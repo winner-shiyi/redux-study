@@ -10,6 +10,7 @@ import reducer from './reducers'
 // store 是state 和 reducer的混合
 // store 是唯一的
 // store包括了完整的state
+
 const store = createStore(reducer)
 
 render(
