@@ -16,16 +16,16 @@ const getVisibleTodos = (todos, filter) => { // 对应第一种
 }
 
 
-const mapStateToProps = (state) => { // 第一种：state转化成props
+const mapStateToProps = (state) => { // 第一种：state转化成props，参数肯定是state
   return {
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   }
   
 }
 
-const mapDispatchToProps = (dispatch) => { // 第二种，dispatch是怎么影响props的
+const mapDispatchToProps = (dispatch) => { // 第二种，dispatch是怎么影响props的，参数肯定是dispatch
   return {
-    onTodoClick: (id) => { // onTodoClick 在TodoList组件中会定义
+    onTodoClick: (id) => { // onTodoClick 在TodoList组件中会定义，作为props传给TodoList
       dispatch(toggleTodo(id))
     }
   }

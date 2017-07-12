@@ -4,20 +4,20 @@ import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
 let AddTodo = ({ dispatch }) => {
-  let input
+  let inputDOM
 
   return (
     <div>
       <form onSubmit={e => {
         e.preventDefault()
-        if (!input.value.trim()) {
+        if (!inputDOM.value.trim()) {
           return
         }
-        dispatch(addTodo(input.value))// 分发派遣给 action中的addTodo
-        input.value = ''
+        dispatch(addTodo(inputDOM.value))// 分发派遣给action中的addTodo
+        inputDOM.value = ''
       }}>
         <input ref={node => { // 获取到输入框真实DOM节点
-          input = node
+          inputDOM = node
         }} />
         <button type="submit">
           Add Todo
