@@ -25,7 +25,7 @@ class CustomList extends Component {
         return (
             <section className="custom">
                 {/*引入AppBar 自己造的一个React Component 轮子*/}
-                <AppBar title="习惯"/>
+                <AppBar title="待办事项"/>
                 <ul>
                     {this.props.customList.map(customItem => // 遍历customList渲染customItem
                         <CustomItem
