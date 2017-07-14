@@ -1,6 +1,6 @@
 /**
  * 习惯页
- * Created by BadWaka on 2017/3/11.
+ * 
  */
 import React, {Component} from 'react';
 // 引入组件
