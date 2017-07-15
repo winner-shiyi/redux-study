@@ -3,7 +3,7 @@
 // 写reducer注意点：
 // 是响应的抽象
 // 一般也是由方法生成的
-// 纯函数编程，不能在这里获取当前时间Date.now()，Math.random(),ajax的，纯方法表示：输出完全由输入决定的
+// 纯函数编程，不能在这里获取当前时间Date.now()，Math.random(),ajax等，纯方法表示：输出完全由输入决定的
 // 传入旧状态prevState和action
 // 返回新状态state
 const todos = (state = [], action) => {
@@ -14,7 +14,7 @@ const todos = (state = [], action) => {
         {
           id: action.id,
           text: action.text,
-          completed: false
+          completed: false,
         }
       ]
     case 'TOGGLE_TODO':

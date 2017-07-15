@@ -37,6 +37,6 @@ const VisibleTodoList = connect(
   // 另外一种是用户(派发的某个行为)行为直接引起的props变化
   mapStateToProps,
   mapDispatchToProps
-)(TodoList)// 括号后面参数表示：传给哪一个组件
+)(TodoList) // 括号后面参数表示：传给哪一个组件
 
 export default VisibleTodoList

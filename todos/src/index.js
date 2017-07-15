@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
 
-// action作用于store
+// action作用于store  
 // reducer根据store响应
 // store 是state 和 reducer的混合
 // store 是唯一的

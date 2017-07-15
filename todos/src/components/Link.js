@@ -11,7 +11,7 @@ const Link = ({ active, children, onClick }) => {
     <a href="#"
        onClick={e => {
          e.preventDefault()
-         onClick()// 这是传进来的props
+         onClick() // 这是传进来的props
        }}
     >
       {children}

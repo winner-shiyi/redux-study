@@ -9,15 +9,14 @@ export const addTodo = (text) => {
   return {
     type: 'ADD_TODO',
     id: nextTodoId++,
-    text
+    text,
   }
-  
 }
 // 选择全部或者已完成或者未完成的todo 的用户行为
 export const setVisibilityFilter = (filter) => {
   return {
     type: 'SET_VISIBILITY_FILTER',
-    filter
+    filter,
   }
   
 }
@@ -25,6 +24,6 @@ export const setVisibilityFilter = (filter) => {
 export const toggleTodo = (id) => {
   return {
     type: 'TOGGLE_TODO',
-    id
+    id,
   }
 }

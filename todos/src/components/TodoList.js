@@ -7,7 +7,7 @@ const TodoList = ({ todos, onTodoClick }) => (
     {todos.map(todo =>
       <Todo
         key={todo.id}
-        {...todo}// es6的语法糖，表示todo中剩下的props，比如compeleted：trus
+        {...todo} // es6的语法糖，表示todo中剩下的props，比如compeleted：true
         onClick={() => onTodoClick(todo.id)}
       />
     )}

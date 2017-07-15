@@ -13,7 +13,7 @@ let AddTodo = ({ dispatch }) => {
         if (!inputDOM.value.trim()) {
           return
         }
-        dispatch(addTodo(inputDOM.value))// 分发派遣给action中的addTodo
+        dispatch(addTodo(inputDOM.value)) // 分发派遣给action中的addTodo
         inputDOM.value = ''
       }}>
         <input ref={node => { // 获取到输入框真实DOM节点
