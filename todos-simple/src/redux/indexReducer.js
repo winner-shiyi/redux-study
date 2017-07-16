@@ -1,14 +1,17 @@
 /**
- * 最终的Reducer
- * Created by BadWaka on 2017/3/15.
+ * 最终的Reducer，合并多个Reducer
+ * Created by wein
  */
-import {combineReducers} from 'redux';  // 需要调用redux中的combineReducers这个合并reducer的方法
-import customListReducer from './custom/customListReducer'; // 引入习惯列表Reducer
 
-// 合并Reducer
+import { combineReducers } from 'redux'
+import customListReducer from './custom/customListReducer'
+
+// 开始合并Reducer，不管是只有一个还是多个reducer都要走这个套路
 const appReducer = combineReducers({
-    customList: customListReducer   // 这里把state中的customList字段与customListReducer对应起来，相当于customListReducer就只在乎customList这个字段就行了
-});
+    //userinfo: userinfo   注意es6 允许省略直接写userinfo即可，但我们这里不会同名
+    customListAAA: customListReducer
+})
 
-// 导出一个最终的appReducer
-export default appReducer;
+export default appReducer
+
+
