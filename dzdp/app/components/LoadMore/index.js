@@ -14,27 +14,29 @@ class LoadMore extends Component{
   }
 
   componentDidMount() {
+    const wrapper = this.refs.wrapper;
     let timeID;
-    let wrapper = this.refs.wrapper;
-    let callback = () => {
-      //获取加载更多这个div距离top的距离
-      const top = wrapper.getBoundingClientRect().top
-      //获取屏幕的高度
-      const windowHeight = window.screen.height
-      if (top && top < windowHeight) {
-          // 证明 wrapper 已经被滚动到暴露在页面可视范围之内了
-          this.handleClick();
+    const callback = () => {
+      //获取wrapper 这个div距离top的距离
+      const top = wrapper.getBoundingClientRect().top;
+      console.log(top)
+      // 获取屏幕的高度
+      const windowHeight = window.screen.height;
+      // 证明 wrapper 已经被滚动到暴露在页面可视范围之内
+      if(top && top < windowHeight) {
+        this.handleClick();
       }
     }
     window.addEventListener('scroll', () => {
-      if(this.props.loadding){
-        return;
+      if(this.props.loadding) {
+        return
       }
-      //截流，避免callback不停的触发。
-      if(timeID){
-        clearTimeout(timeID);
+      // console.log(123)
+      // 函数截流，保证在连续滚动的时候不会连续触发
+      if(timeID) {
+        clearTimeout(timeID)
       }
-      timeID = setTimeout(callback, 50);
+      timeID = setTimeout(callback, 1000)
     }, false)
   }
 

@@ -11,6 +11,7 @@ class ListComponent extends Component{
   }
 
   render(){
+    const data = this.props.data
     return (
       <div className={styles.listContainer}>
       {this.props.data.map((item, index) => {
