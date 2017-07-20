@@ -6,6 +6,8 @@ import {
 } from 'react-router-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
+
+
 import Home from '../containers/Home';
 import User from '../containers/User';
 import Search from '../containers/Search';
