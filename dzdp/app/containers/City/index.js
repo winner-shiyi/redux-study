@@ -20,6 +20,8 @@ class City extends Component{
     this.props.updateCityName(cityName);
   }
   render(){
+    console.log(this.props.cityName)
+    console.log(this.props.updateCityName)
     return (
       <div>
         <Header title='请选择城市' handleBack={this.handleBack.bind(this)}/>
