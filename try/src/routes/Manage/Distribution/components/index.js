@@ -72,86 +72,111 @@ class View extends Component {
     }
 
     const columns = [
-    {
-      title: '订单编号',
-      search: true,
-      dataIndex: 'officeName',
-      key: 'officeName',
-    }, 
-    {
-      title: '发货地址',
-      dataIndex: 'shippingAddress',
-      key: 'shippingAddress',
-    },
-    {
-      title: '状态',
-      dataIndex: 'orderStatus',
-      key: 'orderStatus',
-    }, 
-    {
-      title: '司机姓名',
-      dataIndex: 'name',
-      key: 'name',
-      search: true,
-      max: 20,
-    }, 
-    {
-      title: '司机电话',
-      dataIndex: 'sendPhone',
-      key: 'sendPhone',
-      search: true,
-      max: 11,
-    }, 
-    {
-      title: '收货人电话',
-      dataIndex: 'getPhone',
-      key: 'getPhone',
-      search: true,
-      max: 11,
-    },
-    {
-      title: '收货地址',
-      dataIndex: 'deliveryAddress',
-      key: 'deliveryAddress',
-    },
-    {
-      title: '操作',
-      key: 'action',
-      // width: 360,
-      render: (text, record, index) => (
-        <span>
-          <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">查看明细</Link>
-          {
-            record.orderStatus !== '0' && // 修改 为全等
-            <Button onClick={
-              (() => {
-                Modal.confirm({
-                  title: '确定要启用该账号吗？',
-                  onOk: (() => {
-                    this.active(record, index)
-                  }).bind(this),
-                  onCancel () {},
-                })
-              }).bind(this)
-            }>派单</Button>
-          }
-          {
-             record.accountStatus !== '3' &&
-            <Button type="danger" onClick={
-              (() => {
-                Modal.confirm({
-                  title: '确定要取消该订单吗？',
-                  onOk: (() => {
-                    this.active(record, index)
-                  }).bind(this),
-                  onCancel() {},
-                })
-              }).bind(this)
-            }>取消</Button>
-          }
-        </span>
-      ),
-    }]
+      {
+        title: '订单编号',
+        search: true,
+        dataIndex: 'orderId',
+        key: 'orderId',
+      }, 
+      {
+        title: '发货地址',
+        dataIndex: 'sendAddress',
+        key: 'sendAddress',
+      },
+      { // 0-待提交；1-待配单；2-配送中；3-待取货；4-已取消
+        title: '订单状态',
+        dataIndex: 'orderStatusName',
+        search: true,
+        type: 'select',
+        data: [['0', '待提交'], ['1', '待配单'], ['2', '配送中'], ['3', '待取货'], ['4', '已取消']],
+        key: 'orderStatusName',
+      }, 
+      {
+        title: '发货人电话',
+        dataIndex: 'sendMobile',
+        key: 'sendMobile',
+        search: true,
+        max: 11,
+        hidden: true,
+      },
+      {
+        title: '司机姓名',
+        dataIndex: 'driverName',
+        key: 'driverName',
+        search: true,
+        max: 20,
+      }, 
+      {
+        title: '司机电话',
+        dataIndex: 'driverMobile',
+        key: 'driverMobile',
+        search: true,
+        max: 11,
+      }, 
+      {
+        title: '收货人电话',
+        dataIndex: 'consigneePhone',
+        key: 'consigneePhone',
+        max: 11,
+      },
+      {
+        title: '收货地址',
+        dataIndex: 'receivingAddress',
+        key: 'receivingAddress',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        // width: 360,
+        render: (text, record, index) => (
+          <span>
+            <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">明细</Link>
+            {
+              record.orderStatus === '0' && // 修改 为全等 0-待提交；1-待配单；2-配送中；3-待取货；4-已取消
+              <Button onClick={
+                (() => {
+                  Modal.confirm({
+                    title: '编辑？',
+                    onOk: (() => {
+                      this.active(record, index)
+                    }).bind(this),
+                    onCancel () {},
+                  })
+                }).bind(this)
+              }>编辑</Button>
+            }
+            {
+              record.orderStatus === '1' && // 修改 为全等 0-待提交；1-待配单；2-配送中；3-待取货；4-已取消
+              <Button onClick={
+                (() => {
+                  Modal.confirm({
+                    title: '派单？',
+                    onOk: (() => {
+                      this.active(record, index)
+                    }).bind(this),
+                    onCancel () {},
+                  })
+                }).bind(this)
+              }>派单</Button>
+            }
+            {
+              record.orderStatus !== '4' &&
+              <Button type="danger" onClick={
+                (() => {
+                  Modal.confirm({
+                    title: '确定要取消该订单吗？',
+                    onOk: (() => {
+                      this.active(record, index)
+                    }).bind(this),
+                    onCancel() {},
+                  })
+                }).bind(this)
+              }>取消</Button>
+            }
+          </span>
+        ),
+      }
+    ]
 
     // const buttons = [{
     //   label: '新增账号',

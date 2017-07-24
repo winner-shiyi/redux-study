@@ -17,11 +17,12 @@ export default class CommonTable extends Component {
     expandedRowRender: PropTypes.func,
   }
 
-  onChange (page) {
+  onChange (page) { // 
     this.props.search({
       ...this.props.searchParams,
       pageNo: page.current,
       pageSize: page.pageSize,
+
     })
   }
 
@@ -50,14 +51,13 @@ export default class CommonTable extends Component {
         column.key = column.dataIndex = column.name
       }
     })
-              // console.log(mapColumns)
 
     return (
       <Spin spinning={loading}>
         <Table
           bordered={bordered}
           searchParams={searchParams}
-          rowKey="id"
+          rowKey="id" // ??
           style={{ marginTop: '16px' }}
           columns={mapColumns}
           dataSource={dataSource}
@@ -67,7 +67,7 @@ export default class CommonTable extends Component {
               ...pagination,
               showTotal: (total, range) => `显示第 ${range[0]} 到第 ${range[1]} 条记录，总共 ${total} 条记录`,
             } : false}
-          onChange={onChange || ::this.onChange}
+          onChange={onChange || ::this.onChange} 
           rowSelection={rowSelection}
           expandedRowRender={expandedRowRender}
         />

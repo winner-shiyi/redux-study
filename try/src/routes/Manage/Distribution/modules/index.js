@@ -120,7 +120,9 @@ const failure = (msg) => {
 const search = (params) => { // 第一次进入页面
   return dispatch => {
     dispatch(request(params))
-    fetch('/userList', params)
+    fetch('//' + location.host + '/mock/distributions.json', params, {
+      method: 'GET',
+    })
       .then(json => {
         if (json.resultCode == '0000') {
           dispatch(success(json.resultData))

@@ -7,7 +7,7 @@ import { Form,
 import { createFormItem } from '../../components'
 import PropTypes from 'prop-types'
 
-import {fields} from '../../../public/mock/fields'
+import { fields } from '../../../public/mock/fields'
 import './SendForm.scss'
 
 const FormItem = Form.Item;
@@ -22,12 +22,12 @@ class SendForm extends Component {
     });
   }
 
-  componentDidMount() {
+  componentDidMount () {
     var map = new AMap.Map("mapContainessr", {
         resizeEnable: true
-    });
+    })
     AMap.service(["AMap.PlaceSearch"], function() {
-        var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+        var placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
           pageSize: 1,
           pageIndex: 1,
           //city: "010", //城市
@@ -37,20 +37,21 @@ class SendForm extends Component {
         placeSearch.search('杭州市近江时代大厦', function(status, result) {
           console.log(status)
           console.log(result)
-        });
-    });
+        })
+    })
   }
 
   render() {
     // const {
     //   fields,
     // } = this.props
-
-    
-    const children = []
+  
+    const childrenSend = []
+    const childrenGet = []
     const len = fields.send.length || 0
+    const len2 = fields.get.length || 0
     for (let i = 0; i < len; i++) {
-      children.push(
+      childrenSend.push(
         createFormItem({
           field: fields.send[i],
           form: this.props.form,
@@ -64,7 +65,22 @@ class SendForm extends Component {
       )
     }
 
-    const { getFieldDecorator } = this.props.form;
+    for (let i = 0; i < len2; i++) {
+      childrenGet.push(
+        createFormItem({
+          field: fields.get[i],
+          form: this.props.form,
+          formItemLayout: {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 18 },
+          },
+          inputOpts: {},
+          colSpan: 24,
+        })
+      )
+    }
+
+    const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
         <Row>
@@ -75,7 +91,7 @@ class SendForm extends Component {
           </Col>
         </Row>
         <Row gutter={20}>
-          {children}
+          {childrenSend}
         </Row>
         <Row gutter={20}>
           <div id="mapContainessr"></div>
@@ -87,8 +103,11 @@ class SendForm extends Component {
             </h2>
           </Col>
         </Row>
+        <Row gutter={20}>
+          {childrenGet}
+        </Row>
       </Form>
-    );
+    )
   }
 }
 

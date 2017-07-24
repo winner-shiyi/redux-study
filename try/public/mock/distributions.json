@@ -1,0 +1,48 @@
+{
+  "resultCode": "0000",
+  "resultData": {
+    "count": 50,
+    "list":[
+      {
+        "orderId": "123456",
+        "sendAddress": "发货地址111",
+        "orderStatus": "1",
+        "orderStatusName": "待配单",
+        "id": "11",
+        "driverName": "嘟嘟",
+        "driverMobile": "13612541414",
+        "consigneePhone": "15880274595",
+        "receivingAddress": "近江时代大厦",
+        "sendMobile": "18810218438"
+      },
+      {
+        "orderId": "333456",
+        "sendAddress": "发货地址222",
+        "orderStatus": "0",
+        "orderStatusName": "待提交",
+        "id": "22",
+        "driverName": "嘟嘟",
+        "driverMobile": "13612541414",
+        "consigneePhone": "15880274595",
+        "receivingAddress": "近江时代大厦",
+        "sendMobile": "18810218438"
+      },
+      {
+        "orderId": "533456",
+        "sendAddress": "发货地址333",
+        "orderStatus": "4",
+        "orderStatusName": "已取消",
+        "id": "33",
+        "driverName": "嘟嘟",
+        "driverMobile": "13612541414",
+        "consigneePhone": "15880274595",
+        "receivingAddress": "近江时代大厦",
+        "sendMobile": "18810218438"
+      }
+    ],
+    "pageNo": 1,
+    "pageSize": 10,
+    "totalPage": 0
+  },
+  "resultDesc": "SUCCESS"
+}
