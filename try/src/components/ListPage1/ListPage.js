@@ -1,36 +1,28 @@
 import React, { Component } from 'react'
 import { Row, Col, Button } from 'antd'
 import PropTypes from 'prop-types'
-import Table from '../Table'
+import Table1 from '../Table1'
 import SearchForm1 from '../SearchForm1'
-import ModalForm from '../ModalForm'
 import { Link, browserHistory } from 'react-router'
 import './style.scss'
 
 export default class ListPage extends Component {
+  save (values) {
 
+  }
   render () {
-
     const {
       title,
       loading = false,
-      confirmLoading,
       columns,
       data,
       search,
       cancel,
       record,
-      // fields = [],
-      modalVisible,
-      tableOpts,
       changeSearch,
       searchParams,
       page,
-      // searchFields,
       style,
-      cusTitle,
-      formWidth,
-      changeRecord,
       expandedRowRender,
       reset,
     } = this.props
@@ -46,21 +38,20 @@ export default class ListPage extends Component {
               </h2>
             </Col>
             <Col>
-               <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">新建车配任务</Link>
+              <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">新建车配任务</Link>
             </Col>
           </Row>
         }
         <SearchForm1
-          fields={ columns.filter(item => !!item.search)}
+          fields={columns.filter(item => !!item.search)}
           search={search}
           changeSearch={changeSearch}
           searchParams={searchParams}
           page={page}
           reset={reset}
         />
-        <Table
+        <Table1
           {...this.props}
-          {...tableOpts}
           columns={columns.filter((item) => !item.hidden)}
           dataSource={data}
           loading={loading}

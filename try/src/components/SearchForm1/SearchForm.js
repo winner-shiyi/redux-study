@@ -121,7 +121,7 @@ class AdvancedSearchForm extends Component {
 
   render () {
     const {
-      fields,
+      fields, // 从表格的列定义中拿到的字段
     } = this.props
 
     const {
