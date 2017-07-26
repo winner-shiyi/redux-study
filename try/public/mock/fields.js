@@ -1,3 +1,4 @@
+import addr from './addr.json'
 export const fields = {
   'send':[
       {
@@ -47,29 +48,7 @@ export const fields = {
               'required': true,
               'name': 'pwd',
               'type':'Cascader',
-              'data':[{
-                      value: 'zhejiang',
-                      label: 'Zhejiang',
-                      children: [{
-                              value: 'hangzhou',
-                              label: 'Hangzhou',
-                              children: [{
-                              value: 'xihu',
-                              label: 'West Lake',
-                              }],
-                      }],
-                      }, {
-                      value: 'jiangsu',
-                      label: 'Jiangsu',
-                      children: [{
-                              value: 'nanjing',
-                              label: 'Nanjing',
-                              children: [{
-                              value: 'zhonghuamen',
-                              label: 'Zhong Hua Men',
-                              }],
-                      }],
-              }],
+              'data': addr,
               'changeOnSelect':'true', // 每选择一项就会马上改变
               'long': true,
               'simple': true,
@@ -122,29 +101,7 @@ export const fields = {
                   'required': true,
                   'name': 'pwd',
                   'type':'Cascader',
-                  'data':[{
-                          value: 'zhejiang',
-                          label: 'Zhejiang',
-                          children: [{
-                                  value: 'hangzhou',
-                                  label: 'Hangzhou',
-                                  children: [{
-                                  value: 'xihu',
-                                  label: 'West Lake',
-                                  }],
-                          }],
-                          }, {
-                          value: 'jiangsu',
-                          label: 'Jiangsu',
-                          children: [{
-                                  value: 'nanjing',
-                                  label: 'Nanjing',
-                                  children: [{
-                                  value: 'zhonghuamen',
-                                  label: 'Zhong Hua Men',
-                                  }],
-                          }],
-                  }],
+                  'data': addr,
                   'changeOnSelect':'true', // 每选择一项就会马上改变
                   'long': true,
                   'simple': true,

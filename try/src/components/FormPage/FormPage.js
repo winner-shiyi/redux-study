@@ -8,7 +8,6 @@ export default class FormPage extends Component {
   render () {
     const {
       loading = false,
-      fields = [],
     } = this.props
     return (
       <div style={{ padding: 16, flex: '0 0 auto'}}>
@@ -21,7 +20,6 @@ export default class FormPage extends Component {
         </Row>*/}
         
         <SendForm 
-          fields={fields}
         />
       </div>
     )

@@ -20,7 +20,6 @@ class View extends Component {
     return (
       <FormPage 
         {...this.props}
-        fields={activeFormField}
       />
     )
   }
