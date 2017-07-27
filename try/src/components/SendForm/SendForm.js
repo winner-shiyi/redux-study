@@ -82,30 +82,9 @@ class SendForm extends Component {
     // const {
     //   fields,
     // } = this.props
-    const {
-      expand,
-    } = this.state
   
-    const childrenSend = []
     const childrenGet = []
-    const len = fields.send.length || 0
     const len2 = fields.get.length || 0
-    let labelCol = expand ? 7 : 4
-    let wrapperCol = expand ? 17 : 20
-    for (let i = 0; i < len; i++) {
-      childrenSend.push(
-        createFormItem({
-          field: fields.send[i],
-          form: this.props.form,
-          formItemLayout: {
-            labelCol: { span:6 },
-            wrapperCol: { span: 18 },
-          },
-          inputOpts: {},
-          colSpan: 12,
-        })
-      )
-    }
 
     for (let i = 0; i < len2; i++) {
       childrenGet.push(
@@ -117,12 +96,12 @@ class SendForm extends Component {
             wrapperCol: { span: 18 },
           },
           inputOpts: {},
-          colSpan: 8,
+          colSpan: 12,
         })
       )
     }
 
-    const { getFieldDecorator } = this.props.form
+    // const { getFieldDecorator } = this.props.form
     return (
       <Form onSubmit={this.handleSubmit} className="ant-advanced-search-form">
         <Row>
@@ -133,7 +112,22 @@ class SendForm extends Component {
           </Col>
         </Row>
         <Row gutter={20}>
-          {childrenSend}
+          {
+            fields.send.map((item) => {
+              return (
+                createFormItem({
+                  field: item,
+                  form: this.props.form,
+                  formItemLayout: {
+                    labelCol: { span:6 },
+                    wrapperCol: { span: 18 },
+                  },
+                  inputOpts: {},
+                  colSpan: 12,
+                })
+              )
+            })  
+          }
         </Row>
         <Row>
           <Col><div id="mapContainessrSender"></div></Col>
@@ -144,7 +138,7 @@ class SendForm extends Component {
               收货信息
             </h2>
           </Col>
-          <Col><Button type="primary">添加收货地址</Button></Col>
+          
         </Row>
         <Row>
           {childrenGet}
@@ -153,6 +147,7 @@ class SendForm extends Component {
           <Col><div id="mapContainessrGet"></div></Col>
         </Row>
         <FormItem wrapperCol={{ span: 17, offset: 7 }}>
+          <Button type="primary">添加收货地址</Button>
           <Button 
             type="primary" 
             htmlType="submit" 
