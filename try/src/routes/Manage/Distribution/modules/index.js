@@ -24,41 +24,41 @@ const DISTRIBUTION_SET_STATUS_FAILURE = 'DISTRIBUTION_SET_STATUS_FAILURE'
 // Actions
 // ------------------------------------
 
-const saveRequest = (record) => {
-  return {
-    type: DISTRIBUTION_SAVE_REQUEST,
-    payload: record
-  }
-}
+// const saveRequest = (record) => {
+//   return {
+//     type: DISTRIBUTION_SAVE_REQUEST,
+//     payload: record
+//   }
+// }
 
-const saveSuccess = (data) => {
-  return {
-    type: DISTRIBUTION_SAVE_SUCCESS,
-    payload: data
-  }
-}
+// const saveSuccess = (data) => {
+//   return {
+//     type: DISTRIBUTION_SAVE_SUCCESS,
+//     payload: data
+//   }
+// }
 
-const saveFailure = (msg) => {
-  return {
-    type: DISTRIBUTION_SAVE_FAILURE,
-    payload: msg
-  }
-}
+// const saveFailure = (msg) => {
+//   return {
+//     type: DISTRIBUTION_SAVE_FAILURE,
+//     payload: msg
+//   }
+// }
 
-const save = (record) => {
-  return dispatch => {
-    dispatch(saveRequest(record))
-    return fetch('/saveUser', record)
-      .then(json => {
-        if (json.resultCode == '0000') {
-          dispatch(saveSuccess(json.resultData))
-          return true
-        } else {
-          dispatch(saveFailure(json.resultDesc))
-        }
-      })
-  }
-}
+// const save = (record) => {
+//   return dispatch => {
+//     dispatch(saveRequest(record))
+//     return fetch('/saveUser', record)
+//       .then(json => {
+//         if (json.resultCode == '0000') {
+//           dispatch(saveSuccess(json.resultData))
+//           return true
+//         } else {
+//           dispatch(saveFailure(json.resultDesc))
+//         }
+//       })
+//   }
+// }
 
 const request = () => {
   return {
@@ -112,8 +112,8 @@ export const actions = {
   setStatus: (params) => {
     return {
       types: [DISTRIBUTION_SET_STATUS_REQUEST, DISTRIBUTION_SET_STATUS_SUCCESS, DISTRIBUTION_SET_STATUS_FAILURE],
-      callAPI: () => fetch('/repairbill/status', { // todo 这里是用id，还是用订单编号
-        id: params.id, 
+      callAPI: () => fetch('/repairbill/status', { // 订单编号
+        id: params.orderNo, 
       }),
     }
   },
@@ -134,7 +134,7 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       loading: false,
-      data: action.payload.list, // ？？action.data.list
+      data: action.payload.list, // todo action.data.list
       page: {
         ...state.page,
         pageNo: action.payload.pageNo,
@@ -212,7 +212,7 @@ const initialState = {
   },
   searchParams: {
   },
-  record: {},
+  // record: {},
 }
 export default function reducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

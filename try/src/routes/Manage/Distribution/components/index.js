@@ -14,34 +14,40 @@ class View extends Component {
   }
 
   render () {
-    const {
-      record,
-    } = this.props
+    // const {
+    //   record,
+    // } = this.props
 
     const columns = [
       {
         title: '订单编号',
         search: true,
-        dataIndex: 'orderId',
-        key: 'orderId',
+        dataIndex: 'orderNo',
+        key: 'orderNo',
       }, 
       {
         title: '发货地址',
-        dataIndex: 'sendAddress',
-        key: 'sendAddress',
+        dataIndex: 'address',
+        key: 'address',
       },
       { 
         title: '订单状态',
-        dataIndex: 'orderStatusName',
+        dataIndex: 'orderStatus',
         search: true,
         type: 'select',
-        data: [['0', '待配单'], ['1', '配送中'], ['2', '待取货'], ['3', '已取消']],
-        key: 'orderStatusName',
+        data: [['1', '待配单'], ['2', '待取件'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
+        key: 'orderStatus',
+        render: (text, record, index) => {
+          const statusName = record.orderStatus
+          const statusObj = { '1': '待配单', '2': '待取件', '3': '配送中', '4': '已完成', '5': '已取消' }
+          const statusValue = statusObj[statusName]
+          return statusValue
+        },
       }, 
       {
         title: '发货人电话',
-        dataIndex: 'sendMobile',
-        key: 'sendMobile',
+        dataIndex: 'phone',
+        key: 'phone',
         search: true,
         max: 11,
         hidden: true,
@@ -55,21 +61,33 @@ class View extends Component {
       }, 
       {
         title: '司机电话',
-        dataIndex: 'driverMobile',
-        key: 'driverMobile',
+        dataIndex: 'driverPhone',
+        key: 'driverPhone',
         search: true,
         max: 11,
       }, 
       {
-        title: '收货人电话',
-        dataIndex: 'consigneePhone',
-        key: 'consigneePhone',
-        max: 11,
+        title: '收货商家名称',
+        dataIndex:'receiverUserName',
+        max: 50,
+        render: (text, record, index) => (
+          record.receiversInfoList[0].userName + '...'
+        ),
       },
       {
         title: '收货地址',
-        dataIndex: 'receivingAddress',
-        key: 'receivingAddress',
+        dataIndex:'receiverAddress',
+        max: 50,
+        render: (text, record, index) => (
+          record.receiversInfoList[0].address + '...'
+        ),
+      },
+      {
+        title: '收货方数量',
+        dataIndex:'receiverNo',
+        render: (text, record, index) => (
+          record.receiversInfoList.length
+        ),
       },
       {
         title: '操作',
@@ -79,11 +97,11 @@ class View extends Component {
           <span>
             <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">明细</Link>
             {
-              record.orderStatus === '0' && // 修改  0-待配单；1-配送中；2-待取货；3-已取消
+              record.orderStatus === '1' && // 修改  1-待分配；2-已分配待取货；3-已取货配送中；4-已完成；5-已取消
               <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">派单</Link>
             }
             {
-              record.orderStatus !== '3' &&
+              record.orderStatus !== '5' &&
               <Button type="danger" onClick={
                 (() => {
                   Modal.confirm({
@@ -111,7 +129,7 @@ class View extends Component {
         {...this.props}
         title="车配任务管理"
         columns={columns}
-        record={record}
+        // record={record}
       />
     )
   }

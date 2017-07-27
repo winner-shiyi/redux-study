@@ -10,17 +10,9 @@ export default class FormPage extends Component {
       loading = false,
     } = this.props
     return (
-      <div style={{ padding: 16, flex: '0 0 auto'}}>
-        {/*<Row type="flex" justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
-          <Col>
-            <h2 className="ant-page-title">
-              发货信息
-            </h2>
-          </Col>
-        </Row>*/}
+      <div style={{ padding: 16, flex: '1 1 auto' }}>
         
-        <SendForm 
-        />
+        <SendForm />
       </div>
     )
   }

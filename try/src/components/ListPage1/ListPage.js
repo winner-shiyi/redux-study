@@ -7,9 +7,14 @@ import { Link, browserHistory } from 'react-router'
 import './style.scss'
 
 export default class ListPage extends Component {
-  save (values) {
-
+  static propTypes = {
+    title: PropTypes.string,
+    loading: PropTypes.bool,
+    columns: PropTypes.array.isRequired,
+    data: PropTypes.array,
+    search: PropTypes.func,
   }
+
   render () {
     const {
       title,
@@ -17,8 +22,7 @@ export default class ListPage extends Component {
       columns,
       data,
       search,
-      cancel,
-      record,
+      // record,
       changeSearch,
       searchParams,
       page,

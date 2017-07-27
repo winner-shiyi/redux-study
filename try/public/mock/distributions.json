@@ -4,40 +4,40 @@
     "count": 50,
     "list":[
       {
-        "orderId": "123456",
-        "sendAddress": "发货地址111",
+        "orderNo": "123456",
+        "address": "发货地址111",
         "orderStatus": "1",
-        "orderStatusName": "配送中",
-        "id": "11",
-        "driverName": "嘟嘟",
-        "driverMobile": "13612541414",
-        "consigneePhone": "15880274595",
-        "receivingAddress": "近江时代大厦",
-        "sendMobile": "18810218438"
+        "driverName": "司机嘟嘟",
+        "driverPhone": "13612541414",
+        "phone": "发货15880274595",
+        "receiversInfoList": [
+          {
+            "address": "近江时代大厦",
+            "userName": "收货商家1"
+          },
+          {
+            "address": "近江时代大厦222",
+            "userName": "收货商家222"
+          }
+        ]
       },
       {
-        "orderId": "333456",
-        "sendAddress": "发货地址222",
-        "orderStatus": "0",
-        "orderStatusName": "待配单",
-        "id": "22",
-        "driverName": "嘟嘟",
-        "driverMobile": "13612541414",
-        "consigneePhone": "15880274595",
-        "receivingAddress": "近江时代大厦",
-        "sendMobile": "18810218438"
-      },
-      {
-        "orderId": "533456",
-        "sendAddress": "发货地址333",
-        "orderStatus": "3",
-        "orderStatusName": "已取消",
-        "id": "33",
-        "driverName": "嘟嘟",
-        "driverMobile": "13612541414",
-        "consigneePhone": "15880274595",
-        "receivingAddress": "近江时代大厦",
-        "sendMobile": "18810218438"
+        "orderNo": "2223456",
+        "address": "发货地址111",
+        "orderStatus": "2",
+        "driverName": "司机嘟嘟",
+        "driverPhone": "13612541414",
+        "phone": "发货15880274595",
+        "receiversInfoList": [
+          {
+            "address": "近江时代大厦",
+            "userName": "收货商家1"
+          },
+          {
+            "address": "近江时代大厦222",
+            "userName": "收货商家222"
+          }
+        ]
       }
     ],
     "pageNo": 1,

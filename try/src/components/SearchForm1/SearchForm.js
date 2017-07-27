@@ -60,7 +60,7 @@ class AdvancedSearchForm extends Component {
           fields,
         } = this.props
         for (let i in values) {
-          let field = fields.find((field) => { // TODO
+          let field = fields.find((field) => { 
             return (field.name || field.dataIndex) === i
           })
           switch (field.type) {
@@ -150,9 +150,7 @@ class AdvancedSearchForm extends Component {
     }
 
     return (
-      <Form
-        className="ant-advanced-search-form"
-      >
+      <Form className="ant-advanced-search-form">
         <Row gutter={20}>
           {children}
         </Row>
