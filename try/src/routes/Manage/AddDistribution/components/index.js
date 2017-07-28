@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import FormPage from '../../../../components/FormPage'
+import WrappedFormPage from '../../../../components/FormPage'
 
 class View extends Component {
 
@@ -9,16 +9,12 @@ class View extends Component {
 
   render () {
     const {
-      activeFormField,
-      permission,
-      record,
-      garden,
-      gardenSearch,
-      isEdit,
+      receiverFields,
       changeRecord,
+      addReceiverInfo,
     } = this.props
     return (
-      <FormPage 
+      <WrappedFormPage 
         {...this.props}
       />
     )

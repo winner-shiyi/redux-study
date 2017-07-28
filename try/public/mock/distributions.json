@@ -6,7 +6,7 @@
       {
         "orderNo": "123456",
         "address": "发货地址111",
-        "orderStatus": "1",
+        "orderStatus": 1,
         "driverName": "司机嘟嘟",
         "driverPhone": "13612541414",
         "phone": "发货15880274595",
@@ -24,7 +24,7 @@
       {
         "orderNo": "2223456",
         "address": "发货地址111",
-        "orderStatus": "2",
+        "orderStatus": 2,
         "driverName": "司机嘟嘟",
         "driverPhone": "13612541414",
         "phone": "发货15880274595",

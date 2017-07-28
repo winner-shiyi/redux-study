@@ -1,19 +1,70 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Row, Col, Button } from 'antd'
+import { Form, Row, Col, Button, Icon } from 'antd'
 import SendForm from '../SendForm'
-// import GetForm from '../ModalForm'
+import ReceiverForm from '../ReceiverForm'
 
-export default class FormPage extends Component {
+const FormItem = Form.Item
+
+class FormPage extends Component {
+
+  add () {
+    this.props.addReceiverInfo()
+    console.log('aaaa')
+  }
+    
   render () {
     const {
       loading = false,
+      form,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
-        
-        <SendForm />
+        <Form className="ant-advanced-search-form">
+          <Row>
+            <Col>
+              <h2 className="ant-page-title">
+                发货信息
+              </h2>
+            </Col>
+          </Row>
+          <SendForm form={form} />
+          <Row>
+            <Col>
+              <h2 className="ant-page-title">
+                收货信息
+              </h2>
+            </Col>
+          </Row>
+          <ul>
+            {
+              this.props.receiverFields.map((item, index) => {
+                const AmapId = 'mapContainessrGet' + index
+                return <ReceiverForm 
+                  form={form} 
+                  key={item.id}
+                  fields={item.fields}
+                  AmapId={AmapId}
+                />
+              })
+            }
+          </ul>
+          <FormItem wrapperCol={{ span: 17, offset: 7 }}>
+            <Button type="dashed" onClick={this.add.bind(this)}>
+              <Icon type="plus" /> 添加收货地址
+            </Button>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="login-form-button" 
+              loading={this.props.loading}>提交
+            </Button>
+          </FormItem>
+        </Form>
       </div>
     )
   }
 }
+const WrappedFormPage = Form.create()(FormPage)
+export default WrappedFormPage
+

@@ -7,38 +7,40 @@ import { Form,
 import { createFormItem } from '../../components'
 import PropTypes from 'prop-types'
 
-import { fields } from './configFields' // 新建车配任务表单字段
+// import { fields } from './configFields' // 新建车配任务表单字段
+import './ReceiverForm.scss'
 
-import './SendForm.scss'
-
-// const FormItem = Form.Item
-
-export default class SendForm extends Component {
+export default class ReceiverForm extends Component {
+  
   componentDidMount () {
-     var map1 = new AMap.Map("mapContainessrSender", {
+    var map2 = new AMap.Map("mapContainessrGet0", {
         resizeEnable: true
     })
     AMap.service(["AMap.PlaceSearch"], function() {
         var placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
           pageSize: 1,
           pageIndex: 1,
-          //city: "010", //城市
-          map: map1
+          // city: "010", //城市
+          map: map2
         })
-        //关键字查询
-        placeSearch.search('杭州市近江时代大厦', function(status, result) {
+        // 关键字查询
+        placeSearch.search('杭州市三新家园', function(status, result) {
           // console.log(status)
           // console.log(result)
         })
     })
+    
   }
 
   render () {
-    // const {
-    //   fields,
-    // } = this.props
+    const {
+      AmapId,
+      fields,
+    } = this.props
+    console.log(AmapId)
+  
     return (
-      <div>
+      <li>
         <Row>
           {
             fields.map((item) => {
@@ -54,13 +56,14 @@ export default class SendForm extends Component {
                   colSpan: 12,
                 })
               )
-            })  
+            }) 
           }
         </Row>
         <Row>
-          <Col><div id="mapContainessrSender" className="mapContainessr"></div></Col>
+          <Col><div id={AmapId} className="mapContainessr"></div></Col>
         </Row>
-      </div>
+      </li>
+     
     )
   }
 }
