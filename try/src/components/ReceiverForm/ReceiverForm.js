@@ -10,37 +10,50 @@ import PropTypes from 'prop-types'
 // import { fields } from './configFields' // 新建车配任务表单字段
 import './ReceiverForm.scss'
 
+
 export default class ReceiverForm extends Component {
-  
+  constructor(props) {
+    super(props)
+    this.AmapId = 'mapId' + Math.random()
+  }
+
   componentDidMount () {
-    var map2 = new AMap.Map("mapContainessrGet0", {
+    const map = new AMap.Map(this.AmapId, {
         resizeEnable: true
     })
-    AMap.service(["AMap.PlaceSearch"], function() {
-        var placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
-          pageSize: 1,
-          pageIndex: 1,
-          // city: "010", //城市
-          map: map2
-        })
-        // 关键字查询
-        placeSearch.search('杭州市三新家园', function(status, result) {
-          // console.log(status)
-          // console.log(result)
-        })
+    AMap.service(["AMap.PlaceSearch"], () => {
+      this.placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
+        pageSize: 1,
+        pageIndex: 1,
+        map: map
+      })
+      // 关键字查询
+      this.placeSearch.search('杭州市三新家园', function(status, result) {
+        // console.log(status)
+        // console.log(result)
+      })
     })
     
   }
 
+  reduce (id) {
+    this.props.reduceReceiverInfo(id)
+  }
+
   render () {
     const {
-      AmapId,
       fields,
+      length,
+      id,
     } = this.props
-    console.log(AmapId)
+    
   
     return (
-      <li>
+      <li className="receiverForm-item-box" id={id}>
+        {
+          Number(length) > 1 &&
+          <Icon type="close-circle" className="close-circle" onClick={this.reduce.bind(this,id)}/>
+        }
         <Row>
           {
             fields.map((item) => {
@@ -60,7 +73,7 @@ export default class ReceiverForm extends Component {
           }
         </Row>
         <Row>
-          <Col><div id={AmapId} className="mapContainessr"></div></Col>
+          <Col><div id={this.AmapId} className="mapContainessr"></div></Col>
         </Row>
       </li>
      

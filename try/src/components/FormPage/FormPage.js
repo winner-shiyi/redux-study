@@ -10,13 +10,15 @@ class FormPage extends Component {
 
   add () {
     this.props.addReceiverInfo()
-    console.log('aaaa')
   }
     
   render () {
     const {
       loading = false,
       form,
+      receiverFormNo,
+      receiverFields,
+      reduceReceiverInfo,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -38,13 +40,17 @@ class FormPage extends Component {
           </Row>
           <ul>
             {
-              this.props.receiverFields.map((item, index) => {
+              receiverFields.map((item, index) => {
                 const AmapId = 'mapContainessrGet' + index
                 return <ReceiverForm 
                   form={form} 
                   key={item.id}
+                  id={item.id}
                   fields={item.fields}
                   AmapId={AmapId}
+                  // receiverFormNo={receiverFormNo}
+                  length={this.props.receiverFields.length}
+                  reduceReceiverInfo={reduceReceiverInfo}
                 />
               })
             }

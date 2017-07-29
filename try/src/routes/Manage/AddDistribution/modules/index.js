@@ -8,13 +8,22 @@ import addr from '../../../../../public/mock/addr.json'
 // ------------------------------------
 const TPL_HELLO = 'TPL_HELLO'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
+const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
+
 
 // ------------------------------------
 // Actions
 // ------------------------------------
+// const reduceReceiverInfo = (id) => {
+//   return {
+//     type: ADDDISTRIBUTION_REDUCE_RECEIVER_INFO,
+//     payload: id,
+//   }
+// }
 export const actions = {
   hello: createAction(TPL_HELLO),
-  addReceiverInfo:createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
+  addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
+  reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
 }
 
 // ------------------------------------
@@ -29,12 +38,12 @@ const ACTION_HANDLERS = {
     return newState
   },
   [ADDDISTRIBUTION_ADD_RECEIVER_INFO]: (state, action) => {
-    let numId = state.addNum
-    numId++
-    let newReceiverFields = state.receiverFields
+    let numId = state.receiverFormNo
+    // numId++
+    let receiverFields = state.receiverFields
 
-    newReceiverFields.push({
-      id: numId,
+    receiverFields.push({
+      id: ++numId,
       fields:[
         {
           'label': '商家名称',
@@ -101,21 +110,30 @@ const ACTION_HANDLERS = {
 
     let newState = {
       ...state,
-      addNum:numId,
-      newReceiverFields,
+      receiverFormNo:numId,
+      receiverFields,
     }
     return newState
   },
+  [ADDDISTRIBUTION_REDUCE_RECEIVER_INFO]: (state, action) => {
+
+    let newState = Object.assign({}, state)
+    let newReceiverFields = [...newState.receiverFields]
+    let index = newReceiverFields.findIndex(item => item.id === action.id)
+    newReceiverFields.splice(index,1)
+    newState.receiverFields = newReceiverFields
+    return newState
+  }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  addNum:1,
+  receiverFormNo:1,
   receiverFields:[
     {
-      id:1,
+      id:'1',
       fields:[
         {
           'label': '商家名称',

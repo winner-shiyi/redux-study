@@ -38,7 +38,7 @@ export default class SendForm extends Component {
     //   fields,
     // } = this.props
     return (
-      <div>
+      <div className="senderForm-box">
         <Row>
           {
             fields.map((item) => {

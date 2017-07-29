@@ -12,6 +12,8 @@ class View extends Component {
       receiverFields,
       changeRecord,
       addReceiverInfo,
+      reduceReceiverInfo,
+      receiverFormNo,
     } = this.props
     return (
       <WrappedFormPage 
