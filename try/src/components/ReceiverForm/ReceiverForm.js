@@ -33,9 +33,12 @@ export default class ReceiverForm extends Component {
         // console.log(result)
       })
     })
-    
   }
 
+  /**
+   * 删除收货地址
+   * @param id 收货地址的id 
+   */
   reduce (id) {
     this.props.reduceReceiverInfo(id)
   }

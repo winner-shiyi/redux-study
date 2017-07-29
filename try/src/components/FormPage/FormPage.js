@@ -8,8 +8,21 @@ const FormItem = Form.Item
 
 class FormPage extends Component {
 
+
+  /**
+   * 添加收货地址
+   */
   add () {
     this.props.addReceiverInfo()
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    })
   }
     
   render () {
@@ -22,7 +35,7 @@ class FormPage extends Component {
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
-        <Form className="ant-advanced-search-form">
+        <Form className="ant-advanced-search-form" onSubmit={this.handleSubmit}>
           <Row>
             <Col>
               <h2 className="ant-page-title">
@@ -71,6 +84,36 @@ class FormPage extends Component {
     )
   }
 }
-const WrappedFormPage = Form.create()(FormPage)
+const WrappedFormPage = Form.create({
+  mapPropsToFields (props) {
+    let res = {}
+    for (let i in props.values) {
+      let param = props.values[i]
+      if (typeof param === 'object' && 'value' in param) {
+        res[i] = param
+      } else {
+        res[i] = { value: param }
+      }
+    }
+    if (props.mapFields) {
+      res = {
+        ...res,
+        ...props.mapFields(res),
+      }
+    }
+    return res
+  },
+  // onFieldsChange (props, fields) {
+  //   console.log(props)
+  //   for (let v in fields) {
+  //     const fld = props.receiverFields.fields.find(item => item.name === fields[v].name)
+  //     fields[v].type = fld && fld.type
+  //   }
+  //   props.changeRecord && props.changeRecord({
+  //     ...props.values,
+  //     ...fields,
+  //   })
+  // },
+})(FormPage)
 export default WrappedFormPage
 

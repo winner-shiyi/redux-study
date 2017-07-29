@@ -34,7 +34,7 @@ export const fields = [
     {
       'label': '用车时间',
       'name': 'drivingTime',
-      'required': true,
+      'required': false,
       'type': 'datetime',
       // 'long': true,
       // 'simple': true,

@@ -9,8 +9,6 @@ import addr from '../../../../../public/mock/addr.json'
 const TPL_HELLO = 'TPL_HELLO'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
-
-
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -26,6 +24,7 @@ export const actions = {
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
 }
 
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -37,23 +36,27 @@ const ACTION_HANDLERS = {
     }
     return newState
   },
+  /**
+   * 增加收货地址
+   */
   [ADDDISTRIBUTION_ADD_RECEIVER_INFO]: (state, action) => {
     let numId = state.receiverFormNo
-    // numId++
-    let receiverFields = state.receiverFields
+    numId++
 
+    let receiverFields = state.receiverFields
+    // const fields = receiverFields[0].fields.map((field, index) => {
+    //   field.name = `${field.name}${numId}`
+    //   return field
+    // })
     receiverFields.push({
-      id: ++numId,
-      fields:[
+      id: numId,
+      fields: [
         {
           'label': '商家名称',
-          'name': 'shopName' + numId,
+          'name': 'receiverShopName' + numId,
           'required': true,
-          // 'simple': true,
-          // 'long': true,
           'type': 'select',
           'valueName': 'id',
-          'displayName': 'shopName',
           'state': {
             'data': [],
             'loading': false,
@@ -62,47 +65,36 @@ const ACTION_HANDLERS = {
         },
         {
           'label': '联系人',
-          'name': 'userName' + numId,
+          'name': 'receiverUserName' + numId,
           'required': true,
-          // 'long': true,
-          // 'simple': true,
           'max': 20,
         },
         {
           'label': '联系电话',
-          'name': 'phone' + numId,
+          'name': 'receiverPhone' + numId,
           'required': true,
-          // 'long': true,
-          // 'simple': true,
           'phone': true,
         },
         {
-          'label': '用车时间',
-          'name': 'drivingTime' + numId,
-          'required': true,
-          'type': 'datetime',
-          // 'long': true,
-          // 'simple': true,
+          'label': '送达时间',
+          'name': 'receiverDeliveryTime' + numId,
+          'required': false,
+          'type': 'dateRange',
           'max': 50,
         },
         {
-          'label': '发货地区',
+          'label': '收货地区',
           'required': true,
-          'name': 'area' + numId,
+          'name': 'receiverArea' + numId,
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
-          // 'long': true,
-          // 'simple': true,
         },
         {
           'label': '详细地址',
-          'name': 'addressDetail' + numId,
+          'name': 'receiverAddressDetail' + numId,
           'required': true,
           'type': 'textarea',
-          // 'long': true,
-          // 'simple': true,
-          // 'large': true,
           'max': 50,
         },
       ],
@@ -130,20 +122,17 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  receiverFormNo:1,
+  receiverFormNo: 0,
   receiverFields:[
     {
-      id:'1',
+      id:'0',
       fields:[
         {
           'label': '商家名称',
-          'name': 'shopName',
+          'name': 'receiverShopName0',
           'required': true,
-          // 'simple': true,
-          // 'long': true,
           'type': 'select',
           'valueName': 'id',
-          'displayName': 'shopName',
           'state': {
             'data': [],
             'loading': false,
@@ -152,47 +141,36 @@ const initialState = {
         },
         {
           'label': '联系人',
-          'name': 'userName',
+          'name': 'receiverUserName0',
           'required': true,
-          // 'long': true,
-          // 'simple': true,
           'max': 20,
         },
         {
           'label': '联系电话',
-          'name': 'phone',
+          'name': 'receiverPhone0',
           'required': true,
-          // 'long': true,
-          // 'simple': true,
           'phone': true,
         },
         {
-          'label': '用车时间',
-          'name': 'drivingTime',
-          'required': true,
-          'type': 'datetime',
-          // 'long': true,
-          // 'simple': true,
+          'label': '送达时间',
+          'name': 'receiverDeliveryTime0',
+          'required': false,
+          'type': 'dateRange',
           'max': 50,
         },
         {
-          'label': '发货地区',
+          'label': '收货地区',
           'required': true,
-          'name': 'area',
+          'name': 'receiverArea0',
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
-          // 'long': true,
-          // 'simple': true,
         },
         {
           'label': '详细地址',
-          'name': 'addressDetail',
+          'name': 'receiverAddressDetail0',
           'required': true,
           'type': 'textarea',
-          // 'long': true,
-          // 'simple': true,
-          // 'large': true,
           'max': 50,
         },
       ],
