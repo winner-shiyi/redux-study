@@ -49,13 +49,7 @@ const ACTION_HANDLERS = {
           'label': '商家名称',
           'name': 'receiverShopName' + numId,
           'required': true,
-          'type': 'select',
-          'valueName': 'id',
-          'state': {
-            'data': [],
-            'loading': false,
-            'lastFetch': 0,
-          },
+          'max': 20,
         },
         {
           'label': '联系人',
@@ -143,13 +137,7 @@ const initialState = {
           'label': '商家名称',
           'name': 'receiverShopName0',
           'required': true,
-          'type': 'select',
-          'valueName': 'id',
-          'state': {
-            'data': [],
-            'loading': false,
-            'lastFetch': 0,
-          },
+          'max': 20,
         },
         {
           'label': '联系人',

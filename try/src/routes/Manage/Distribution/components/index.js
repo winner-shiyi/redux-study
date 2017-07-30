@@ -129,7 +129,6 @@ class View extends Component {
         {...this.props}
         title="车配任务管理"
         columns={columns}
-        // record={record}
       />
     )
   }

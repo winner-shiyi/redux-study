@@ -87,7 +87,7 @@ class FormPage extends Component {
 }
 const WrappedFormPage = Form.create({
   mapPropsToFields (props) {
-    console.log(props)
+    // console.log(props)
     let res = {}
     for (let i in props.values) { // props.values 拿到的就是上面传下来的【保存填写的表单数据】
       let param = props.values[i]

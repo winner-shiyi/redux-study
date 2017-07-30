@@ -22,7 +22,6 @@ export default class ListPage extends Component {
       columns,
       data,
       search,
-      // record,
       changeSearch,
       searchParams,
       page,
