@@ -14,19 +14,17 @@ class FormPage extends Component {
    */
   add () {
     this.props.addReceiverInfo()
-    console.log(this.props.form.getFieldValue('area'))
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
       }
     })
   }
-    
+
   render () {
     const {
       loading = false,
@@ -57,8 +55,8 @@ class FormPage extends Component {
             {
               receiverFields.map((item, index) => {
                 const AmapId = 'mapContainessrGet' + index
-                return <ReceiverForm 
-                  form={form} 
+                return <ReceiverForm
+                  form={form}
                   key={item.id}
                   id={item.id}
                   fields={item.fields}
@@ -74,10 +72,10 @@ class FormPage extends Component {
             <Button type="dashed" onClick={this.add.bind(this)}>
               <Icon type="plus" /> 添加收货地址
             </Button>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              className="login-form-button" 
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
               loading={this.props.loading}>提交
             </Button>
           </FormItem>
@@ -87,35 +85,24 @@ class FormPage extends Component {
   }
 }
 const WrappedFormPage = Form.create({
-  // mapPropsToFields (props) {
-  //   let res = {}
-  //   for (let i in props.values) {
-  //     let param = props.values[i]
-  //     if (typeof param === 'object' && 'value' in param) {
-  //       res[i] = param
-  //     } else {
-  //       res[i] = { value: param }
-  //     }
-  //   }
-  //   if (props.mapFields) {
-  //     res = {
-  //       ...res,
-  //       ...props.mapFields(res),
-  //     }
-  //   }
-  //   return res
-  // },
-  // onFieldsChange (props, fields) {
-  //   console.log(props)
-  //   for (let v in fields) {
-  //     const fld = props.receiverFields.fields.find(item => item.name === fields[v].name)
-  //     fields[v].type = fld && fld.type
-  //   }
-  //   props.changeRecord && props.changeRecord({
-  //     ...props.values,
-  //     ...fields,
-  //   })
-  // },
+  mapPropsToFields (props) {
+    let res = {}
+    for (let i in props.values) {
+      let param = props.values[i]
+      if (typeof param === 'object' && 'value' in param) {
+        res[i] = param
+      } else {
+        res[i] = { value: param }
+      }
+    }
+    if (props.mapFields) {
+      res = {
+        ...res,
+        ...props.mapFields(res),
+      }
+    }
+    return res
+  }
 })(FormPage)
 export default WrappedFormPage
 

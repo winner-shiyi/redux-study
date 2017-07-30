@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Form,
+import {
+  Form,
   Row,
   Col,
   Button,
-  Icon } from 'antd'
+  Icon
+} from 'antd'
 import { createFormItem } from '../../components'
 import PropTypes from 'prop-types'
 
@@ -17,9 +19,9 @@ export default class ReceiverForm extends Component {
     this.AmapId = 'mapId' + Math.random()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const map = new AMap.Map(this.AmapId, {
-        resizeEnable: true
+      resizeEnable: true
     })
     AMap.service(["AMap.PlaceSearch"], () => {
       this.placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
@@ -28,7 +30,7 @@ export default class ReceiverForm extends Component {
         map: map
       })
       // 关键字查询
-      this.placeSearch.search('杭州市三新家园', function(status, result) {
+      this.placeSearch.search('杭州市三新家园', function (status, result) {
         // console.log(status)
         // console.log(result)
       })
@@ -37,25 +39,29 @@ export default class ReceiverForm extends Component {
 
   /**
    * 删除收货地址
-   * @param id 收货地址的id 
+   * @param id 收货地址的id
    */
-  reduce (id) {
+  reduce(id) {
     this.props.reduceReceiverInfo(id)
   }
 
-  render () {
+  render() {
     const {
       fields,
       length,
       id,
+      form,
     } = this.props
-    
-  
+
+    let obj = form.getFieldsValue([`receiverArea${id}`,`receiverAddressDetail${id}`])
+    // console.log(form.getFieldsValue([`receiverArea${id}`,`receiverAddressDetail${id}`]))
+  //  console.log(obj)
+
     return (
-      <li className="receiverForm-item-box" id={id}>
+      <li className="receiverForm-item-box" data-id={id}>
         {
           Number(length) > 1 &&
-          <Icon type="close-circle" className="close-circle" onClick={this.reduce.bind(this,id)}/>
+          <Icon type="close-circle" className="close-circle" onClick={this.reduce.bind(this, id)} />
         }
         <Row>
           {
@@ -65,21 +71,21 @@ export default class ReceiverForm extends Component {
                   field: item,
                   form: this.props.form,
                   formItemLayout: {
-                    labelCol: { span:6 },
+                    labelCol: { span: 6 },
                     wrapperCol: { span: 18 },
                   },
                   inputOpts: {},
                   colSpan: 12,
                 })
               )
-            }) 
+            })
           }
         </Row>
         <Row>
           <Col><div id={this.AmapId} className="mapContainessr"></div></Col>
         </Row>
       </li>
-     
+
     )
   }
 }

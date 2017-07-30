@@ -38,7 +38,6 @@ export const geneBox = (field, opts = {}) => {
     label: field.label,
 
   }
-
   switch (field.type) {
     case 'date':
       return (
@@ -56,6 +55,7 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
           placeholder={field.disabled ? '-' : '请选择地址'}
           options={field.data}
+          onChange={field.onChange}
           changeOnSelect={!!field.changeOnSelect}
         />
       )
@@ -252,7 +252,7 @@ export const createFormItem = (opts) => {
     if (typeof field.label === 'string') {
       msgLabel = (field.labelExtra || field.label || '').replace(/\(.*\)/, '')
     }
-    
+
     if (field.required) {
       let msgPefix = '请输入'
       if (['date', 'datetime', 'dateRange', 'datetimeRange', 'select'].indexOf(field.type) > -1) {

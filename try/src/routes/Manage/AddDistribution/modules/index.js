@@ -88,6 +88,13 @@ const ACTION_HANDLERS = {
           'name': 'receiverArea' + numId,
           'type': 'Cascader',
           'data': addr,
+          onChange(a,b) {
+            let newArr = b.map(item => {
+              return item.label
+            })
+            // return newArr.join()
+            // console.log(newArr.join())
+          },
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
@@ -96,6 +103,7 @@ const ACTION_HANDLERS = {
           'required': true,
           'type': 'textarea',
           'max': 50,
+          
         },
       ],
     })
@@ -164,6 +172,13 @@ const initialState = {
           'name': 'receiverArea0',
           'type': 'Cascader',
           'data': addr,
+          onChange(a,b) {
+            let newArr = b.map(item => {
+              return item.label
+            })
+            // return newArr.join()
+            // console.log(newArr.join())
+          },
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {

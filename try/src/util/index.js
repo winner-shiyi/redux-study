@@ -108,3 +108,12 @@ export function formatMoney (num) {
   let integer = (nums[0]).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
   return nums.length > 1 ? integer + '.' + nums[1] : integer
 }
+
+/**
+ * 对象、数组深拷贝
+ * @param {Object} obj
+ * @return {Object} 深拷贝后的对象
+ */
+export function deepCloneObj (obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
