@@ -14,7 +14,9 @@ class FormPage extends Component {
   add () {
     this.props.addReceiverInfo()
   }
-
+  /**
+   * 提交表单
+   */
   handleSubmit = (e) => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
