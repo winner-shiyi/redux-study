@@ -6,36 +6,76 @@ import ReceiverForm from '../ReceiverForm'
 
 const FormItem = Form.Item
 
-class FormPage extends Component {
-
-
-  /**
-   * 添加收货地址
-   */
-  add () {
-    this.props.addReceiverInfo()
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+const FormPage = Form.create({
+  mapPropsToFields (props) {
+    // console.log(props)
+    
+    let res = {}
+    for (let i in props.values) {
+      let param = props.values[i]
+      if (typeof param === 'object' && 'value' in param) {
+        res[i] = param
+      } else {
+        res[i] = { value: param }
       }
-    })
-  }
+    }
 
-  render () {
+    if (props.mapFields) {
+      res = {
+        ...res,
+        ...props.mapFields(res),
+      }
+    }
+    return res
+  },
+  onFieldsChange (props, fields) {
+    // console.log(props)
+
+    for (let v in fields) {
+      let fld = null
+      props.receiverFields &&　props.receiverFields.forEach((receiverField) => {
+        fld = receiverField.fields.find((item) => item.name === fields[v].name)
+      })
+
+      // console.log(fld)
+
+      fields[v].type = fld && fld.type
+    }
+    props.changeRecord && props.changeRecord({
+      ...props.values,
+      ...fields,
+    })
+  },
+})(
+  (props) => {
     const {
       loading = false,
       form,
       receiverFormNo,
       receiverFields,
       reduceReceiverInfo,
-    } = this.props
+      addReceiverInfo,
+      changeRecord,
+    } = props
+
+    /**
+   * 添加收货地址
+   */
+    const add = () => {
+      addReceiverInfo()
+    }
+
+    const handleSubmit = (e) => {
+      e.preventDefault()
+      form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+        }
+      })
+    }
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
-        <Form className="ant-advanced-search-form" onSubmit={this.handleSubmit}>
+        <Form className="ant-advanced-search-form" onSubmit={handleSubmit}>
           <Row>
             <Col>
               <h2 className="ant-page-title">
@@ -62,47 +102,30 @@ class FormPage extends Component {
                   fields={item.fields}
                   AmapId={AmapId}
                   // receiverFormNo={receiverFormNo}
-                  length={this.props.receiverFields.length}
+                  length={receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
+                  changeRecord={changeRecord}
                 />
               })
             }
           </ul>
           <FormItem wrapperCol={{ span: 17, offset: 7 }}>
-            <Button type="dashed" onClick={this.add.bind(this)}>
+            <Button type="dashed" onClick={add}>
               <Icon type="plus" /> 添加收货地址
             </Button>
             <Button
               type="primary"
               htmlType="submit"
               className="login-form-button"
-              loading={this.props.loading}>提交
+              loading={loading}>提交
             </Button>
           </FormItem>
         </Form>
       </div>
     )
+
+
   }
-}
-const WrappedFormPage = Form.create({
-  mapPropsToFields (props) {
-    let res = {}
-    for (let i in props.values) {
-      let param = props.values[i]
-      if (typeof param === 'object' && 'value' in param) {
-        res[i] = param
-      } else {
-        res[i] = { value: param }
-      }
-    }
-    if (props.mapFields) {
-      res = {
-        ...res,
-        ...props.mapFields(res),
-      }
-    }
-    return res
-  }
-})(FormPage)
-export default WrappedFormPage
+)
+export default FormPage
 

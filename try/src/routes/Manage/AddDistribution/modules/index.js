@@ -9,19 +9,16 @@ import addr from '../../../../../public/mock/addr1.json'
 const TPL_HELLO = 'TPL_HELLO'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
+const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
 // ------------------------------------
 // Actions
 // ------------------------------------
-// const reduceReceiverInfo = (id) => {
-//   return {
-//     type: ADDDISTRIBUTION_REDUCE_RECEIVER_INFO,
-//     payload: id,
-//   }
-// }
+
 export const actions = {
   hello: createAction(TPL_HELLO),
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
+  changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE,'fields')
 }
 
 
@@ -44,10 +41,7 @@ const ACTION_HANDLERS = {
     numId++
 
     let receiverFields = state.receiverFields
-    // const fields = receiverFields[0].fields.map((field, index) => {
-    //   field.name = `${field.name}${numId}`
-    //   return field
-    // })
+    // let NewreceiverFields = state.receiverFields
     receiverFields.push({
       id: numId,
       fields: [
@@ -88,13 +82,6 @@ const ACTION_HANDLERS = {
           'name': 'receiverArea' + numId,
           'type': 'Cascader',
           'data': addr,
-          onChange(a,b) {
-            let newArr = b.map(item => {
-              return item.label
-            })
-            // return newArr.join()
-            // console.log(newArr.join())
-          },
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
@@ -112,9 +99,13 @@ const ACTION_HANDLERS = {
       ...state,
       receiverFormNo:numId,
       receiverFields,
+      // NewreceiverFields,
     }
     return newState
   },
+  /**
+   * 删除收货地址
+   */
   [ADDDISTRIBUTION_REDUCE_RECEIVER_INFO]: (state, action) => {
 
     let newState = Object.assign({}, state)
@@ -123,8 +114,21 @@ const ACTION_HANDLERS = {
     newReceiverFields.splice(index,1)
     newState.receiverFields = newReceiverFields
     return newState
-  }
+  },
+  /**
+   * 表单数据改变更新
+   */
+  [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => {
+    return {
+      ...state,
+      record: {
+        ...state.record,
+        ...action.fields,
+      },
+    }
+  },
 }
+
 
 // ------------------------------------
 // Reducer
@@ -172,13 +176,6 @@ const initialState = {
           'name': 'receiverArea0',
           'type': 'Cascader',
           'data': addr,
-          onChange(a,b) {
-            let newArr = b.map(item => {
-              return item.label
-            })
-            // return newArr.join()
-            // console.log(newArr.join())
-          },
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
@@ -191,6 +188,7 @@ const initialState = {
       ],
     },
   ],
+  record:{}, // 用来保存填写的表单数据
   helloText: 'I’m a mother father gentleman',
 }
 

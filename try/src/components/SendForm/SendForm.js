@@ -15,18 +15,17 @@ import './SendForm.scss'
 
 export default class SendForm extends Component {
   componentDidMount () {
-     var map1 = new AMap.Map("mapContainessrSender", {
+    const map1 = new AMap.Map("mapContainessrSender", {
         resizeEnable: true
     })
-    AMap.service(["AMap.PlaceSearch"], function() {
-        var placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
+    AMap.service(["AMap.PlaceSearch"], () => {
+        this.placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
           pageSize: 1,
           pageIndex: 1,
-          //city: "010", //城市
           map: map1
         })
         //关键字查询
-        placeSearch.search('杭州市近江时代大厦', function(status, result) {
+        this.placeSearch.search('', function(status, result) {
           // console.log(status)
           // console.log(result)
         })
@@ -37,6 +36,21 @@ export default class SendForm extends Component {
     // const {
     //   fields,
     // } = this.props
+    let val1 = this.props.form.getFieldValue('area')
+    let val2 = this.props.form.getFieldValue('addressDetail')
+
+    let val3 = ''
+    if(val1 && val2) {
+      val3 = val1.join() + ',' + val2
+    }
+    if(this.placeSearch && this.placeSearch.search) {
+      this.placeSearch.search(val3, (status, result) => {
+        // console.log(result.poiList.pois[0].adcode && result.poiList.pois[0].adcode)
+        // console.log(result.poiList.pois[0].location.lat)
+        // console.log(result.poiList.pois[0].location.lng)
+      })
+    }
+
     return (
       <div className="senderForm-box">
         <Row>

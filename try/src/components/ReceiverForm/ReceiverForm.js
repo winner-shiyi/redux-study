@@ -17,9 +17,11 @@ export default class ReceiverForm extends Component {
   constructor(props) {
     super(props)
     this.AmapId = 'mapId' + Math.random()
+    
   }
 
   componentDidMount() {
+    
     const map = new AMap.Map(this.AmapId, {
       resizeEnable: true
     })
@@ -30,17 +32,19 @@ export default class ReceiverForm extends Component {
         map: map
       })
       // 关键字查询
-      this.placeSearch.search('杭州市三新家园', function (status, result) {
+      this.placeSearch.search('', function (status, result) {
         // console.log(status)
         // console.log(result)
       })
     })
+
   }
 
   /**
    * 删除收货地址
    * @param id 收货地址的id
    */
+  
   reduce(id) {
     this.props.reduceReceiverInfo(id)
   }
@@ -53,9 +57,20 @@ export default class ReceiverForm extends Component {
       form,
     } = this.props
 
-    let obj = form.getFieldsValue([`receiverArea${id}`,`receiverAddressDetail${id}`])
-    // console.log(form.getFieldsValue([`receiverArea${id}`,`receiverAddressDetail${id}`]))
-  //  console.log(obj)
+    
+    let val1 = this.props.form.getFieldValue(`receiverArea${id}`)
+    let val2 = this.props.form.getFieldValue(`receiverAddressDetail${id}`)
+
+    let val3 = ''
+    if(val1 && val2) {
+      val3 = val1.join() + ',' + val2
+    }
+    if(this.placeSearch && this.placeSearch.search) {
+      this.placeSearch.search(val3)
+    }
+
+ 
+    
 
     return (
       <li className="receiverForm-item-box" data-id={id}>
