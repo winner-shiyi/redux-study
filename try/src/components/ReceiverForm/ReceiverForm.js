@@ -58,8 +58,8 @@ export default class ReceiverForm extends Component {
     } = this.props
 
     
-    let val1 = this.props.form.getFieldValue(`receiverArea${id}`)
-    let val2 = this.props.form.getFieldValue(`receiverAddressDetail${id}`)
+    let val1 = this.props.form.getFieldValue(`${id}area`)
+    let val2 = this.props.form.getFieldValue(`${id}addressDetail`)
 
     let val3 = ''
     if(val1 && val2) {

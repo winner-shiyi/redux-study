@@ -47,39 +47,39 @@ const ACTION_HANDLERS = {
       fields: [
         {
           'label': '商家名称',
-          'name': 'receiverShopName' + numId,
+          'name':  numId+'shopName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系人',
-          'name': 'receiverUserName' + numId,
+          'name': numId+'userName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系电话',
-          'name': 'receiverPhone' + numId,
+          'name': numId+'phone',
           'required': true,
           'phone': true,
         },
         {
           'label': '送达时间',
-          'name': 'receiverDeliveryTime' + numId,
+          'name': numId+'deliveryTime',
           'required': false,
           'type': 'dateRange',
         },
         {
           'label': '收货地区',
           'required': true,
-          'name': 'receiverArea' + numId,
+          'name': numId+'area',
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
           'label': '详细地址',
-          'name': 'receiverAddressDetail' + numId,
+          'name': numId+'addressDetail',
           'required': true,
           'type': 'textarea',
           'max': 50,
@@ -134,39 +134,39 @@ const initialState = {
       fields:[
         {
           'label': '商家名称',
-          'name': 'receiverShopName0',
+          'name': '0shopName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系人',
-          'name': 'receiverUserName0',
+          'name': '0userName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系电话',
-          'name': 'receiverPhone0',
+          'name': '0phone',
           'required': true,
           'phone': true,
         },
         {
           'label': '送达时间',
-          'name': 'receiverDeliveryTime0',
+          'name': '0deliveryTime',
           'required': false,
-          'type': 'dateRange',
+          'type': 'dateRange',  
         },
         {
           'label': '收货地区',
           'required': true,
-          'name': 'receiverArea0',
+          'name': '0area',
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
           'label': '详细地址',
-          'name': 'receiverAddressDetail0',
+          'name': '0addressDetail',
           'required': true,
           'type': 'textarea',
           'max': 50,

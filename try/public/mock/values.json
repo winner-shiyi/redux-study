@@ -1,0 +1,38 @@
+/* chrome-extension://pkgccpejnmalmdinmhkkfafefagiiiad/template/fehelper_jsonformat.html */
+{
+    "shopName": "1",
+    "userName": "发货人1",
+    "phone": "15880274595",
+    "drivingTime": "2017-07-31 00:18",
+    "area": [
+        "北京市",
+        "东城区"
+    ],
+    "addressDetail": "天安门",
+    "receiverShopName0": "我是收货商家",
+    "receiverUserName0": "收货人魏娜",
+    "receiverPhone0": "15880111111",
+    "receiverDeliveryTime0": [
+        "2017-07-30 16:17:27",
+        "2017-08-02 16:17:27"
+    ],
+    "receiverArea0": [
+        "浙江省",
+        "杭州市",
+        "江干区"
+    ],
+    "receiverAddressDetail0": "三新家园",
+    "receiverShopName1": "收货商家2",
+    "receiverUserName1": "收货人严小飞",
+    "receiverPhone1": "18810218138",
+    "receiverDeliveryTime1": [
+        "2017-07-30 16:28:14",
+        "2017-07-31 16:28:14"
+    ],
+    "receiverArea1": [
+        "浙江省",
+        "杭州市",
+        "江干区"
+    ],
+    "receiverAddressDetail1": "市民中心"
+}
