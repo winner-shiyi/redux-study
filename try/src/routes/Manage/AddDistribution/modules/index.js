@@ -68,7 +68,6 @@ const ACTION_HANDLERS = {
           'name': 'receiverDeliveryTime' + numId,
           'required': false,
           'type': 'dateRange',
-          'max': 50,
         },
         {
           'label': '收货地区',
@@ -156,7 +155,6 @@ const initialState = {
           'name': 'receiverDeliveryTime0',
           'required': false,
           'type': 'dateRange',
-          'max': 50,
         },
         {
           'label': '收货地区',

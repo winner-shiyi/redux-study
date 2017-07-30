@@ -5,13 +5,7 @@ export const fields = [
       'name': 'shopName',
       'required': true,
       'type': 'select',
-      'valueName': 'id',
-      'displayName': 'shopName',
-      'state': {
-        'data': [],
-        'loading': false,
-        'lastFetch': 0,
-      },
+      'data': [['1', '发货商家1'], ['2', '发货商家2']],
     },
     {
       'label': '联系人',
@@ -30,7 +24,7 @@ export const fields = [
       'name': 'drivingTime',
       'required': false,
       'type': 'datetime',
-      'max': 50,
+      // 'max': 50, todo 时间需要怎么限制
     },
     {
       'label': '发货地区',
