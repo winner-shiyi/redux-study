@@ -14,10 +14,12 @@ class FormPage extends Component {
    */
   add () {
     this.props.addReceiverInfo()
+    console.log(this.props.form.getFieldValue('area'))
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
+    
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
@@ -85,24 +87,24 @@ class FormPage extends Component {
   }
 }
 const WrappedFormPage = Form.create({
-  mapPropsToFields (props) {
-    let res = {}
-    for (let i in props.values) {
-      let param = props.values[i]
-      if (typeof param === 'object' && 'value' in param) {
-        res[i] = param
-      } else {
-        res[i] = { value: param }
-      }
-    }
-    if (props.mapFields) {
-      res = {
-        ...res,
-        ...props.mapFields(res),
-      }
-    }
-    return res
-  },
+  // mapPropsToFields (props) {
+  //   let res = {}
+  //   for (let i in props.values) {
+  //     let param = props.values[i]
+  //     if (typeof param === 'object' && 'value' in param) {
+  //       res[i] = param
+  //     } else {
+  //       res[i] = { value: param }
+  //     }
+  //   }
+  //   if (props.mapFields) {
+  //     res = {
+  //       ...res,
+  //       ...props.mapFields(res),
+  //     }
+  //   }
+  //   return res
+  // },
   // onFieldsChange (props, fields) {
   //   console.log(props)
   //   for (let v in fields) {

@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { createAction } from '../../../../util'
 import fetch from '../../../../util/fetch'
-import addr from '../../../../../public/mock/addr.json'
+import addr from '../../../../../public/mock/addr1.json'
 
 // ------------------------------------
 // Constants
