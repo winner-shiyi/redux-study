@@ -10,6 +10,8 @@ const TPL_HELLO = 'TPL_HELLO'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
 const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
+const ADDDISTRIBUTION_SENDER_MAP_CHANGE = 'ADDDISTRIBUTION_SENDER_MAP_CHANGE'
+const ADDDISTRIBUTION_RECEIVER_MAP_CHANGE = 'ADDDISTRIBUTION_RECEIVER_MAP_CHANGE'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -19,8 +21,9 @@ export const actions = {
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
+  changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'param'),
+  changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'params'),
 }
-
 
 // ------------------------------------
 // Action Handlers
@@ -39,7 +42,6 @@ const ACTION_HANDLERS = {
   [ADDDISTRIBUTION_ADD_RECEIVER_INFO]: (state, action) => {
     let numId = state.receiverFormNo
     numId++
-
     let receiverFields = state.receiverFields
     // let NewreceiverFields = state.receiverFields
     receiverFields.push({
@@ -106,7 +108,6 @@ const ACTION_HANDLERS = {
    * 删除收货地址
    */
   [ADDDISTRIBUTION_REDUCE_RECEIVER_INFO]: (state, action) => {
-
     let newState = Object.assign({}, state)
     let newReceiverFields = [...newState.receiverFields]
     let index = newReceiverFields.findIndex(item => item.id === action.id)
@@ -126,7 +127,29 @@ const ACTION_HANDLERS = {
       },
     }
   },
-
+  /**
+   * 发货地图信息更新
+   */
+  [ADDDISTRIBUTION_SENDER_MAP_CHANGE]: (state, action) => {
+    let newState = {
+      ...state,
+      senderMap: {
+        ...state.senderMap,
+      },
+    }
+    return newState
+  },
+  /**
+   * 收货地图信息更新
+   */
+  [ADDDISTRIBUTION_RECEIVER_MAP_CHANGE]: (state, action) => {
+    let newState = {
+      ...state,
+      // receiverMap
+      
+    }
+    return newState
+  },
 }
 
 // ------------------------------------
@@ -194,7 +217,12 @@ const initialState = {
       value: '',
     },
   }, 
+  senderMap: { // 用来保存【发货】高德地图返回的位置信息
 
+  },
+  receiverMap: [ // 用来保存【收货】高德地图返回的位置信息
+
+  ],
   helloText: 'I’m a mother father gentleman',
 }
 

@@ -67,7 +67,9 @@ export default class ReceiverForm extends Component {
       val3 = val1Arr.join() + ',' + val2
     }
     if (this.placeSearch && this.placeSearch.search) {
-      this.placeSearch.search(val3)
+      this.placeSearch.search(val3, (status, result) => {
+        // console.log(result)
+      })
     }
 
     return (

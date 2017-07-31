@@ -147,7 +147,7 @@ const WrappedFormPage = Form.create({
 
     for (let v in fields) {
       let fld = null
-      props.receiverFields &&　props.receiverFields.forEach((receiverField) => {
+      props.receiverFields && props.receiverFields.forEach((receiverField) => {
         fld = receiverField.fields.find((item) => item.name === fields[v].name)
       })
       // console.log(fld)
