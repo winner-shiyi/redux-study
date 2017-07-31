@@ -12,16 +12,14 @@ import PropTypes from 'prop-types'
 // import { fields } from './configFields' // 新建车配任务表单字段
 import './ReceiverForm.scss'
 
-
 export default class ReceiverForm extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.AmapId = 'mapId' + Math.random()
     
   }
 
-  componentDidMount() {
-    
+  componentDidMount () { 
     const map = new AMap.Map(this.AmapId, {
       resizeEnable: true
     })
@@ -55,22 +53,22 @@ export default class ReceiverForm extends Component {
       length,
       id,
       form,
+      values,
     } = this.props
 
-    
-    let val1 = this.props.form.getFieldValue(`${id}area`)
-    let val2 = this.props.form.getFieldValue(`${id}addressDetail`)
+    // let val1 = this.props.form.getFieldValue(`${id}region`)
+    // let val2 = this.props.form.getFieldValue(`${id}addressDetail`)
+
+    let val1Arr = values[`${id}region`] && values[`${id}region`].value
+    let val2 = values[`${id}addressDetail`] && values[`${id}addressDetail`].value
 
     let val3 = ''
-    if(val1 && val2) {
-      val3 = val1.join() + ',' + val2
+    if (val1Arr && val2) {
+      val3 = val1Arr.join() + ',' + val2
     }
-    if(this.placeSearch && this.placeSearch.search) {
+    if (this.placeSearch && this.placeSearch.search) {
       this.placeSearch.search(val3)
     }
-
- 
-    
 
     return (
       <li className="receiverForm-item-box" data-id={id}>

@@ -110,7 +110,7 @@ const ACTION_HANDLERS = {
     let newState = Object.assign({}, state)
     let newReceiverFields = [...newState.receiverFields]
     let index = newReceiverFields.findIndex(item => item.id === action.id)
-    newReceiverFields.splice(index,1)
+    newReceiverFields.splice(index, 1)
     newState.receiverFields = newReceiverFields
     return newState
   },
@@ -126,6 +126,7 @@ const ACTION_HANDLERS = {
       },
     }
   },
+
 }
 
 // ------------------------------------
@@ -133,7 +134,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   receiverFormNo: 0,
-  receiverFields:[
+  receiverFields: [
     {
       id:'0',
       fields:[
@@ -185,7 +186,15 @@ const initialState = {
       ],
     },
   ],
-  record:{}, // 用来保存填写的表单数据
+  record: { // 用来保存填写的表单数据
+    region: {
+      value: [],
+    },
+    addressDetail: {
+      value: '',
+    },
+  }, 
+
   helloText: 'I’m a mother father gentleman',
 }
 

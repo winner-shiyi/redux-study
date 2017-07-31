@@ -22,7 +22,7 @@ class FormPage extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // todo 
-        // 需要转换成 { from: {}, to: [{}, {}] }，这种格式
+        // 需要转换成 { from: {}, to: [{}, {}] }这种格式
         const senderInfo = {}
         const receiversInfoList = []
         const receiversInfoListObj = {}
@@ -31,6 +31,11 @@ class FormPage extends Component {
           let k = parseInt(key)
           if (isNaN(k)) {
             senderInfo[key] = values[key]
+            if (key === 'region') {
+              senderInfo['province'] = senderInfo[key][0]
+              senderInfo['city'] = senderInfo[key][1]
+              senderInfo['area'] = senderInfo[key][2]
+            }
           } else {
             if (!receiversInfoListObj[k]) {
               receiversInfoListObj[k] = {}
@@ -38,9 +43,16 @@ class FormPage extends Component {
             receiversInfoListObj[k][key.replace(k, '')] = values[key]
           }
         })
+
+        delete senderInfo.region
+
+        // Object.keys(receiversInfoListObj).forEach((key) => {
+        //   receiversInfoList.push(receiversInfoListObj[key])
+        // })
         Object.keys(receiversInfoListObj).forEach((key) => {
           receiversInfoList.push(receiversInfoListObj[key])
         })
+        
         console.log({
           senderInfo,
           receiversInfoList,
@@ -56,6 +68,7 @@ class FormPage extends Component {
       receiverFormNo,
       receiverFields,
       reduceReceiverInfo,
+      values, // 就是保存表单中填写的数据
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -67,7 +80,7 @@ class FormPage extends Component {
               </h2>
             </Col>
           </Row>
-          <SendForm form={form} />
+          <SendForm form={form} values={values} />
           <Row>
             <Col>
               <h2 className="ant-page-title">
@@ -88,6 +101,7 @@ class FormPage extends Component {
                   // receiverFormNo={receiverFormNo}
                   length={this.props.receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
+                  values={values}
                 />
               })
             }

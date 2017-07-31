@@ -28,24 +28,33 @@ export default class SendForm extends Component {
         // console.log(result)
       })
     })
+
+  }
+
+  componentWillReceiveProps (nextProps) {
+    // console.log(JSON.stringify(nextProps))
+    if ('values' in nextProps) {
+    }
   }
 
   render () {
-    // const {
-    //   fields,
-    // } = this.props
-    let val1 = this.props.form.getFieldValue('region')
-    let val2 = this.props.form.getFieldValue('addressDetail')
+    const {
+      values,
+    } = this.props
+    // let val1 = this.props.form.getFieldValue('region')
+    // let val2 = this.props.form.getFieldValue('addressDetail')
 
+    let val1Arr = values.region.value
+    let val2 = values.addressDetail.value
+    
     let val3 = ''
-    if (val1 && val2) {
-      val3 = val1.join() + ',' + val2
+    if (val1Arr && val2) {
+      val3 = val1Arr.join() + ',' + val2
     }
+    
     if (this.placeSearch && this.placeSearch.search) {
       this.placeSearch.search(val3, (status, result) => {
-        // console.log(result.poiList.pois[0].adcode && result.poiList.pois[0].adcode)
-        // console.log(result.poiList.pois[0].location.lat)
-        // console.log(result.poiList.pois[0].location.lng)
+        console.log(result)
       })
     }
 
