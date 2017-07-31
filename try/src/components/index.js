@@ -215,6 +215,7 @@ export const geneBox = (field, opts = {}) => {
         <AutoComplete
           {...defaultOpts}
           allowClear
+          dataSource={field.dataSource}
           placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
           buttonText={field.buttonText}
           buttonClick={field.buttonClick}

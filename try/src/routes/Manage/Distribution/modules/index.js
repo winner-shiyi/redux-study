@@ -4,12 +4,7 @@ import { createAction } from '../../../../util'
 // ------------------------------------
 // Constants
 // ------------------------------------
-// const DISTRIBUTION_ADD = 'DISTRIBUTION_ADD'
-// const DISTRIBUTION_EDIT = 'DISTRIBUTION_EDIT'
-// const DISTRIBUTION_ADDEDIT_CANCEL = 'DISTRIBUTION_ADDEDIT_CANCEL'
-// const DISTRIBUTION_SAVE_REQUEST = 'DISTRIBUTION_SAVE_REQUEST'
-// const DISTRIBUTION_SAVE_SUCCESS = 'DISTRIBUTION_SAVE_SUCCESS'
-// const DISTRIBUTION_SAVE_FAILURE = 'DISTRIBUTION_SAVE_FAILURE'
+
 const DISTRIBUTION_REQUEST = 'DISTRIBUTION_REQUEST'
 const DISTRIBUTION_SUCCESS = 'DISTRIBUTION_SUCCESS'
 const DISTRIBUTION_FAILURE = 'DISTRIBUTION_FAILURE'
@@ -23,42 +18,6 @@ const DISTRIBUTION_SET_STATUS_FAILURE = 'DISTRIBUTION_SET_STATUS_FAILURE'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-// const saveRequest = (record) => {
-//   return {
-//     type: DISTRIBUTION_SAVE_REQUEST,
-//     payload: record
-//   }
-// }
-
-// const saveSuccess = (data) => {
-//   return {
-//     type: DISTRIBUTION_SAVE_SUCCESS,
-//     payload: data
-//   }
-// }
-
-// const saveFailure = (msg) => {
-//   return {
-//     type: DISTRIBUTION_SAVE_FAILURE,
-//     payload: msg
-//   }
-// }
-
-// const save = (record) => {
-//   return dispatch => {
-//     dispatch(saveRequest(record))
-//     return fetch('/saveUser', record)
-//       .then(json => {
-//         if (json.resultCode == '0000') {
-//           dispatch(saveSuccess(json.resultData))
-//           return true
-//         } else {
-//           dispatch(saveFailure(json.resultDesc))
-//         }
-//       })
-//   }
-// }
 
 const request = () => {
   return {
@@ -139,7 +98,7 @@ const ACTION_HANDLERS = {
         ...state.page,
         pageNo: action.payload.pageNo,
         pageSize: action.payload.pageSize,
-        count: action.payload.count,
+        total: action.payload.total,
       },
     }
   },
@@ -208,7 +167,7 @@ const initialState = {
   page: {
     pageNo: 1,
     pageSize: 10,
-    count: 0,
+    total: 0,
   },
   searchParams: {
   },

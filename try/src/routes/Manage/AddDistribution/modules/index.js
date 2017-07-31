@@ -12,6 +12,9 @@ const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_IN
 const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
 const ADDDISTRIBUTION_SENDER_MAP_CHANGE = 'ADDDISTRIBUTION_SENDER_MAP_CHANGE'
 const ADDDISTRIBUTION_RECEIVER_MAP_CHANGE = 'ADDDISTRIBUTION_RECEIVER_MAP_CHANGE'
+const ADDDISTRIBUTION_SUBMIT_REQUEST = 'ADDDISTRIBUTION_SUBMIT_REQUEST'
+const ADDDISTRIBUTION_SUBMIT_SUCCESS = 'ADDDISTRIBUTION_SUBMIT_SUCCESS'
+const ADDDISTRIBUTION_SUBMIT_FAILURE = 'ADDDISTRIBUTION_SUBMIT_FAILURE'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -23,6 +26,12 @@ export const actions = {
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
   changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'mapValue'),
   changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'mapValues'),
+  submit: (params) => {
+    return {
+      types: [ADDDISTRIBUTION_SUBMIT_REQUEST, ADDDISTRIBUTION_SUBMIT_SUCCESS, ADDDISTRIBUTION_SUBMIT_FAILURE],
+      callAPI: () => fetch('/repairbill/', params), // todo
+    }
+  },
 }
 
 // ------------------------------------
@@ -115,6 +124,28 @@ const ACTION_HANDLERS = {
     newState.receiverFields = newReceiverFields
     return newState
   },
+  /**
+   * 提交车配任务表单
+   */
+  [ADDDISTRIBUTION_SUBMIT_REQUEST]: (state, action) => {
+    return {
+      ...state,
+    }
+  },
+  [ADDDISTRIBUTION_SUBMIT_SUCCESS]: (state, action) => {
+    message.success('提交成功')
+    return {
+      ...state,
+      record: {},
+    }
+  },
+  [ADDDISTRIBUTION_SUBMIT_FAILURE]: (state, action) => {
+    message.error(action.msg)
+    return {
+      ...state,
+    }
+  },
+
   /**
    * 表单数据改变更新
    */

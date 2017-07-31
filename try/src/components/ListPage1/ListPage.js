@@ -63,7 +63,7 @@ export default class ListPage extends Component {
           pagination={
             page ? {
               current: page.pageNo,
-              total: page.count,
+              total: page.total,
               pageSize: page.pageSize || 10,
             } : null
           }

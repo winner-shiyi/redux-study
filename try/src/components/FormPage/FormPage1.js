@@ -62,12 +62,17 @@ class FormPage extends Component {
           receiversInfoList.push(receiversInfoListObj[key])
         })
 
-        // console.log(this.props.senderMap)
-        
-        console.log({
+        this.props.submit({
           senderInfo,
           receiversInfoList,
         })
+
+        // console.log(this.props.senderMap)
+        
+        // console.log({
+        //   senderInfo,
+        //   receiversInfoList,
+        // })
       }
     })
   }
@@ -93,6 +98,7 @@ class FormPage extends Component {
               </h2>
             </Col>
           </Row>
+          
           <SendForm form={form} values={values} changeSenderMap={changeSenderMap}/>
           <Row>
             <Col>

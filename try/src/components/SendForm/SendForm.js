@@ -9,9 +9,11 @@ import PropTypes from 'prop-types'
 
 import { fields } from './configFields' // 新建车配任务表单字段
 
+
 import './SendForm.scss'
 
 export default class SendForm extends Component {
+
   componentDidMount () {
     const map1 = new window.AMap.Map("mapContainessrSender", {
       resizeEnable: true
@@ -25,6 +27,13 @@ export default class SendForm extends Component {
       // 关键字查询
       this.placeSearch.search('')
     })
+
+    // [{shopName: 'DDD'}, {shopNmae: 'FFF'}].map(() => {
+	
+    // })
+    // ['DDDD', 'FFF']
+    // 没有就要拆分了
+    // },5000)
   }
 
 

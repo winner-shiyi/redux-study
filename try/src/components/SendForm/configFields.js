@@ -4,8 +4,9 @@ export const fields = [
       'label': '商家名称',
       'name': 'shopName',
       'required': true,
-      'type': 'select',
-      'data': [['1', '发货商家1'], ['2', '发货商家2']],
+      // 'type': 'select',
+      'dataSource': ['rrrr', 'dddd'],
+      // 'data': [['1', '发货商家1'], ['2', '发货商家2']],
     },
     {
       'label': '联系人',
