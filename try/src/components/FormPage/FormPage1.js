@@ -29,29 +29,40 @@ class FormPage extends Component {
 
         Object.keys(values).forEach((key) => {
           let k = parseInt(key)
+          const curValue = values[key]
+
           if (isNaN(k)) {
-            senderInfo[key] = values[key]
+            senderInfo[key] = curValue
             if (key === 'region') {
               senderInfo['province'] = senderInfo[key][0]
               senderInfo['city'] = senderInfo[key][1]
               senderInfo['area'] = senderInfo[key][2]
             }
+            Object.assign(senderInfo, window.mapInfosToWindow)
+            delete senderInfo.region
           } else {
             if (!receiversInfoListObj[k]) {
               receiversInfoListObj[k] = {}
             }
-            receiversInfoListObj[k][key.replace(k, '')] = values[key]
+            receiversInfoListObj[k][key.replace(k, '')] = curValue
+            // 
+            if (key.replace(k, '') === 'region') {
+              receiversInfoListObj[k]['province'] = values[key][0]
+              receiversInfoListObj[k]['city'] = values[key][1]
+              receiversInfoListObj[k]['area'] = values[key][2]
+            }
+
+            // 从window上获取地图保存信息
+            const mw = window[`${k}mapInfosToWindow`] 
+            Object.assign(receiversInfoListObj[k], mw)
+            delete receiversInfoListObj[k].region                    
           }
         })
-
-        delete senderInfo.region
-
-        // Object.keys(receiversInfoListObj).forEach((key) => {
-        //   receiversInfoList.push(receiversInfoListObj[key])
-        // })
         Object.keys(receiversInfoListObj).forEach((key) => {
           receiversInfoList.push(receiversInfoListObj[key])
         })
+
+        // console.log(this.props.senderMap)
         
         console.log({
           senderInfo,
@@ -68,7 +79,9 @@ class FormPage extends Component {
       receiverFormNo,
       receiverFields,
       reduceReceiverInfo,
-      values, // 就是保存表单中填写的数据
+      values, // 就是保存表单中填写的数据,
+      changeSenderMap,
+      changeReceiverMap,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -80,7 +93,7 @@ class FormPage extends Component {
               </h2>
             </Col>
           </Row>
-          <SendForm form={form} values={values} />
+          <SendForm form={form} values={values} changeSenderMap={changeSenderMap}/>
           <Row>
             <Col>
               <h2 className="ant-page-title">

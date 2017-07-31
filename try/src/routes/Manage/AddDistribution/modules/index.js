@@ -21,8 +21,8 @@ export const actions = {
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
-  changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'param'),
-  changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'params'),
+  changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'mapValue'),
+  changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'mapValues'),
 }
 
 // ------------------------------------
@@ -135,6 +135,7 @@ const ACTION_HANDLERS = {
       ...state,
       senderMap: {
         ...state.senderMap,
+        ...action.mapValue,
       },
     }
     return newState
@@ -218,10 +219,17 @@ const initialState = {
     },
   }, 
   senderMap: { // 用来保存【发货】高德地图返回的位置信息
-
+    adcode:'',
+    latitude:'',
+    longitude:'',
   },
   receiverMap: [ // 用来保存【收货】高德地图返回的位置信息
-
+    {
+      id:0,
+      adcode:'',
+      latitude:'',
+      longitude:'',
+    },
   ],
   helloText: 'I’m a mother father gentleman',
 }

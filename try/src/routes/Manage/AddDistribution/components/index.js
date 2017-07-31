@@ -15,6 +15,8 @@ class View extends Component {
       reduceReceiverInfo,
       receiverFormNo,
       record, // 保存填写的表单数据
+      changeSenderMap, // 方法：发货信息地图更新
+      senderMap, // 保存发货信息地图数据
     } = this.props
     return (
       <WrappedFormPage 

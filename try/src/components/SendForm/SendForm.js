@@ -13,51 +13,42 @@ import './SendForm.scss'
 
 export default class SendForm extends Component {
   componentDidMount () {
-    const map1 = new AMap.Map("mapContainessrSender", {
+    const map1 = new window.AMap.Map("mapContainessrSender", {
       resizeEnable: true
     })
-    AMap.service(["AMap.PlaceSearch"], () => {
-      this.placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
+    window.AMap.service(["AMap.PlaceSearch"], () => {
+      this.placeSearch = new window.AMap.PlaceSearch({ // 构造地点查询类
         pageSize: 1,
         pageIndex: 1,
         map: map1
       })
       // 关键字查询
-      this.placeSearch.search('', function (status, result) {
-        // console.log(status)
-        // console.log(result)
-      })
+      this.placeSearch.search('')
     })
-
   }
 
-  componentWillReceiveProps (nextProps) {
-    // console.log(JSON.stringify(nextProps))
-    if ('values' in nextProps) {
-    }
-  }
 
   render () {
     const {
       values,
+      changeSenderMap,
     } = this.props
-    // let val1 = this.props.form.getFieldValue('region')
-    // let val2 = this.props.form.getFieldValue('addressDetail')
 
     let val1Arr = values.region.value
     let val2 = values.addressDetail.value
     
-    let val3 = ''
-    if (val1Arr && val2) {
-      val3 = val1Arr.join() + ',' + val2
-    }
-    
-    if (this.placeSearch && this.placeSearch.search) {
-      this.placeSearch.search(val3, (status, result) => {
-        console.log(result)
+    if (val1Arr && val2 && this.placeSearch && this.placeSearch.search) {
+      this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
+        if (result.poiList) {
+          const pois = result.poiList.pois[0]
+          window['mapInfosToWindow'] = {
+            adcode: pois.adcode,
+            latitude: pois.location.lat,
+            longitude: pois.location.lng,
+          }
+        }
       })
     }
-
     return (
       <div className="senderForm-box">
         <Row>

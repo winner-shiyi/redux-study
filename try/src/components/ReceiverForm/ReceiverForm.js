@@ -8,8 +8,6 @@ import {
 } from 'antd'
 import { createFormItem } from '../../components'
 import PropTypes from 'prop-types'
-
-// import { fields } from './configFields' // 新建车配任务表单字段
 import './ReceiverForm.scss'
 
 export default class ReceiverForm extends Component {
@@ -20,22 +18,18 @@ export default class ReceiverForm extends Component {
   }
 
   componentDidMount () { 
-    const map = new AMap.Map(this.AmapId, {
-      resizeEnable: true
+    const map = new window.AMap.Map(this.AmapId, {
+      resizeEnable: true,
     })
-    AMap.service(["AMap.PlaceSearch"], () => {
-      this.placeSearch = new AMap.PlaceSearch({ // 构造地点查询类
+    window.AMap.service(['AMap.PlaceSearch'], () => {
+      this.placeSearch = new window.AMap.PlaceSearch({ // 构造地点查询类
         pageSize: 1,
         pageIndex: 1,
-        map: map
+        map: map,
       })
       // 关键字查询
-      this.placeSearch.search('', function (status, result) {
-        // console.log(status)
-        // console.log(result)
-      })
+      this.placeSearch.search('')
     })
-
   }
 
   /**
@@ -43,7 +37,7 @@ export default class ReceiverForm extends Component {
    * @param id 收货地址的id
    */
   
-  reduce(id) {
+  reduce (id) {
     this.props.reduceReceiverInfo(id)
   }
 
@@ -56,19 +50,19 @@ export default class ReceiverForm extends Component {
       values,
     } = this.props
 
-    // let val1 = this.props.form.getFieldValue(`${id}region`)
-    // let val2 = this.props.form.getFieldValue(`${id}addressDetail`)
-
     let val1Arr = values[`${id}region`] && values[`${id}region`].value
     let val2 = values[`${id}addressDetail`] && values[`${id}addressDetail`].value
 
-    let val3 = ''
-    if (val1Arr && val2) {
-      val3 = val1Arr.join() + ',' + val2
-    }
-    if (this.placeSearch && this.placeSearch.search) {
-      this.placeSearch.search(val3, (status, result) => {
-        // console.log(result)
+    if (val1Arr && val2 && this.placeSearch && this.placeSearch.search) {
+      this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
+        if (result.poiList) {
+          const pois = result.poiList.pois[0]
+          window[`${id}mapInfosToWindow`] = {
+            adcode: pois.adcode,
+            latitude: pois.location.lat,
+            longitude: pois.location.lng,
+          }
+        }
       })
     }
 
