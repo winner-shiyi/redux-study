@@ -1,4 +1,4 @@
-import addr from '../../../public/mock/addr1.json'
+import addr from '../../../public/mock/addr2.json'
 export const fields = [
     {
       'label': '商家名称',
@@ -29,7 +29,7 @@ export const fields = [
     {
       'label': '发货地区',
       'required': true,
-      'name': 'area',
+      'name': 'region',
       'type': 'Cascader',
       'data': addr,
       'changeOnSelect': 'true', // 每选择一项就会马上改变

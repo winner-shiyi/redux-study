@@ -21,31 +21,30 @@ class FormPage extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // console.log(JSON.stringify(values))
+        // todo 
         // 需要转换成 { from: {}, to: [{}, {}] }，这种格式
-        const from = {}
-        const to = []
-        const toObj = {}
+        const senderInfo = {}
+        const receiversInfoList = []
+        const receiversInfoListObj = {}
 
         Object.keys(values).forEach((key) => {
           let k = parseInt(key)
-          if(isNaN(k)) {
-            from[key] = values[key]
+          if (isNaN(k)) {
+            senderInfo[key] = values[key]
           } else {
-            if (!toObj[k]) {
-              toObj[k] = {}
+            if (!receiversInfoListObj[k]) {
+              receiversInfoListObj[k] = {}
             }
-            toObj[k][key.replace(k, '')] = values[key]
+            receiversInfoListObj[k][key.replace(k, '')] = values[key]
           }
         })
-        Object.keys(toObj).forEach((key) => {
-          to.push(toObj[key])
+        Object.keys(receiversInfoListObj).forEach((key) => {
+          receiversInfoList.push(receiversInfoListObj[key])
         })
         console.log({
-          from,
-          to,
+          senderInfo,
+          receiversInfoList,
         })
-
       }
     })
   }

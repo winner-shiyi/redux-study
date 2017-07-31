@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { createAction } from '../../../../util'
 import fetch from '../../../../util/fetch'
-import addr from '../../../../../public/mock/addr1.json'
+import addr from '../../../../../public/mock/addr2.json'
 
 // ------------------------------------
 // Constants
@@ -18,7 +18,7 @@ export const actions = {
   hello: createAction(TPL_HELLO),
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
-  changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE,'fields')
+  changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
 }
 
 
@@ -47,39 +47,45 @@ const ACTION_HANDLERS = {
       fields: [
         {
           'label': '商家名称',
-          'name':  numId+'shopName',
+          'name':  numId + 'shopName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系人',
-          'name': numId+'userName',
+          'name': numId + 'userName',
           'required': true,
           'max': 20,
         },
         {
           'label': '联系电话',
-          'name': numId+'phone',
+          'name': numId + 'phone',
           'required': true,
           'phone': true,
         },
         {
-          'label': '送达时间',
-          'name': numId+'deliveryTime',
+          'label': '送达起始时间',
+          'name': numId + 'deliveryBeginTime',
           'required': false,
-          'type': 'dateRange',
+          'type': 'datetime',
+        },
+        {
+          'label': '送达结束时间',
+          'name': numId + 'deliveryEndTime',
+          'required': false,
+          'type': 'datetime',
         },
         {
           'label': '收货地区',
           'required': true,
-          'name': numId+'area',
+          'name': numId + 'region',
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
           'label': '详细地址',
-          'name': numId+'addressDetail',
+          'name': numId + 'addressDetail',
           'required': true,
           'type': 'textarea',
           'max': 50,
@@ -122,7 +128,6 @@ const ACTION_HANDLERS = {
   },
 }
 
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -151,15 +156,21 @@ const initialState = {
           'phone': true,
         },
         {
-          'label': '送达时间',
-          'name': '0deliveryTime',
+          'label': '送达起始时间',
+          'name': '0deliveryBeginTime',
           'required': false,
-          'type': 'dateRange',  
+          'type': 'datetime',
+        },
+        {
+          'label': '送达结束时间',
+          'name': '0deliveryEndTime',
+          'required': false,
+          'type': 'datetime',
         },
         {
           'label': '收货地区',
           'required': true,
-          'name': '0area',
+          'name': '0region',
           'type': 'Cascader',
           'data': addr,
           'changeOnSelect': 'true', // 每选择一项就会马上改变
