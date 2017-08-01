@@ -46,13 +46,13 @@ const senderSearch = (params) => { // 发货商家模糊搜索
   return dispatch => {
     dispatch(senderSearchRequest(params)) // sendInfo.json
     // return fetch('/resetPWD', { shopName: params.shopName }) // todo 等待接口
-    fetch('//' + location.host + '/mock/sendInfo.json', params, {
+    return fetch('//' + location.host + '/mock/sendInfo.json', params, {
       method: 'GET',
     })
       .then(json => {
         if (json.resultCode === '0000') {
           dispatch(senderSearchSuccess(json.resultData))
-          return json.resultData.password
+          return json.resultData.list
         } else {
           dispatch(senderSearchFailure(json.resultDesc))
         }

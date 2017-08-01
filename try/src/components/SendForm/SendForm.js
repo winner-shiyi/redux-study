@@ -17,6 +17,7 @@ export default class SendForm extends Component {
     this.state = {
       dataSource: [],
     }
+    this.timer = null
   }
 
   componentDidMount () {
@@ -40,13 +41,16 @@ export default class SendForm extends Component {
   onChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个thi指向的是fields[0]
     // console.log('我是onChange输出的值：' + val)
     // 请求接口 过1秒钟以后去请求接口
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.props.senderSearch(val).then((items) => {
+        const newDataSource = items.map((item) => item.shopName)
+        this.renderItem(newDataSource, val)
+      })
+    }, 400)
+  }
 
-    this.props.senderSearch(val) 
-
-
-    let newDataSource = this.props.newSenderInfos.map((item) => {
-      return item.shopName
-    })
+  renderItem = (newDataSource, val) => {
     this.setState({
       dataSource: newDataSource,
     })
@@ -69,7 +73,7 @@ export default class SendForm extends Component {
     values.addressDetail.value = shopItem.addressDetail
 
     this.props.changeRecord(values)
-  }  
+  }
 
   render () {
     const {
