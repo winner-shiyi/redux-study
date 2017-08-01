@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Button, Icon } from 'antd'
+import { Link, browserHistory } from 'react-router'
 import SendForm from '../SendForm'
 import ReceiverForm from '../ReceiverForm'
 
@@ -67,6 +68,7 @@ class FormPage extends Component {
           receiversInfoList,
         })
 
+        this.handleGo()
         // console.log(this.props.senderMap)
         
         // console.log({
@@ -75,6 +77,10 @@ class FormPage extends Component {
         // })
       }
     })
+  }
+
+  handleGo = () => {
+    browserHistory.push('/Manage/Distribution')
   }
 
   render () {

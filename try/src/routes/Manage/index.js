@@ -6,6 +6,8 @@ import GardenUser from './GardenUser'
 import Role from './Role'
 import Distribution from './Distribution'
 import AddDistribution from './AddDistribution'
+import DistributionDetail from './DistributionDetail'
+import ChooseDriver from './ChooseDriver'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -25,6 +27,8 @@ export const createRoutes = (store) => ({
     Role(store),
     Distribution(store), // 车配任务管理
     AddDistribution(store), // 新增车配任务
+    DistributionDetail(store), // 车配任务明细
+    ChooseDriver(store), // 车辆派单
   ],
 })
 

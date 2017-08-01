@@ -34,7 +34,8 @@ export default class SendForm extends Component {
     })
   }
   /**
-   * 监听输入值变化
+   * 监听输入值变化 
+   * val 表示用户输入的商家名称
    */
   onChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个thi指向的是fields[0]
     // console.log('我是onChange输出的值：' + val)
@@ -48,21 +49,21 @@ export default class SendForm extends Component {
     })
 
     const {
-      newSenderInfos,
+      newSenderInfos, // redux中保存的 模糊搜索接口返回的发货信息数组
       values,
     } = this.props
 
     const shopName = val
-    let shop = newSenderInfos.find((item) => {
+    let shopItem = newSenderInfos.find((item) => {
       return item.shopName === shopName
     })
 
-    shop = shop || {}
+    shopItem = shopItem || {}
 
-    values.userName.value = shop.userName
-    values.phone.value = shop.phone
-    values.region.value = [shop.province, shop.city, shop.area]
-    values.addressDetail.value = shop.addressDetail
+    values.userName.value = shopItem.userName
+    values.phone.value = shopItem.phone
+    values.region.value = [shopItem.province, shopItem.city, shopItem.area]
+    values.addressDetail.value = shopItem.addressDetail
 
     this.props.changeRecord(values)
   }
@@ -128,3 +129,8 @@ export default class SendForm extends Component {
     )
   }
 }
+
+// 路由跳转
+// goDispatch() {
+//   browserHistory.push('/Manage/ChooseDriver/' + this.props.paramsId);
+// }
