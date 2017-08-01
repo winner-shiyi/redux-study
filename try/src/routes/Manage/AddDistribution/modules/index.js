@@ -45,10 +45,10 @@ const senderSearchFailure = (msg) => {
 const senderSearch = (params) => { // 发货商家模糊搜索
   return dispatch => {
     dispatch(senderSearchRequest(params)) // sendInfo.json
-    // return fetch('/resetPWD', { shopName: params.shopName }) // todo 等待接口
-    return fetch('//' + location.host + '/mock/sendInfo.json', params, {
-      method: 'GET',
-    })
+    return fetch('/senderSearch', { shopName: params }) // todo 等待接口
+    // return fetch('//' + location.host + '/mock/sendInfo.json', params, {
+    //   method: 'GET',
+    // })
       .then(json => {
         if (json.resultCode === '0000') {
           dispatch(senderSearchSuccess(json.resultData))
@@ -141,7 +141,6 @@ const ACTION_HANDLERS = {
           'required': true,
           'type': 'textarea',
           'max': 50,
-          
         },
       ],
     })

@@ -36,25 +36,27 @@ export default class SendForm extends Component {
   }
   /**
    * 监听输入值变化 
-   * val 表示用户输入的商家名称
+   * 参数：val 表示用户输入的商家名称
    */
   onChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个thi指向的是fields[0]
-    // console.log('我是onChange输出的值：' + val)
-    // 请求接口 过1秒钟以后去请求接口
+    // 过400毫秒以后去请求接口
     clearTimeout(this.timer)
+    
+    // 如果商家名称为空则不发送请求，并清空原有填充值
+    if (!(val + '').trim()) {
+      return
+    }
+
     this.timer = setTimeout(() => {
       this.props.senderSearch(val).then((items) => {
-        const newDataSource = items.map((item) => item.shopName)
-        this.renderItem(newDataSource, val)
+        this.setState({
+          dataSource: items.map((item) => item.shopName),
+        })
       })
     }, 400)
   }
 
-  renderItem = (newDataSource, val) => {
-    this.setState({
-      dataSource: newDataSource,
-    })
-
+  onSelect = (val) => {
     const {
       newSenderInfos, // redux中保存的 模糊搜索接口返回的发货信息数组
       values,
@@ -99,6 +101,7 @@ export default class SendForm extends Component {
     
     // 下面是绑定发货商家名称这个表单的onChange事件
     fields[0].onChange = this.onChange
+    fields[0].onSelect = this.onSelect
     fields[0].dataSource = this.state.dataSource
 
     return (
