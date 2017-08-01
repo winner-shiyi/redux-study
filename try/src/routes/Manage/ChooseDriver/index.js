@@ -1,7 +1,7 @@
 import { injectReducer } from '../../../store/reducers.js'
 import { common } from '../../../store/common'
 
-export const moduleName = 'ChooseDriver'
+export const moduleName = 'ChooseDriver/:id'
 
 export default (store) => ({
   path : moduleName,

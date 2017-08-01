@@ -1,7 +1,7 @@
 import { injectReducer } from '../../../store/reducers.js'
 import { common } from '../../../store/common'
 
-export const moduleName = 'DistributionDetail'
+export const moduleName = 'DistributionDetail/:id'
 
 export default (store) => ({
   path : moduleName,

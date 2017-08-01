@@ -98,7 +98,7 @@ class View extends Component {
             <Link to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
               className="add-btn ant-btn ant-btn-primary">明细</Link>
             {
-              record.orderStatus === 1 && // 修改  1-待分配；2-已分配待取货；3-已取货配送中；4-已完成；5-已取消
+              record.orderStatus === 1 && //  1-待分配；2-已分配待取货；3-已取货配送中；4-已完成；5-已取消
               <Link to={`/Manage/ChooseDriver/${data[index].orderNo}`} 
                 className="add-btn ant-btn ant-btn-primary">派单</Link>
             }

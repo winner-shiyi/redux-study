@@ -40,7 +40,10 @@ export default class SendForm extends Component {
   onChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个thi指向的是fields[0]
     // console.log('我是onChange输出的值：' + val)
     // 请求接口 过1秒钟以后去请求接口
+
     this.props.senderSearch(val) 
+
+
     let newDataSource = this.props.newSenderInfos.map((item) => {
       return item.shopName
     })
@@ -66,14 +69,7 @@ export default class SendForm extends Component {
     values.addressDetail.value = shopItem.addressDetail
 
     this.props.changeRecord(values)
-  }
-
-  /**
-   * autoComplete 选择时调用，选择以后也会触发onChange
-   */
-  // onSelect = (value, option) => {  
-
-  // }   
+  }  
 
   render () {
     const {
@@ -99,7 +95,6 @@ export default class SendForm extends Component {
     
     // 下面是绑定发货商家名称这个表单的onChange事件
     fields[0].onChange = this.onChange
-    fields[0].onSelect = this.onSelect
     fields[0].dataSource = this.state.dataSource
 
     return (

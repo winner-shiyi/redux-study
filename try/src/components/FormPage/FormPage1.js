@@ -69,7 +69,6 @@ class FormPage extends Component {
         })
 
         this.handleGo()
-        // console.log(this.props.senderMap)
         
         // console.log({
         //   senderInfo,
