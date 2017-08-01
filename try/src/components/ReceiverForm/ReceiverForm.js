@@ -13,8 +13,7 @@ import './ReceiverForm.scss'
 export default class ReceiverForm extends Component {
   constructor (props) {
     super(props)
-    this.AmapId = 'mapId' + Math.random()
-    
+    this.AmapId = 'mapId' + Math.random()  
   }
 
   componentDidMount () { 

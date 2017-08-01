@@ -87,6 +87,9 @@ class FormPage extends Component {
       values, // 就是保存表单中填写的数据,
       changeSenderMap,
       changeReceiverMap,
+      senderSearch,
+      newSenderInfos,
+      changeRecord,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -99,7 +102,12 @@ class FormPage extends Component {
             </Col>
           </Row>
           
-          <SendForm form={form} values={values} changeSenderMap={changeSenderMap}/>
+          <SendForm form={form} 
+            values={values} 
+            changeRecord={changeRecord}
+            senderSearch={senderSearch} 
+            newSenderInfos={newSenderInfos}
+          />
           <Row>
             <Col>
               <h2 className="ant-page-title">

@@ -1,7 +1,7 @@
 {
   "resultCode": "0000",
   "resultData": {
-    "count": 50,
+    "total": 50,
     "list":[
       {
         "orderNo": "123456",

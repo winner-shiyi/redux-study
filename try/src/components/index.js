@@ -216,6 +216,8 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
           allowClear
           dataSource={field.dataSource}
+          onChange={field.onChange}
+          onSelect={field.onSelect}
           placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
           buttonText={field.buttonText}
           buttonClick={field.buttonClick}

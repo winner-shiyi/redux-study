@@ -15,10 +15,50 @@ const ADDDISTRIBUTION_RECEIVER_MAP_CHANGE = 'ADDDISTRIBUTION_RECEIVER_MAP_CHANGE
 const ADDDISTRIBUTION_SUBMIT_REQUEST = 'ADDDISTRIBUTION_SUBMIT_REQUEST'
 const ADDDISTRIBUTION_SUBMIT_SUCCESS = 'ADDDISTRIBUTION_SUBMIT_SUCCESS'
 const ADDDISTRIBUTION_SUBMIT_FAILURE = 'ADDDISTRIBUTION_SUBMIT_FAILURE'
+const ADDDISTRIBUTION_SENDER_SEARCH_REQUEST = 'ADDDISTRIBUTION_SENDER_SEARCH_REQUEST'
+const ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS = 'ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS'
+const ADDDISTRIBUTION_SENDER_SEARCH_FAILURE = 'ADDDISTRIBUTION_SENDER_SEARCH_FAILURE'
 // ------------------------------------
 // Actions
 // ------------------------------------
 
+const senderSearchRequest = (params) => { 
+  return {
+    type: 'ADDDISTRIBUTION_SENDER_SEARCH_REQUEST',
+    payload: params,
+  }
+}
+const senderSearchSuccess = (data) => {
+  return {
+    type: 'ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS',
+    payload: data,
+  }
+}
+
+const senderSearchFailure = (msg) => {
+  return {
+    type: 'ADDDISTRIBUTION_SENDER_SEARCH_FAILURE',
+    payload: msg,
+  }
+}
+
+const senderSearch = (params) => { // 发货商家模糊搜索
+  return dispatch => {
+    dispatch(senderSearchRequest(params)) // sendInfo.json
+    // return fetch('/resetPWD', { shopName: params.shopName }) // todo 等待接口
+    fetch('//' + location.host + '/mock/sendInfo.json', params, {
+      method: 'GET',
+    })
+      .then(json => {
+        if (json.resultCode === '0000') {
+          dispatch(senderSearchSuccess(json.resultData))
+          return json.resultData.password
+        } else {
+          dispatch(senderSearchFailure(json.resultDesc))
+        }
+      })
+  }
+}
 export const actions = {
   hello: createAction(TPL_HELLO),
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
@@ -32,6 +72,7 @@ export const actions = {
       callAPI: () => fetch('/repairbill/', params), // todo
     }
   },
+  senderSearch,
 }
 
 // ------------------------------------
@@ -125,6 +166,27 @@ const ACTION_HANDLERS = {
     return newState
   },
   /**
+   * 发货商家名称模糊搜索
+   */
+  [ADDDISTRIBUTION_SENDER_SEARCH_REQUEST]: (state, action) => {
+    return {
+      ...state,
+    }
+  },
+  [ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS]: (state, action) => {
+    message.success('搜索成功')
+    return {
+      ...state,
+      newSenderInfos: action.payload.list,
+    }
+  },
+  [ADDDISTRIBUTION_SENDER_SEARCH_FAILURE]: (state, action) => {
+    message.error(action.payload)
+    return {
+      ...state,
+    }
+  },
+  /**
    * 提交车配任务表单
    */
   [ADDDISTRIBUTION_SUBMIT_REQUEST]: (state, action) => {
@@ -150,13 +212,14 @@ const ACTION_HANDLERS = {
    * 表单数据改变更新
    */
   [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => {
-    return {
+    let newState = {
       ...state,
       record: {
         ...state.record,
         ...action.fields,
       },
     }
+    return newState
   },
   /**
    * 发货地图信息更新
@@ -248,6 +311,15 @@ const initialState = {
     addressDetail: {
       value: '',
     },
+    shopName: {
+      value: '',
+    },
+    userName: {
+      value: '',
+    },
+    phone: {
+      value: '',
+    },
   }, 
   senderMap: { // 用来保存【发货】高德地图返回的位置信息
     adcode:'',
@@ -262,6 +334,7 @@ const initialState = {
       longitude:'',
     },
   ],
+  newSenderInfos: [], //
   helloText: 'I’m a mother father gentleman',
 }
 
