@@ -42,11 +42,10 @@ const failure = (msg) => {
 const search = (params) => { // 第一次进入页面
   return dispatch => {
     dispatch(request(params))
-    fetch('//' + location.host + '/mock/distributions.json', params, {
-      method: 'GET',
-    })
+    console.log(params)
+    return fetch('/order/list', params) 
       .then(json => {
-        if (json.resultCode === '0000') {
+        if (json.resultCode === '0') {
           dispatch(success(json.resultData))
         } else {
           dispatch(failure(json.resultDesc))
@@ -59,24 +58,15 @@ export const actions = {
   reset: createAction(DISTRIBUTION_SEARCH_RESET),
   changeSearch: createAction(DISTRIBUTION_CHANGE_SEARCH, 'fields'),
   changeRecord: createAction(DISTRIBUTION_CHANGE_RECORD, 'fields'),
-  // search: (params) => {
-  //   return {
-  //     types: [DISTRIBUTION_REQUEST, DISTRIBUTION_SUCCESS, DISTRIBUTION_FAILURE],
-  //     callAPI: () => fetch('//' + location.host + '/mock/distributions.json', params, {
-  //       method: 'GET',
-  //     }),
-  //   }
-  // },
   search,
   setStatus: (params) => {
     return {
       types: [DISTRIBUTION_SET_STATUS_REQUEST, DISTRIBUTION_SET_STATUS_SUCCESS, DISTRIBUTION_SET_STATUS_FAILURE],
-      callAPI: () => fetch('/repairbill/status', { // 订单编号
+      callAPI: () => fetch('/order/cancel', { // 订单编号
         id: params.orderNo, 
       }),
     }
   },
-  
 }
 
 // ------------------------------------

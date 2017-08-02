@@ -6,7 +6,6 @@ import addr from '../../../../../public/mock/addr2.json'
 // ------------------------------------
 // Constants
 // ------------------------------------
-const TPL_HELLO = 'TPL_HELLO'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
 const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
@@ -45,12 +44,12 @@ const senderSearchFailure = (msg) => {
 const senderSearch = (params) => { // 发货商家模糊搜索
   return dispatch => {
     dispatch(senderSearchRequest(params)) // sendInfo.json
-    return fetch('/senderSearch', { shopName: params }) // todo 等待接口
+    return fetch('/sender/fuzzyQuery', { shopName: params }) // todo 等待接口
     // return fetch('//' + location.host + '/mock/sendInfo.json', params, {
     //   method: 'GET',
     // })
       .then(json => {
-        if (json.resultCode === '0000') {
+        if (json.resultCode === '0') {
           dispatch(senderSearchSuccess(json.resultData))
           return json.resultData.list
         } else {
@@ -60,16 +59,16 @@ const senderSearch = (params) => { // 发货商家模糊搜索
   }
 }
 export const actions = {
-  hello: createAction(TPL_HELLO),
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
   changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'mapValue'),
   changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'mapValues'),
   submit: (params) => {
+    console.log(params)
     return {
       types: [ADDDISTRIBUTION_SUBMIT_REQUEST, ADDDISTRIBUTION_SUBMIT_SUCCESS, ADDDISTRIBUTION_SUBMIT_FAILURE],
-      callAPI: () => fetch('/repairbill/', params), // todo
+      callAPI: () => fetch('/order/create', params), // todo 等待接口
     }
   },
   senderSearch,
@@ -79,13 +78,6 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [TPL_HELLO]: (state, action) => {
-    message.info(state.helloText)
-    let newState = {
-      ...state,
-    }
-    return newState
-  },
   /**
    * 增加收货地址
    */
@@ -197,7 +189,24 @@ const ACTION_HANDLERS = {
     message.success('提交成功')
     return {
       ...state,
-      record: {},
+      record: { 
+        region: {
+          value: [],
+        },
+        addressDetail: {
+          value: '',
+        },
+        shopName: {
+          value: '',
+        },
+        userName: {
+          value: '',
+        },
+        phone: {
+          value: '',
+        },
+      }, 
+      newSenderInfos:[],
     }
   },
   [ADDDISTRIBUTION_SUBMIT_FAILURE]: (state, action) => {
@@ -334,7 +343,6 @@ const initialState = {
     },
   ],
   newSenderInfos: [], //
-  helloText: 'I’m a mother father gentleman',
 }
 
 export default function reducer (state = initialState, action) {

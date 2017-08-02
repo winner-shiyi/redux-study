@@ -50,7 +50,7 @@ export default class SendForm extends Component {
     this.timer = setTimeout(() => {
       this.props.senderSearch(val).then((items) => {
         this.setState({
-          dataSource: items.map((item) => item.shopName),
+          dataSource: items && items.map((item) => item.shopName), // 需要判断，否则请求接口失败的时候 没有map方法
         })
       })
     }, 400)
@@ -83,8 +83,8 @@ export default class SendForm extends Component {
       changeSenderMap,
     } = this.props
 
-    let val1Arr = values.region.value
-    let val2 = values.addressDetail.value
+    let val1Arr = values && values.region.value
+    let val2 = values && values.addressDetail.value
 
     if (val1Arr && val2 && this.placeSearch && this.placeSearch.search) {
       this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
