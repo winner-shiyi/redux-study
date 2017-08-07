@@ -14,6 +14,7 @@ class City extends Component{
   }
   handleBack(){
     this.props.history.goBack();
+    // window.history.back()
   }
   cityListClick(cityName){
     localStore.setItem(CITYNAME, cityName);
@@ -35,7 +36,7 @@ class City extends Component{
 const mapStateToProps = state => ({
   cityName: state.userInfo.cityName
 });
-
+ 
 const mapDispatchToProps = dispatch => ({
   updateCityName: cityName => dispatch(updateUserInfo({cityName}))
 })
