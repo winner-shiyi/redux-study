@@ -22,7 +22,6 @@ class FormPage extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // todo 
         // 需要转换成 { from: {}, to: [{}, {}] }这种格式
         const senderInfo = {}
         const receiversInfoList = []
@@ -41,22 +40,30 @@ class FormPage extends Component {
             }
             Object.assign(senderInfo, window.mapInfosToWindow)
             delete senderInfo.region
+            if (key === 'drivingTime') {
+              senderInfo[key] = new Date(senderInfo[key]).getTime() // 转换成毫秒数
+            }
           } else {
             if (!receiversInfoListObj[k]) {
               receiversInfoListObj[k] = {}
             }
             receiversInfoListObj[k][key.replace(k, '')] = curValue
-            // 
+            // 把省市区数组转成 对应字符串
             if (key.replace(k, '') === 'region') {
               receiversInfoListObj[k]['province'] = values[key][0]
               receiversInfoListObj[k]['city'] = values[key][1]
               receiversInfoListObj[k]['area'] = values[key][2]
             }
-
             // 从window上获取地图保存信息
             const mw = window[`${k}mapInfosToWindow`] 
             Object.assign(receiversInfoListObj[k], mw)
-            delete receiversInfoListObj[k].region                    
+            delete receiversInfoListObj[k].region 
+            if (key.replace(k, '') === 'deliveryBeginTime') {
+              receiversInfoListObj[k]['deliveryBeginTime'] = new Date(receiversInfoListObj[k]['deliveryBeginTime']).getTime()
+            }
+            if (key.replace(k, '') === 'deliveryEndTime') {
+              receiversInfoListObj[k]['deliveryEndTime'] = new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
+            }                   
           }
         })
         Object.keys(receiversInfoListObj).forEach((key) => {
@@ -66,14 +73,9 @@ class FormPage extends Component {
         this.props.submit({
           senderInfo,
           receiversInfoList,
+        }).then((isSuccess) => {
+          isSuccess && this.handleGo() // 跳转到列表页 ？？还要去请求列表页的接口吗
         })
-
-        this.handleGo()
-        
-        // console.log({
-        //   senderInfo,
-        //   receiversInfoList,
-        // })
       }
     })
   }
@@ -156,7 +158,6 @@ class FormPage extends Component {
 }
 const WrappedFormPage = Form.create({
   mapPropsToFields (props) {
-    // console.log(props)
     let res = {}
     for (let i in props.values) { // props.values 拿到的就是上面传下来的【保存填写的表单数据】
       let param = props.values[i]

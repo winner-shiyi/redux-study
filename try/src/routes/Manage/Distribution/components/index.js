@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'antd'
 import ListPage1 from '../../../../components/ListPage1'
 import './style.scss'
-import { Link, browserHistory } from 'react-router'
+import { Link } from 'react-router'
 
 class View extends Component {
 

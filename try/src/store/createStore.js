@@ -43,7 +43,7 @@ function callAPIMiddleware ({ dispatch, getState }) {
 
     return callAPI(getState()).then(
       response => {
-        if (response.resultCode === '0000') {
+        if (response.resultCode === '0') {
           let newPayload = {
             ...payload,
             data: response.resultData,

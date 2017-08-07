@@ -49,8 +49,8 @@ export default class ReceiverForm extends Component {
       values,
     } = this.props
 
-    let val1Arr = values[`${id}region`] && values[`${id}region`].value
-    let val2 = values[`${id}addressDetail`] && values[`${id}addressDetail`].value
+    let val1Arr = values && values[`${id}region`] && values[`${id}region`].value
+    let val2 = values && values[`${id}addressDetail`] && values[`${id}addressDetail`].value
 
     if (val1Arr && val2 && this.placeSearch && this.placeSearch.search) {
       this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
