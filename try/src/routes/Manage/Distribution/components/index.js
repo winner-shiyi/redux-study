@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Modal } from 'antd'
-import ListPage1 from '../../../../components/ListPage1'
+import OrderListPage from '../../../../components/OrderListPage'
 import './style.scss'
 import { Link } from 'react-router'
 
@@ -24,6 +24,7 @@ class View extends Component {
         search: true,
         dataIndex: 'orderNo',
         key: 'orderNo',
+        max: '80',
       }, 
       {
         title: '发货地址',
@@ -35,11 +36,11 @@ class View extends Component {
         dataIndex: 'orderStatus',
         search: true,
         type: 'select',
-        data: [['1', '待配单'], ['2', '待取件'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
+        data: [['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
         key: 'orderStatus',
         render: (text, record, index) => {
           const statusName = record.orderStatus
-          const statusObj = { '1': '待配单', '2': '待取件', '3': '配送中', '4': '已完成', '5': '已取消' }
+          const statusObj = { 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消' }
           const statusValue = statusObj[statusName]
           return statusValue
         },
@@ -49,6 +50,7 @@ class View extends Component {
         dataIndex: 'phone',
         key: 'phone',
         search: true,
+        number: true,
         max: 11,
         hidden: true,
       },
@@ -65,13 +67,16 @@ class View extends Component {
         key: 'driverPhone',
         search: true,
         max: 11,
+        number: true,
       }, 
       {
         title: '收货商家名称',
-        dataIndex:'receiverUserName',
+        dataIndex:'receiverShopName',
         max: 50,
         render: (text, record, index) => (
-          record.receiversInfoList[0].userName + '...'
+          record.receiversInfoList.length > 1 
+          ? `${record.receiversInfoList[0].shopName}...` : record && record.receiversInfoList.length === 1
+          ? record.receiversInfoList[0].shopName : ''
         ),
       },
       {
@@ -79,7 +84,9 @@ class View extends Component {
         dataIndex:'receiverAddress',
         max: 50,
         render: (text, record, index) => (
-          record.receiversInfoList[0].address + '...'
+          record.receiversInfoList.length > 1 
+          ? `${record.receiversInfoList[0].address}...` : record && record.receiversInfoList.length === 1
+          ? record.receiversInfoList[0].address : ''
         ),
       },
       {
@@ -100,11 +107,11 @@ class View extends Component {
             {
               record.orderStatus === 1 && //  1-待分配；2-已分配待取货；3-已取货配送中；4-已完成；5-已取消
               <Link to={`/Manage/ChooseDriver/${data[index].orderNo}`} 
-                className="add-btn ant-btn ant-btn-primary">派单</Link>
+                className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn">派单</Link>
             }
             {
-              record.orderStatus !== 5 &&
-              <Button type="danger" onClick={
+              record.orderStatus !== 4 && record.orderStatus !== 5 &&
+              <Button type="danger" className="Distribution-cancel-btn" onClick={
                 (() => {
                   Modal.confirm({
                     title: '确定要取消该订单吗？',
@@ -127,7 +134,7 @@ class View extends Component {
     ]
 
     return (
-      <ListPage1
+      <OrderListPage
         {...this.props}
         title="车配任务管理"
         columns={columns}

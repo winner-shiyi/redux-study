@@ -162,7 +162,7 @@ class AdvancedSearchForm extends Component {
               <Button type="primary" onClick={this.handleSearch} style={{ width: 195 }}>搜索</Button>
               {
                 fields.length > 1 &&
-                <Button style={{ marginLeft: 8, color: '#32b4ca', border: 'none' }} onClick={this.handleReset}>
+                <Button style={{ marginLeft: 8, color: '#ff9500', border: 'none' }} onClick={this.handleReset}>
                   重置
                 </Button>
               }

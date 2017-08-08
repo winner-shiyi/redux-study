@@ -9,7 +9,6 @@ const DISTRIBUTION_REQUEST = 'DISTRIBUTION_REQUEST'
 const DISTRIBUTION_SUCCESS = 'DISTRIBUTION_SUCCESS'
 const DISTRIBUTION_FAILURE = 'DISTRIBUTION_FAILURE'
 const DISTRIBUTION_CHANGE_SEARCH = 'DISTRIBUTION_CHANGE_SEARCH'
-const DISTRIBUTION_CHANGE_RECORD = 'DISTRIBUTION_CHANGE_RECORD' // todo 等待验证这个页面是否需要
 const DISTRIBUTION_SEARCH_RESET = 'DISTRIBUTION_SEARCH_RESET'
 const DISTRIBUTION_SET_STATUS_REQUEST = 'DISTRIBUTION_SET_STATUS_REQUEST'
 const DISTRIBUTION_SET_STATUS_SUCCESS = 'DISTRIBUTION_SET_STATUS_SUCCESS'
@@ -42,7 +41,6 @@ const failure = (msg) => {
 const search = (params) => { // 第一次进入页面
   return dispatch => {
     dispatch(request(params))
-    console.log(params)
     return fetch('/order/list', params) 
       .then(json => {
         if (json.resultCode === '0') {
@@ -57,13 +55,12 @@ const search = (params) => { // 第一次进入页面
 export const actions = {
   reset: createAction(DISTRIBUTION_SEARCH_RESET),
   changeSearch: createAction(DISTRIBUTION_CHANGE_SEARCH, 'fields'),
-  changeRecord: createAction(DISTRIBUTION_CHANGE_RECORD, 'fields'),
   search,
   setStatus: (params) => {
     return {
       types: [DISTRIBUTION_SET_STATUS_REQUEST, DISTRIBUTION_SET_STATUS_SUCCESS, DISTRIBUTION_SET_STATUS_FAILURE],
       callAPI: () => fetch('/order/cancel', { // 订单编号
-        id: params.orderNo, 
+        orderNo: params.orderNo, 
       }),
     }
   },
@@ -83,7 +80,7 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       loading: false,
-      data: action.payload.list, // todo action.data.list
+      data: action.payload.list, // 没有使用callAPI方法，通过原始传入payload: data
       page: {
         ...state.page,
         pageNo: action.payload.pageNo,
@@ -93,7 +90,7 @@ const ACTION_HANDLERS = {
     }
   },
   [DISTRIBUTION_FAILURE]: (state, action) => {
-    message.error(action.msg)
+    message.error(action.payload) // 没有使用callAPI方法,因为原始传入的dispatch(failure(json.resultDesc))就是msg
     return {
       ...state,
       loading: false,
@@ -105,15 +102,6 @@ const ACTION_HANDLERS = {
       ...state,
       searchParams: {
         ...state.searchParams,
-        ...action.fields,
-      },
-    }
-  },
-  [DISTRIBUTION_CHANGE_RECORD]: (state, action) => {
-    return {
-      ...state,
-      record: {
-        ...state.record,
         ...action.fields,
       },
     }
@@ -132,7 +120,7 @@ const ACTION_HANDLERS = {
     }
   },
   [DISTRIBUTION_SET_STATUS_FAILURE]: (state, action) => {
-    message.error(action.msg)
+    message.error(action.msg) // 这里调接口的时候使用了callAPI方法，可以在creatStore里面看到封装返回msg
     return {
       ...state,
       loading: false,
@@ -155,13 +143,12 @@ const ACTION_HANDLERS = {
 const initialState = {
   loading: false,
   page: {
-    pageNo: 1,
-    pageSize: 10,
-    total: 0,
+    pageNo: '1',
+    pageSize: '10',
+    total: '0',
   },
   searchParams: {
   },
-  record: {},
 }
 export default function reducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

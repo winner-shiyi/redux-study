@@ -9,8 +9,6 @@ import addr from '../../../../../public/mock/addr2.json'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
 const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
-const ADDDISTRIBUTION_SENDER_MAP_CHANGE = 'ADDDISTRIBUTION_SENDER_MAP_CHANGE'
-const ADDDISTRIBUTION_RECEIVER_MAP_CHANGE = 'ADDDISTRIBUTION_RECEIVER_MAP_CHANGE'
 const ADDDISTRIBUTION_SUBMIT_REQUEST = 'ADDDISTRIBUTION_SUBMIT_REQUEST'
 const ADDDISTRIBUTION_SUBMIT_SUCCESS = 'ADDDISTRIBUTION_SUBMIT_SUCCESS'
 const ADDDISTRIBUTION_SUBMIT_FAILURE = 'ADDDISTRIBUTION_SUBMIT_FAILURE'
@@ -43,11 +41,8 @@ const senderSearchFailure = (msg) => {
 
 const senderSearch = (params) => { // 发货商家模糊搜索
   return dispatch => {
-    dispatch(senderSearchRequest(params)) // sendInfo.json
+    dispatch(senderSearchRequest(params)) 
     return fetch('/sender/fuzzyQuery', { shopName: params }) // todo 等待接口
-    // return fetch('//' + location.host + '/mock/sendInfo.json', params, {
-    //   method: 'GET',
-    // })
       .then(json => {
         if (json.resultCode === '0') {
           dispatch(senderSearchSuccess(json.resultData))
@@ -62,13 +57,11 @@ export const actions = {
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
-  changeSenderMap: createAction(ADDDISTRIBUTION_SENDER_MAP_CHANGE, 'mapValue'),
-  changeReceiverMap: createAction(ADDDISTRIBUTION_RECEIVER_MAP_CHANGE, 'mapValues'),
   submit: (params) => {
     console.log(params)
     return {
       types: [ADDDISTRIBUTION_SUBMIT_REQUEST, ADDDISTRIBUTION_SUBMIT_SUCCESS, ADDDISTRIBUTION_SUBMIT_FAILURE],
-      callAPI: () => fetch('/order/create', params), // todo 等待接口
+      callAPI: () => fetch('/order/create', params), 
     }
   },
   senderSearch,
@@ -85,7 +78,6 @@ const ACTION_HANDLERS = {
     let numId = state.receiverFormNo
     numId++
     let receiverFields = state.receiverFields
-    // let NewreceiverFields = state.receiverFields
     receiverFields.push({
       id: numId,
       fields: [
@@ -114,12 +106,6 @@ const ACTION_HANDLERS = {
           'type': 'datetime',
         },
         {
-          'label': '送达结束时间',
-          'name': numId + 'deliveryEndTime',
-          'required': false,
-          'type': 'datetime',
-        },
-        {
           'label': '收货地区',
           'required': true,
           'name': numId + 'region',
@@ -128,11 +114,17 @@ const ACTION_HANDLERS = {
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
+          'label': '送达结束时间',
+          'name': numId + 'deliveryEndTime',
+          'required': false,
+          'type': 'datetime',
+        },
+        {
           'label': '详细地址',
           'name': numId + 'addressDetail',
           'required': true,
           'type': 'textarea',
-          'max': 50,
+          'max': 60,
         },
       ],
     })
@@ -141,7 +133,6 @@ const ACTION_HANDLERS = {
       ...state,
       receiverFormNo:numId,
       receiverFields,
-      // NewreceiverFields,
     }
     return newState
   },
@@ -165,14 +156,18 @@ const ACTION_HANDLERS = {
     }
   },
   [ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS]: (state, action) => {
-    message.success('搜索成功')
-    return {
-      ...state,
-      newSenderInfos: action.payload.list,
-    }
+    // message.success('搜索成功')
+    let newState = Object.assign({}, state)
+    newState.newSenderInfos = action.payload.list
+    // 自动填充完毕后，要把errors清除
+    newState.record.userName.errors = false
+    newState.record.phone.errors = false
+    newState.record.region.errors = false
+    newState.record.addressDetail.errors = false
+    return newState
   },
   [ADDDISTRIBUTION_SENDER_SEARCH_FAILURE]: (state, action) => {
-    message.error(action.payload)
+    message.error(action.payload) // 没有使用callAPI封装的action时候，根据action.payload对应获取
     return {
       ...state,
     }
@@ -207,10 +202,62 @@ const ACTION_HANDLERS = {
         },
       }, 
       newSenderInfos:[],
+      receiverFields:[
+        {
+          id:'0',
+          fields:[
+            {
+              'label': '商家名称',
+              'name': '0shopName',
+              'required': true,
+              'max': 20,
+            },
+            {
+              'label': '联系人',
+              'name': '0userName',
+              'required': true,
+              'max': 20,
+            },
+            {
+              'label': '联系电话',
+              'name': '0phone',
+              'required': true,
+              'phone': true,
+            },
+            {
+              'label': '送达起始时间',
+              'name': '0deliveryBeginTime',
+              'required': false,
+              'type': 'datetime',
+            },
+            {
+              'label': '收货地区',
+              'required': true,
+              'name': '0region',
+              'type': 'Cascader',
+              'data': addr,
+              'changeOnSelect': 'true', // 每选择一项就会马上改变
+            },
+            {
+              'label': '送达结束时间',
+              'name': '0deliveryEndTime',
+              'required': false,
+              'type': 'datetime',
+            },
+            {
+              'label': '详细地址',
+              'name': '0addressDetail',
+              'required': true,
+              'type': 'textarea',
+              'max': 60,
+            },
+          ],
+        },
+      ],
     }
   },
   [ADDDISTRIBUTION_SUBMIT_FAILURE]: (state, action) => {
-    message.error(action.msg)
+    message.error(action.msg) // 使用callAPI封装的action时候直接action.msg就可得到错误信息
     return {
       ...state,
     }
@@ -226,30 +273,6 @@ const ACTION_HANDLERS = {
         ...state.record,
         ...action.fields,
       },
-    }
-    return newState
-  },
-  /**
-   * 发货地图信息更新
-   */
-  [ADDDISTRIBUTION_SENDER_MAP_CHANGE]: (state, action) => {
-    let newState = {
-      ...state,
-      senderMap: {
-        ...state.senderMap,
-        ...action.mapValue,
-      },
-    }
-    return newState
-  },
-  /**
-   * 收货地图信息更新
-   */
-  [ADDDISTRIBUTION_RECEIVER_MAP_CHANGE]: (state, action) => {
-    let newState = {
-      ...state,
-      // receiverMap
-      
     }
     return newState
   },
@@ -289,12 +312,6 @@ const initialState = {
           'type': 'datetime',
         },
         {
-          'label': '送达结束时间',
-          'name': '0deliveryEndTime',
-          'required': false,
-          'type': 'datetime',
-        },
-        {
           'label': '收货地区',
           'required': true,
           'name': '0region',
@@ -303,11 +320,17 @@ const initialState = {
           'changeOnSelect': 'true', // 每选择一项就会马上改变
         },
         {
+          'label': '送达结束时间',
+          'name': '0deliveryEndTime',
+          'required': false,
+          'type': 'datetime',
+        },
+        {
           'label': '详细地址',
           'name': '0addressDetail',
           'required': true,
           'type': 'textarea',
-          'max': 50,
+          'max': 60,
         },
       ],
     },
@@ -329,20 +352,8 @@ const initialState = {
       value: '',
     },
   }, 
-  senderMap: { // 用来保存【发货】高德地图返回的位置信息
-    adcode:'',
-    latitude:'',
-    longitude:'',
-  },
-  receiverMap: [ // 用来保存【收货】高德地图返回的位置信息
-    {
-      id:0,
-      adcode:'',
-      latitude:'',
-      longitude:'',
-    },
-  ],
-  newSenderInfos: [], //
+  newSenderInfos: [], // 发货方搜索自动填充信息
+  searchParams: {},
 }
 
 export default function reducer (state = initialState, action) {
