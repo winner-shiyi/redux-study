@@ -8,6 +8,7 @@ import {
   Checkbox,
   // Button,
   Radio,
+  Switch,
 } from 'antd'
 import CommonSelect from './Select'
 import Editor from './Editor'
@@ -38,6 +39,7 @@ export const geneBox = (field, opts = {}) => {
     label: field.label,
 
   }
+
   switch (field.type) {
     case 'date':
       return (
@@ -137,6 +139,14 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
         />
       )
+    case 'switch':
+      return (
+        <Switch
+          checkedChildren={field.checkedChildren}
+          unCheckedChildren={field.unCheckedChildren}
+          {...defaultOpts}
+        />
+      )
     case 'IDPhotoGroup':
       return (
         <IDPhotoGroup
@@ -185,7 +195,14 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
           placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
           autosize={field.disabled ? true : { minRows: 2, maxRows: 6 }}
+          onChange={field.onChange}
         />
+      )
+    case 'span':
+      return (
+        <a
+          onClick={field.onClick || ''}
+        >{field.spanName || field.label || field.name}</a>
       )
     case 'radio':
       return (
@@ -230,6 +247,12 @@ export const createFormItem = (opts) => {
   let {
     field,
     form,
+    formItemLayout,
+    inputOpts,
+    colSpan = 12,
+  } = opts;
+  // console.log(field.label,opts.formItemLayout);
+  if(!opts.formItemLayout){
     formItemLayout = {
       labelCol: {
         span: 6,
@@ -237,10 +260,9 @@ export const createFormItem = (opts) => {
       wrapperCol: {
         span: 18,
       },
-    },
-    inputOpts,
-    colSpan = 12,
-  } = opts
+    }
+  }
+  // console.log(field.label,opts.formItemLayout);
   inputOpts.form = form
   field.dataIndex && (field.name = field.dataIndex)
   field.title && (field.label = field.title)
@@ -355,6 +377,20 @@ export const createFormItem = (opts) => {
     }
   }
 
+  if (field.small) {
+    colSpan = field.small
+    formItemLayout = field.layoutData || formItemLayout
+
+    formItemLayout = {
+      labelCol: {
+        span: formItemLayout.labelCol.span / 2,
+      },
+      wrapperCol: {
+        span: 24 - formItemLayout.labelCol.span / 2,
+      },
+    }
+  }
+
   let styles = {}
   if (!field.search && field.hidden) {
     styles.display = 'none'
@@ -402,6 +438,30 @@ export const createFormItem = (opts) => {
     }
   }
 
+  if (field.simpleHalf) {
+    colSpan = 24
+    formItemLayout = {
+      labelCol: {
+        span: 3,
+      },
+      wrapperCol: {
+        span: 10,
+      },
+    }
+  }
+
+  if (field.simpleList) {
+    colSpan = 24
+    formItemLayout = {
+      labelCol: {
+        span: 6,
+      },
+      wrapperCol: {
+        span: 18,
+      }
+    }
+  }
+
   if (field.className === 'title') {
     colSpan = 24
     formItemLayout = {
@@ -438,6 +498,7 @@ export const createFormItem = (opts) => {
         >
           {
             form.getFieldDecorator(field.name, {
+              valuePropName: field.type === 'switch' ? 'checked' : 'value',
               rules: rules,
               initialValue: field.initialValue,
             })(geneBox(field, inputOpts))

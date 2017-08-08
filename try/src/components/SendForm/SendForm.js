@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import { Form,
-  Row,
-  Col,
-  Button,
-  Icon } from 'antd'
+import { Row, Col } from 'antd'
 import { createFormItem } from '../../components'
 import PropTypes from 'prop-types'
 
@@ -12,12 +8,18 @@ import { fields } from './configFields' // 新建车配任务表单字段
 import './SendForm.scss'
 
 export default class SendForm extends Component {
+  static propTypes = {
+    newSenderInfos: PropTypes.array,
+    values: PropTypes.object,
+  }
+
   constructor (props) {
     super(props)
     this.state = {
       dataSource: [],
     }
     this.timer = null
+    this.timer1 = null
   }
 
   componentDidMount () {
@@ -38,7 +40,7 @@ export default class SendForm extends Component {
    * 监听输入值变化 
    * 参数：val 表示用户输入的商家名称
    */
-  onChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个thi指向的是fields[0]
+  onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
     // 过400毫秒以后去请求接口
     clearTimeout(this.timer)
     
@@ -54,6 +56,39 @@ export default class SendForm extends Component {
         })
       })
     }, 400)
+  }
+  /**
+   * 地图api设置val1，val2公共函数
+   */
+  mapChange = () => {
+    clearTimeout(this.timer1) 
+    this.timer1 = setTimeout(() => {
+      let val1Arr = this.props.values.region.value
+      let val2 = this.props.values.addressDetail.value
+      console.log(val1Arr)
+      this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
+        if (result.info === 'OK' && result.poiList) {
+          const pois = result.poiList.pois[0]
+          window['mapInfosToWindow'] = {
+            adcode: pois.adcode,
+            latitude: pois.location.lat,
+            longitude: pois.location.lng,
+            
+          }
+        }
+        
+        if (status === 'no_data') {
+          window['mapInfosToWindow'] = {}
+          // message.error('请输入有正确的发货地址')
+        }
+      })
+    }, 400)
+  }
+  onRegionChange = () => {
+    this.mapChange()
+  }
+  onAddressDetailChange = () => {
+    this.mapChange()
   }
 
   onSelect = (val) => {
@@ -78,32 +113,12 @@ export default class SendForm extends Component {
   }
 
   render () {
-    const {
-      values,
-      changeSenderMap,
-    } = this.props
-
-    let val1Arr = values && values.region.value
-    let val2 = values && values.addressDetail.value
-
-    if (val1Arr && val2 && this.placeSearch && this.placeSearch.search) {
-      this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
-        if (result.poiList) {
-          const pois = result.poiList.pois[0]
-          window['mapInfosToWindow'] = {
-            adcode: pois.adcode,
-            latitude: pois.location.lat,
-            longitude: pois.location.lng,
-          }
-        }
-      })
-    }
-    
-    // 下面是绑定发货商家名称这个表单的onChange事件
-    fields[0].onChange = this.onChange
+    // 下面是绑定发货商家名称这个表单的onChange,onSelect事件 配置dataSource
+    fields[0].onChange = this.onShopNameChange
     fields[0].onSelect = this.onSelect
     fields[0].dataSource = this.state.dataSource
-
+    fields[4].onChange = this.onRegionChange
+    fields[5].onChange = this.onAddressDetailChange
     return (
       <div className="senderForm-box">
         <Row>
@@ -114,7 +129,7 @@ export default class SendForm extends Component {
                   field: item,
                   form: this.props.form,
                   formItemLayout: {
-                    labelCol: { span:6 },
+                    labelCol: { span:4 },
                     wrapperCol: { span: 18 },
                   },
                   inputOpts: {},
@@ -131,8 +146,3 @@ export default class SendForm extends Component {
     )
   }
 }
-
-// 路由跳转
-// goDispatch() {
-//   browserHistory.push('/Manage/ChooseDriver/' + this.props.paramsId);
-// }

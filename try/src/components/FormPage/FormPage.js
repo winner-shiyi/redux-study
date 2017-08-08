@@ -1,14 +1,34 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Button, Icon } from 'antd'
-import { Link, browserHistory } from 'react-router'
+import { message, Form, Row, Col, Button, Icon } from 'antd'
+import { browserHistory } from 'react-router'
 import SendForm from '../SendForm'
 import ReceiverForm from '../ReceiverForm'
+import './FormPage.scss'
 
 const FormItem = Form.Item
 
 class FormPage extends Component {
-
+  static propTypes = {
+    title: PropTypes.string,
+    loading: PropTypes.bool,
+    newSenderInfos: PropTypes.array,
+    receiverFields: PropTypes.array.isRequired,
+    reduceReceiverInfo: PropTypes.func,
+    senderSearch: PropTypes.func,
+    changeRecord: PropTypes.func,
+    form: PropTypes.object,
+    values: PropTypes.object,
+  }
+  /**
+   * 判断是否为空对象
+   */
+  isEmptyObject = (obj) => {
+    for (var key in obj) {
+      return false
+    }
+    return true
+  } 
   /**
    * 添加收货地址
    */
@@ -22,10 +42,12 @@ class FormPage extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // 需要转换成 { from: {}, to: [{}, {}] }这种格式
+        // 需要转换成 { senderInfo: {}, receiversInfoList: [{}, {}] }这种格式提交
         const senderInfo = {}
         const receiversInfoList = []
         const receiversInfoListObj = {}
+        let mw = {} // 存放收货信息的adcode 和 经纬度信息
+        let timeCompareLock = true // 时间比较变量锁
 
         Object.keys(values).forEach((key) => {
           let k = parseInt(key)
@@ -55,51 +77,71 @@ class FormPage extends Component {
               receiversInfoListObj[k]['area'] = values[key][2]
             }
             // 从window上获取地图保存信息
-            const mw = window[`${k}mapInfosToWindow`] 
+            mw = window[`${k}mapInfosToWindow`] 
             Object.assign(receiversInfoListObj[k], mw)
             delete receiversInfoListObj[k].region 
             if (key.replace(k, '') === 'deliveryBeginTime') {
-              receiversInfoListObj[k]['deliveryBeginTime'] = new Date(receiversInfoListObj[k]['deliveryBeginTime']).getTime()
+              receiversInfoListObj[k]['deliveryBeginTime'] = 
+              new Date(receiversInfoListObj[k]['deliveryBeginTime']).getTime()
             }
             if (key.replace(k, '') === 'deliveryEndTime') {
-              receiversInfoListObj[k]['deliveryEndTime'] = new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
-            }                   
+              receiversInfoListObj[k]['deliveryEndTime'] = 
+              new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
+            }
+            if (receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
+              timeCompareLock = false
+            }                 
           }
         })
         Object.keys(receiversInfoListObj).forEach((key) => {
           receiversInfoList.push(receiversInfoListObj[key])
         })
-
+        // 如果输入的是无效地址，弹窗提示并且return禁止提交表单
+        if (this.isEmptyObject(window.mapInfosToWindow) || this.isEmptyObject(mw)) { 
+          message.error('亲，请输入正确有效的地址哦~')
+          return
+        }
+        // 送达起始时间不能大于结束时间
+        if (!timeCompareLock) {
+          message.error('送达起始时间不能大于送达结束时间哦~')
+          return
+        }
         this.props.submit({
           senderInfo,
           receiversInfoList,
         }).then((isSuccess) => {
-          isSuccess && this.handleGo() // 跳转到列表页 ？？还要去请求列表页的接口吗
+          isSuccess && this.handleGo() // 跳转到列表页
         })
       }
     })
   }
-
   handleGo = () => {
     browserHistory.push('/Manage/Distribution')
   }
 
   render () {
     const {
-      loading = false,
       form,
-      receiverFormNo,
+      title,
       receiverFields,
       reduceReceiverInfo,
       values, // 就是保存表单中填写的数据,
-      changeSenderMap,
-      changeReceiverMap,
       senderSearch,
       newSenderInfos,
       changeRecord,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
+        {
+          (title) &&
+          <Row type="flex" justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
+            <Col>
+              <h2 className="ant-page-title">
+                {title}
+              </h2>
+            </Col>
+          </Row>
+        }
         <Form className="ant-advanced-search-form" onSubmit={this.handleSubmit}>
           <Row>
             <Col>
@@ -124,7 +166,7 @@ class FormPage extends Component {
           </Row>
           <ul>
             {
-              receiverFields.map((item, index) => {
+              receiverFields.length && receiverFields.map((item, index) => {
                 const AmapId = 'mapContainessrGet' + index
                 return <ReceiverForm
                   form={form}
@@ -132,7 +174,6 @@ class FormPage extends Component {
                   id={item.id}
                   fields={item.fields}
                   AmapId={AmapId}
-                  // receiverFormNo={receiverFormNo}
                   length={this.props.receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
                   values={values}
@@ -140,7 +181,7 @@ class FormPage extends Component {
               })
             }
           </ul>
-          <FormItem wrapperCol={{ span: 17, offset: 7 }}>
+          <FormItem className="AddDistribution-btn-formItem">
             <Button type="dashed" onClick={this.add.bind(this)}>
               <Icon type="plus" /> 添加收货地址
             </Button>
@@ -183,7 +224,6 @@ const WrappedFormPage = Form.create({
       props.receiverFields && props.receiverFields.forEach((receiverField) => {
         fld = receiverField.fields.find((item) => item.name === fields[v].name)
       })
-      // console.log(fld)
       fields[v].type = fld && fld.type
     }
     props.changeRecord && props.changeRecord({ // 从上面拿到的【表单数据更新的函数】

@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
-import { Row, Col, Button } from 'antd'
+import { Row, Col } from 'antd'
 import PropTypes from 'prop-types'
-import Table1 from '../Table1'
-import SearchForm1 from '../SearchForm1'
-import { Link, browserHistory } from 'react-router'
+import Table from '../Table'
+import SearchForm from '../SearchForm'
+import { Link } from 'react-router'
 import './style.scss'
 
-export default class ListPage extends Component {
+export default class OrderListPage extends Component {
   static propTypes = {
     title: PropTypes.string,
     loading: PropTypes.bool,
     columns: PropTypes.array.isRequired,
     data: PropTypes.array,
     search: PropTypes.func,
+    changeSearch: PropTypes.func,
+    reset: PropTypes.func,
+    searchParams: PropTypes.object,
+    page: PropTypes.object,
   }
 
   render () {
@@ -45,7 +49,7 @@ export default class ListPage extends Component {
             </Col>
           </Row>
         }
-        <SearchForm1
+        <SearchForm
           fields={columns.filter(item => !!item.search)}
           search={search}
           changeSearch={changeSearch}
@@ -53,18 +57,19 @@ export default class ListPage extends Component {
           page={page}
           reset={reset}
         />
-        <Table1
+        <Table
           {...this.props}
           columns={columns.filter((item) => !item.hidden)}
           dataSource={data}
           loading={loading}
           search={search}
           expandedRowRender={expandedRowRender}
+          rowKey="orderNo"
           pagination={
             page ? {
               current: page.pageNo,
               total: page.total,
-              pageSize: page.pageSize || 10,
+              pageSize: page.pageSize || '10',
             } : null
           }
         />

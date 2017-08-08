@@ -1,8 +1,12 @@
-.new-pwd {
-  text-align: center;
-  color: #ff771f;
+.Distribution-dispatch-btn {
+  background: #f9980a;
+  border-color: #f9980a;
+  margin: 10px 0;
+  &:hover {
+    background: #f9980a;
+    border-color: #f9980a;
+  }
 }
-
-.new-pwd-title {
-  text-align: center;
+.Distribution-cancel-btn{
+  margin-top:10px;
 }
