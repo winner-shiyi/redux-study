@@ -35,7 +35,11 @@ export default class SendForm extends Component {
       // 关键字查询
       this.placeSearch.search('')
     })
+    this.props.route.onEnter = () => {
+      this.mapChange()
+    }
   }
+  
   /**
    * 监听输入值变化 
    * 参数：val 表示用户输入的商家名称
@@ -58,15 +62,15 @@ export default class SendForm extends Component {
     }, 400)
   }
   /**
-   * 地图api设置val1，val2公共函数
+   * val1Arr拼接val2作为值传给高得地图api的公共函数
    */
   mapChange = () => {
     clearTimeout(this.timer1) 
-    this.timer1 = setTimeout(() => {
+    this.timer1 = setTimeout(() => { // 使用setTimeout才能实时拿到最新的val1Arr和val2
       let val1Arr = this.props.values.region.value
       let val2 = this.props.values.addressDetail.value
-      console.log(val1Arr)
       this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
+        console.log('result', result)
         if (result.info === 'OK' && result.poiList) {
           const pois = result.poiList.pois[0]
           window['mapInfosToWindow'] = {
@@ -110,6 +114,7 @@ export default class SendForm extends Component {
     values.addressDetail.value = shopItem.addressDetail
 
     this.props.changeRecord(values)
+    this.mapChange()
   }
 
   render () {

@@ -129,6 +129,7 @@ class FormPage extends Component {
       senderSearch,
       newSenderInfos,
       changeRecord,
+      route,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -156,6 +157,7 @@ class FormPage extends Component {
             changeRecord={changeRecord}
             senderSearch={senderSearch} 
             newSenderInfos={newSenderInfos}
+            route={route}
           />
           <Row>
             <Col>
@@ -177,6 +179,7 @@ class FormPage extends Component {
                   length={this.props.receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
                   values={values}
+                  route={route}
                 />
               })
             }

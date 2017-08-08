@@ -6,6 +6,7 @@ class View extends Component {
   render () {
     const {
       record, // 保存填写的表单数据
+      route, // 路由
     } = this.props
     return (
       <WrappedFormPage 
