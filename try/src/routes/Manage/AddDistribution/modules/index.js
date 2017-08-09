@@ -128,11 +128,19 @@ const ACTION_HANDLERS = {
         },
       ],
     })
+    let record = state.record
+    record[`${numId}region`] = {
+      value: [],
+    }
+    record[`${numId}addressDetail`] = {
+      value: '',
+    }
 
     let newState = {
       ...state,
       receiverFormNo:numId,
       receiverFields,
+      record,
     }
     return newState
   },
@@ -145,8 +153,13 @@ const ACTION_HANDLERS = {
     let index = newReceiverFields.findIndex(item => item.id === action.id)
     newReceiverFields.splice(index, 1)
     newState.receiverFields = newReceiverFields
+
+    delete newState.record[`${action.id}region`]
+    delete newState.record[`${action.id}addressDetail`]
+    let newRecord = Object.assign({}, newState.record)
+    newState.record = newRecord
     return newState
-  },
+  }, 
   /**
    * 发货商家名称模糊搜索
    */
@@ -188,7 +201,13 @@ const ACTION_HANDLERS = {
         region: {
           value: [],
         },
+        '0region': { 
+          value: [],
+        },
         addressDetail: {
+          value: '',
+        },
+        '0addressDetail': {
           value: '',
         },
         shopName: {
@@ -339,7 +358,13 @@ const initialState = {
     region: {
       value: [],
     },
+    '0region': { 
+      value: [],
+    },
     addressDetail: {
+      value: '',
+    },
+    '0addressDetail': {
       value: '',
     },
     shopName: {

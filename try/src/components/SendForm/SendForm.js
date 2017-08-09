@@ -32,12 +32,11 @@ export default class SendForm extends Component {
         pageIndex: 1,
         map: map1,
       })
-      // 关键字查询
-      this.placeSearch.search('')
     })
-    this.props.route.onEnter = () => {
-      this.mapChange()
-    }
+    // this.props.route.onEnter = () => { 
+    // 保证路由切换后高德定位正确，不能componentDidMount里面写route的onEnter
+    this.mapChange()
+    // }
   }
   
   /**
@@ -70,7 +69,6 @@ export default class SendForm extends Component {
       let val1Arr = this.props.values.region.value
       let val2 = this.props.values.addressDetail.value
       this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
-        console.log('result', result)
         if (result.info === 'OK' && result.poiList) {
           const pois = result.poiList.pois[0]
           window['mapInfosToWindow'] = {

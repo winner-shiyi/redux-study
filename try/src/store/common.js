@@ -70,7 +70,7 @@ function menuOpen (openKeys) {
 function menuLoad () {
   return dispatch => {
     dispatch(menuRequest())
-    return fetch('//localhost:3000/mock/menu.json', {}, {
+    return fetch('//localhost:8090/mock/menu.json', {}, {
       method: 'GET',
     })
       .then(json => {

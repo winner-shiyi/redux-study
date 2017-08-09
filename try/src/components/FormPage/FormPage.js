@@ -88,7 +88,8 @@ class FormPage extends Component {
               receiversInfoListObj[k]['deliveryEndTime'] = 
               new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
             }
-            if (receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
+            if (receiversInfoListObj[k]['deliveryEndTime'] !== 0 && 
+            receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
               timeCompareLock = false
             }                 
           }
