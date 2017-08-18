@@ -88,8 +88,9 @@ class FormPage extends Component {
               receiversInfoListObj[k]['deliveryEndTime'] = 
               new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
             }
-            if (receiversInfoListObj[k]['deliveryEndTime'] !== 0 && 
-            receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
+            
+            if (receiversInfoListObj[k]['deliveryEndTime'] !== 0 &&  // 等于0的情况是，选择具体时间后又清空
+              receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
               timeCompareLock = false
             }                 
           }
@@ -130,7 +131,6 @@ class FormPage extends Component {
       senderSearch,
       newSenderInfos,
       changeRecord,
-      route,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -158,7 +158,6 @@ class FormPage extends Component {
             changeRecord={changeRecord}
             senderSearch={senderSearch} 
             newSenderInfos={newSenderInfos}
-            route={route}
           />
           <Row>
             <Col>
@@ -180,7 +179,6 @@ class FormPage extends Component {
                   length={this.props.receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
                   values={values}
-                  route={route}
                 />
               })
             }

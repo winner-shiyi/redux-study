@@ -13,7 +13,6 @@ const FormItem = Form.Item
 
 const ModalForm = Form.create({
   mapPropsToFields (props) {
-    
     const res = {}
     for (let i in props.values) {
       let param = props.values[i]
@@ -23,14 +22,11 @@ const ModalForm = Form.create({
         res[i] = { value: param }
       }
     }
-    // console.log(res)
     return res
   },
   onFieldsChange (props, fields) {
-    console.log(props)
     for (let v in fields) {
       const fld = props.fields.find(item => item.name === fields[v].name)
-      
       fields[v].type = fld && fld.type
     }
     props.changeRecord && props.changeRecord({

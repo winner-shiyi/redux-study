@@ -16,13 +16,11 @@ export default class ListPage extends Component {
     fields: PropTypes.array,
     data: PropTypes.array,
     search: PropTypes.func,
-    add: PropTypes.func,
     save: PropTypes.func,
     record: PropTypes.object,
     modalVisible: PropTypes.bool,
     cancel: PropTypes.func,
     tableOpts: PropTypes.object,
-    permission: PropTypes.object,
     changeRecord: PropTypes.func,
   }
 
@@ -84,10 +82,6 @@ export default class ListPage extends Component {
       expandedRowRender,
       reset,
     } = this.props
-
-    // console.log(JSON.stringify(fields))
-
-
 
     return (
       <div style={{ padding: 16, flex: 'auto', ...style }} >

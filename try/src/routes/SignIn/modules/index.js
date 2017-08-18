@@ -30,25 +30,25 @@ const loginFailure = (msg) => {
     type: LOGIN_FAILURE,
     payload: msg,
   }
-}
+};
 
-const key = CryptoJS.enc.Latin1.parse('eGluZ3Vhbmd4Yw==')
-const iv = CryptoJS.enc.Latin1.parse('voskplutwrfnnpuk')
+const key = CryptoJS.enc.Latin1.parse('dGJiZXhwcmVzcw==')
+const iv = CryptoJS.enc.Latin1.parse('fxlyyqiuwwljqwss')
 
 const login = (params) => {
   return dispatch => {
     dispatch(loginRequest(params))
-    let encrypted = CryptoJS.AES.encrypt(
+    /*let encrypted = CryptoJS.AES.encrypt(
       params.password,
       key,
       {
         iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.ZeroPadding,
       })
-    params.password = encrypted.toString()
+    params.password = encrypted.toString()*/
 
     return fetch('/login', params)
       .then(json => {
-        if (json.resultCode == '0000') {
+        if (json.resultCode === '0') {
           dispatch(loginSuccess(json.resultData))
           return true
         } else {
@@ -75,8 +75,9 @@ const ACTION_HANDLERS = {
     }
   },
   [LOGIN_SUCCESS]: (state, action) => {
-    sessionStorage.setItem('accessToken', action.payload.token.accessToken)
-    sessionStorage.setItem('user', JSON.stringify(action.payload.user))
+    sessionStorage.setItem('accessToken', action.payload.token)
+    sessionStorage.setItem('refreshToken', action.payload.refreshToken)
+    sessionStorage.setItem('name', JSON.stringify(action.payload.name))
     return {
       ...state,
       user: action.payload.user,

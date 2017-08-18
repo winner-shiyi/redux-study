@@ -8,8 +8,8 @@ const decorateParams = (params = {}) => { // compatible with the param like "foo
     let param = params[i] // TODO
     let value = typeof param === 'object' && // fields is a object perhaps
     !(param instanceof Array) && // not array
-    !(param._d) // not moment
-      ? (param.value && param.value.trim && param.value.trim() || param.value) : param
+    !(param._d) // 提交参数的时候有进一步被包装
+      ? (('value' in param) ? (param.value && param.value.trim && param.value.trim() || param.value) : param) : param
 
     if (value instanceof Array && value.length === 2) { // dateRange, datetimeRange, numberRange
       if (param.type === 'datetimeRange' || param.type === 'numberRange') {
@@ -37,10 +37,9 @@ export default (url, params = {}, opts = {}) => {
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'bearer ' + sessionStorage.getItem('accessToken'),
+      'Authorization': sessionStorage.getItem('accessToken')||'aa',
     },
   }
-
   opts = {
     ...defaultOpts,
     ...opts,
@@ -50,7 +49,9 @@ export default (url, params = {}, opts = {}) => {
     opts.body = JSON.stringify(decorateParams(params))
   }
   document.querySelector('#overlay').style.display = 'block'
-  return fetch(url.indexOf('//') > -1 ? url : (getBaseUrl() + url), opts)
+  url = url.indexOf('//') > -1 ? url : (getBaseUrl() + url)
+  sessionStorage.setItem('url', url)
+  return fetch(url, opts)
     .then(res => {
       document.querySelector('#overlay').style.display = 'none'
       if (res.status < 200 || res.status >= 300) {
@@ -75,6 +76,60 @@ export default (url, params = {}, opts = {}) => {
         sessionStorage.setItem('user', '{}')
         location.assign('/SignIn')
       }
+      if (json.resultCode === '10') {
+        const paramsTemp = {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+        if (opts.method === 'POST') {
+          paramsTemp.body = JSON.stringify(decorateParams({ refreshToken : sessionStorage.getItem('refreshToken') }))
+        }
+        fetch((getBaseUrl() + '/user/refreshToken'), paramsTemp)
+        .then(res => {
+          if (res.status < 200 || res.status >= 300) {
+            return {
+              resultCode: '-1',
+              resultDesc: res.status + ' ' + res.statusText,
+            }
+          } else {
+            return res.json()
+          }
+        }).then(json => {
+          let { resultData } = json
+          sessionStorage.setItem('accessToken', resultData.token)
+          sessionStorage.setItem('refreshToken', resultData.refreshToken)
+
+          let resetUrl = sessionStorage.getItem('url')
+          sessionStorage.removeItem('url')
+
+          document.querySelector('#overlay').style.display = 'block'
+          opts.headers.Authorization = resultData.token
+          fetch(resetUrl, opts).then(res => {
+            document.querySelector('#overlay').style.display = 'none'
+            if (res.status < 200 || res.status >= 300) {
+              return {
+                resultCode: '-1',
+                resultDesc: res.status + ' ' + res.statusText,
+              }
+            }
+            const contentType = res.headers.get('content-type')
+            if (contentType.indexOf('application/json') > -1) {
+              return res.json()
+            } else {
+              return res.blob()
+            }
+          }).then(() => {
+            if (json.type) { // blob
+              return json
+            }
+            return json
+          })
+        })
+      }
+      sessionStorage.removeItem('url')
       return json
     })
     .catch(e => {

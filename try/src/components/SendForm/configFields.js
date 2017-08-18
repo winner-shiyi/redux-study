@@ -4,6 +4,7 @@ export const fields = [
     'label': '商家名称',
     'name': 'shopName',
     'required': true,
+    'max': 20,
   },
   {
     'label': '联系人',
@@ -22,7 +23,6 @@ export const fields = [
     'name': 'drivingTime',
     'required': false,
     'type': 'datetime',
-    // 'max': 50, todo 时间需要怎么限制
   },
   {
     'label': '发货地区',
@@ -37,6 +37,6 @@ export const fields = [
     'name': 'addressDetail',
     'required': true,
     'type': 'textarea',
-    'max': 50,
+    'max': 60,
   },
 ]

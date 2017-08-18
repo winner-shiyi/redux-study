@@ -3,168 +3,74 @@
   "resultData": [
     {
       "id": "100",
+      "href": "/Manage/Distribution",
       "isShow": "1",
-      "name": "一级菜单1",
+      "name": "首页",
       "parentId": "1",
       "parentIds": "0,1,",
       "root": false,
       "sort": 10
     },
     {
-      "id": "2",
+      "id": "121",
+      "href": "/Manage/Distribution",
       "isShow": "1",
-      "name": "一级菜单2",
-      "parentId": "1",
-      "parentIds": "0,1,",
-      "root": false,
-      "sort": 30
-    },
-    {
-      "id": "101",
-      "isShow": "1",
-      "name": "二级菜单1",
+      "name": "车配任务管理",
       "parentId": "100",
       "parentIds": "0,1,100,",
       "root": false,
       "sort": 30
     },
     {
-      "href": "/Manage/WorkOrder",
-      "id": "102",
+      "href": "/Manage/Distribution",
+      "id": "1211",
       "isShow": "1",
-      "name": "三级菜单1",
-      "parentId": "101",
-      "parentIds": "0,1,100,101,",
+      "name": "车配任务管理",
+      "parentId": "121",
+      "parentIds": "0,1,100,121,",
       "root": false,
       "sort": 30
     },
     {
-      "id": "103",
+      "id": "1212",
       "isShow": "0",
       "name": "查看页面",
-      "parentId": "102",
-      "parentIds": "0,1,100,101,102,",
-      "permission": "Manage:WorkOrder:read",
+      "parentId": "1211",
+      "parentIds": "0,1,100,121,1211,",
+      "permission": "Manage:Distribution:read",
       "root": false,
       "sort": 30
     },
     {
-      "icon": "user",
-      "id": "4",
+      "href": "/Manage/AddDistribution",
+      "id": "1221",
       "isShow": "1",
-      "name": "账号管理",
-      "parentId": "2",
-      "parentIds": "0,1,2,",
+      "name": "新增车配任务",
+      "parentId": "121",
+      "parentIds": "0,1,100,121,",
       "root": false,
       "sort": 30
     },
     {
-      "href": "/Manage/GardenUser",
-      "id": "15",
-      "isShow": "1",
-      "name": "园区账号管理",
-      "parentId": "4",
-      "parentIds": "0,1,2,4,",
-      "root": false,
-      "sort": 30
-    },
-    {
-      "id": "32||",
+      "id": "1222",
       "isShow": "0",
       "name": "查看页面",
-      "parentId": "15",
-      "parentIds": "0,1,2,4,15,",
-      "permission": "Manage:GardenUser:read",
+      "parentId": "1221",
+      "parentIds": "0,1,100,121,1221,",
+      "permission": "Manage:AddDistribution:read",
       "root": false,
       "sort": 30
     },
     {
-      "href": "",
-      "id": "692b7b41babd4f7d85f8663f6dc381fb",
-      "isShow": "0",
-      "name": "新增园区账号",
-      "parentId": "15",
-      "parentIds": "0,1,2,4,15,",
-      "permission": "Manage:GardenUser:create",
-      "root": false,
-      "sort": 60
-    },
-    {
-      "href": "",
-      "id": "db004dc768a14dc3957fd07b1cba2dcf",
-      "isShow": "0",
-      "name": "修改账号",
-      "parentId": "15",
-      "parentIds": "0,1,2,4,15,",
-      "permission": "Manage:GardenUser:update",
-      "root": false,
-      "sort": 90
-    },
-    {
-      "href": "",
-      "id": "3c046d20f13247f6be3c65d08b8abf71",
-      "isShow": "0",
-      "name": "冻结/启用",
-      "parentId": "15",
-      "parentIds": "0,1,2,4,15,",
-      "permission": "Manage:GardenUser:lock",
-      "root": false,
-      "sort": 120
-    },
-    {
-      "href": "",
-      "id": "d7dda88933614ed584492bccef93dac7",
-      "isShow": "0",
-      "name": "重置密码",
-      "parentId": "15",
-      "parentIds": "0,1,2,4,15,",
-      "permission": "Manage:GardenUser:reset",
-      "root": false,
-      "sort": 150
-    },
-    {
-      "href": "/Manage/Role",
-      "id": "16",
+      "id": "200",
       "isShow": "1",
-      "name": "角色权限管理",
-      "parentId": "4",
-      "parentIds": "0,1,2,4,",
+      "name": "其他",
+      "parentId": "1",
+      "parentIds": "0,1,",
       "root": false,
-      "sort": 60
-    },
-    {
-      "href": "",
-      "id": "33||",
-      "isShow": "0",
-      "name": "查看页面",
-      "parentId": "16",
-      "parentIds": "0,1,2,4,16,",
-      "permission": "Manage:Role:read",
-      "root": false,
-      "sort": 30
-    },
-    {
-      "href": "",
-      "id": "6d20bfe238e1425e986afd3de4a098ba",
-      "isShow": "0",
-      "name": "新增角色",
-      "parentId": "16",
-      "parentIds": "0,1,2,4,16,",
-      "permission": "Manage:Role:create",
-      "root": false,
-      "sort": 60
-    },
-    {
-      "href": "",
-      "id": "2176cfe391104fa7810f8182cf172a86",
-      "isShow": "0",
-      "name": "权限配置",
-      "parentId": "16",
-      "parentIds": "0,1,2,4,16,",
-      "permission": "Manage:Role:update",
-      "root": false,
-      "sort": 90
+      "sort": 10
     }
+
   ],
   "resultDesc": "SUCCESS"
 }

@@ -33,10 +33,10 @@ class DetailPage extends Component {
         </Button>
     })
 
-    const formItemLayout = {
+    const formItemLayout = ({
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
-    }
+    })
 
     const { getFieldDecorator } = form
 

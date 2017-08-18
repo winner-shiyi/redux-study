@@ -35,8 +35,8 @@ function showMessage (msg, type = 'info') {
     type: SHOW_MESSAGE,
     payload: {
       msg: msg,
-      type: type
-    }
+      type: type,
+    },
   }
 }
 
@@ -49,7 +49,7 @@ function menuRequest () {
 function menuSuccess (data) {
   return {
     type: MENU_SUCCESS,
-    payload: data
+    payload: data,
   }
 }
 
@@ -70,7 +70,7 @@ function menuOpen (openKeys) {
 function menuLoad () {
   return dispatch => {
     dispatch(menuRequest())
-    return fetch('//localhost:8090/mock/menu.json', {}, {
+    return fetch('//' + location.host + '/mock/menu.json', {}, {
       method: 'GET',
     })
       .then(json => {

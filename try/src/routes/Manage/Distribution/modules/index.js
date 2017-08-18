@@ -13,6 +13,8 @@ const DISTRIBUTION_SEARCH_RESET = 'DISTRIBUTION_SEARCH_RESET'
 const DISTRIBUTION_SET_STATUS_REQUEST = 'DISTRIBUTION_SET_STATUS_REQUEST'
 const DISTRIBUTION_SET_STATUS_SUCCESS = 'DISTRIBUTION_SET_STATUS_SUCCESS'
 const DISTRIBUTION_SET_STATUS_FAILURE = 'DISTRIBUTION_SET_STATUS_FAILURE'
+const DISTRIBUTION_ENTRY_SHOW = 'DISTRIBUTION_ENTRY_SHOW'
+const DISTRIBUTION_ENTRY_CANCEL = 'DISTRIBUTION_ENTRY_CANCEL'
 
 // ------------------------------------
 // Actions
@@ -64,6 +66,8 @@ export const actions = {
       }),
     }
   },
+  showModal: createAction(DISTRIBUTION_ENTRY_SHOW),
+  cancel: createAction(DISTRIBUTION_ENTRY_CANCEL),
 }
 
 // ------------------------------------
@@ -135,12 +139,25 @@ const ACTION_HANDLERS = {
       },
     }
   },
+  [DISTRIBUTION_ENTRY_SHOW]: (state, action) => {
+    return {
+      ...state,
+      visible: true,
+    }
+  },
+  [DISTRIBUTION_ENTRY_CANCEL]: (state, action) => {
+    return {
+      ...state,
+      visible: false,
+    }
+  },
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
+  visible: false,
   loading: false,
   page: {
     pageNo: '1',

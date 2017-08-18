@@ -4,7 +4,6 @@ import SignInRoute from './SignIn'
 import FindPwdRoute from './FindPwd'
 import ManageRoute from './Manage'
 
-
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -16,7 +15,7 @@ export const createRoutes = (store) => ({
     if (location.pathname === '/' && sessionStorage.getItem('accessToken')) {
       replace('/Manage') // TODO
     }
-    if (location.pathname === '/' && !sessionStorage.getItem('accessToken')) {
+    if (location.pathname !== '/SignIn' && !sessionStorage.getItem('accessToken')) {
       replace('/SignIn')
     }
     next()
@@ -27,7 +26,6 @@ export const createRoutes = (store) => ({
     SignInRoute(store),
     ManageRoute(store),
     FindPwdRoute(store),
-    
   ],
 })
 

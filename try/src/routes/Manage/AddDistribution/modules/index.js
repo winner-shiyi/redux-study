@@ -58,7 +58,7 @@ export const actions = {
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
   submit: (params) => {
-    console.log(params)
+    // console.log(params)
     return {
       types: [ADDDISTRIBUTION_SUBMIT_REQUEST, ADDDISTRIBUTION_SUBMIT_SUCCESS, ADDDISTRIBUTION_SUBMIT_FAILURE],
       callAPI: () => fetch('/order/create', params), 

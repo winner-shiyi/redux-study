@@ -24,7 +24,7 @@ class View extends Component {
         search: true,
         dataIndex: 'orderNo',
         key: 'orderNo',
-        max: '80',
+        max: 80,
       }, 
       {
         title: '发货地址',
@@ -105,7 +105,7 @@ class View extends Component {
             <Link to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
               className="add-btn ant-btn ant-btn-primary">明细</Link>
             {
-              record.orderStatus === 1 && //  1-待分配；2-已分配待取货；3-已取货配送中；4-已完成；5-已取消
+              record.orderStatus === 1 &&
               <Link to={`/Manage/ChooseDriver/${data[index].orderNo}`} 
                 className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn">派单</Link>
             }

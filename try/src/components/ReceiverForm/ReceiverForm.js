@@ -76,7 +76,6 @@ export default class ReceiverForm extends Component {
       fields,
       length,
       id,
-      values,
     } = this.props
 
     // 以下是绑定收货信息表单的【收货地区】和【详细地址】onChange事件

@@ -1,10 +1,10 @@
 import { injectReducer } from '../../../store/reducers.js'
 import { common } from '../../../store/common'
 
-export const moduleName = 'ChooseDriver/:id'
+export const moduleName = 'ChooseDriver'
 
 export default (store) => ({
-  path : moduleName,
+  path : moduleName + '/:id',
   onEnter: ({ location, routes, params }, replace, next) => {
     store.dispatch(common.initialMenu())
     next()
