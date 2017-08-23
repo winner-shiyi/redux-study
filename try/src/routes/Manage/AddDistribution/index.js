@@ -19,7 +19,6 @@ export default (store) => ({
       injectReducer(store, { key: moduleName, reducer })
 
       cb(null, propertyContainer)
-
     })
   },
 })
