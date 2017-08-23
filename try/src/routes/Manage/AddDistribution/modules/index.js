@@ -6,6 +6,9 @@ import addr from '../../../../../public/mock/addr2.json'
 // ------------------------------------
 // Constants
 // ------------------------------------
+const ADDDISTRIBUTION_REQUEST = 'ADDDISTRIBUTION_REQUEST'
+const ADDDISTRIBUTION_SUCCESS = 'ADDDISTRIBUTION_SUCCESS'
+const ADDDISTRIBUTION_FAILURE = 'ADDDISTRIBUTION_FAILURE'
 const ADDDISTRIBUTION_ADD_RECEIVER_INFO = 'ADDDISTRIBUTION_ADD_RECEIVER_INFO'
 const ADDDISTRIBUTION_REDUCE_RECEIVER_INFO = 'ADDDISTRIBUTION_REDUCE_RECEIVER_INFO'
 const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
@@ -18,6 +21,38 @@ const ADDDISTRIBUTION_SENDER_SEARCH_FAILURE = 'ADDDISTRIBUTION_SENDER_SEARCH_FAI
 // ------------------------------------
 // Actions
 // ------------------------------------
+
+const request = (params) => {
+  return {
+    type: ADDDISTRIBUTION_REQUEST,
+  }
+}
+const success = (data) => {
+  return {
+    type: ADDDISTRIBUTION_SUCCESS,
+    payload: data,
+  }
+}
+const failure = (msg) => {
+  return {
+    type: ADDDISTRIBUTION_FAILURE,
+    payload: msg,
+  }
+}
+
+const editOredr = (params) => {
+  return dispatch => {
+    dispatch(request(params))
+    return fetch('/order/edit', { oederNo: params.orderNo })
+      .then(json => {
+        if (json.rescultCode === '0') {
+          dispatch(success(json.rescultData))
+        } else {
+          dispatch(failure(json.rescultDesc))
+        }
+      })
+  }
+}
 
 const senderSearchRequest = (params) => { 
   return {
@@ -65,12 +100,42 @@ export const actions = {
     }
   },
   senderSearch,
+  editOredr,
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  /**
+   * 进入编辑车配任务页面
+   */
+  [ADDDISTRIBUTION_REQUEST]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+    }
+  },
+  [ADDDISTRIBUTION_SUCCESS]: (state, action) => {
+    let newReceiverFormNo = state.receiverFormNo
+    newReceiverFormNo = action.payload.list.receiversInfoList.length - 1 // TODO
+    let newState = {
+      ...state,
+      data: action.payload.list,
+      loading: false,
+      receiverFormNo: newReceiverFormNo,
+    }
+    return newState
+  },
+  [ADDDISTRIBUTION_FAILURE]: (state, action) => {
+    message.error(action.payload)
+    return {
+      ...state,
+      loading: false,
+      data: {},
+    }
+  },
+
   /**
    * 增加收货地址
    */

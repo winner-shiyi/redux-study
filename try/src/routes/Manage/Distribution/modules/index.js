@@ -20,7 +20,7 @@ const DISTRIBUTION_ENTRY_CANCEL = 'DISTRIBUTION_ENTRY_CANCEL'
 // Actions
 // ------------------------------------
 
-const request = () => {
+const request = (params) => {
   return {
     type: DISTRIBUTION_REQUEST,
   }
@@ -60,7 +60,7 @@ const downExcel = () => {
       .then(json => {
         let binaryData = []
         binaryData.push(json)
-        const downloadUrl = window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+        const downloadUrl = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/zip' }))
         // const downloadUrl = window.URL.createObjectURL(json)  // todo 
         let a = document.createElement('a')
         a.href = downloadUrl
