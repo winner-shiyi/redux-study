@@ -156,8 +156,9 @@ class EntryData extends Component {
     }
     return (
       <div>
-        <p>1、将订单信息填入Excel模板；</p>
-        <p>2、将填好订单信息的Excel模板上传；</p>
+        <p>1、下载导入模板 <a href="#" onClick={that.props.downExcel}>点此下载</a>；</p>
+        <p>2、将订单信息填入Excel模板；</p>
+        <p>3、将填好订单信息的Excel模板上传；</p>
         <Upload ref="upload" {...uploadProps}>
           <Button style={{ marginTop:'16px' }}>
             <Icon type="upload" /> 选择导入文件

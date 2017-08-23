@@ -54,6 +54,23 @@ const search = (params) => { // 第一次进入页面
   }
 }
 
+const downExcel = () => {
+  return dispatch => {
+    fetch('/order/downExcel')
+      .then(json => {
+        let binaryData = []
+        binaryData.push(json)
+        const downloadUrl = window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+        // const downloadUrl = window.URL.createObjectURL(json)  // todo 
+        let a = document.createElement('a')
+        a.href = downloadUrl
+        a.download = '车配导入订单模板.xlsx'
+        document.body.appendChild(a)
+        a.click()
+      })
+  }
+}
+
 export const actions = {
   reset: createAction(DISTRIBUTION_SEARCH_RESET),
   changeSearch: createAction(DISTRIBUTION_CHANGE_SEARCH, 'fields'),
@@ -68,6 +85,7 @@ export const actions = {
   },
   showModal: createAction(DISTRIBUTION_ENTRY_SHOW),
   cancel: createAction(DISTRIBUTION_ENTRY_CANCEL),
+  downExcel,
 }
 
 // ------------------------------------

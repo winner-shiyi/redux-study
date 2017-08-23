@@ -130,7 +130,7 @@ const ACTION_HANDLERS = {
     })
     let record = state.record
     record[`${numId}region`] = {
-      value: [],
+      value: ['浙江省', '杭州市', '江干区'],
     }
     record[`${numId}addressDetail`] = {
       value: '',
@@ -356,10 +356,10 @@ const initialState = {
   ],
   record: { // 用来保存填写的表单数据
     region: {
-      value: [],
+      value: ['浙江省', '杭州市', '江干区'],
     },
     '0region': { 
-      value: [],
+      value: ['浙江省', '杭州市', '江干区'],
     },
     addressDetail: {
       value: '',

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { message, Form, Row, Col, Button, Icon } from 'antd'
+import { message, Form, Row, Col, Button, Icon, BackTop } from 'antd'
 import { browserHistory } from 'react-router'
 import SendForm from '../SendForm'
 import ReceiverForm from '../ReceiverForm'
@@ -89,7 +89,7 @@ class FormPage extends Component {
               new Date(receiversInfoListObj[k]['deliveryEndTime']).getTime()
             }
             
-            if (receiversInfoListObj[k]['deliveryEndTime'] !== 0 &&  // 等于0的情况是，选择具体时间后又清空
+            if (receiversInfoListObj[k]['deliveryEndTime'] !== 0 && // 等于0的情况是，选择具体时间后又清空
               receiversInfoListObj[k]['deliveryEndTime'] < receiversInfoListObj[k]['deliveryBeginTime']) {
               timeCompareLock = false
             }                 
@@ -172,7 +172,7 @@ class FormPage extends Component {
                 const AmapId = 'mapContainessrGet' + index
                 return <ReceiverForm
                   form={form}
-                  key={item.id}
+                  key={`receiverField${index}`}
                   id={item.id}
                   fields={item.fields}
                   AmapId={AmapId}
@@ -184,7 +184,7 @@ class FormPage extends Component {
             }
           </ul>
           <FormItem className="AddDistribution-btn-formItem">
-            <Button type="dashed" onClick={this.add.bind(this)}>
+            <Button type="dashed" onClick={this.add.bind(this)} className="add-form-button">
               <Icon type="plus" /> 添加收货地址
             </Button>
             <Button
@@ -193,8 +193,15 @@ class FormPage extends Component {
               className="login-form-button"
               loading={this.props.loading}>提交
             </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="save-form-button"
+              loading={this.props.loading}>保存草稿
+            </Button>
           </FormItem>
         </Form>
+        <Row><BackTop>111</BackTop></Row>  
       </div>
     )
   }

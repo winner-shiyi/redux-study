@@ -122,6 +122,8 @@ export default class SendForm extends Component {
     fields[0].dataSource = this.state.dataSource
     fields[4].onChange = this.onRegionChange
     fields[5].onChange = this.onAddressDetailChange
+
+    // fields[4].defaultValue = ['zhejiang', 'hangzhou', 'xihu']
     return (
       <div className="senderForm-box">
         <Row>

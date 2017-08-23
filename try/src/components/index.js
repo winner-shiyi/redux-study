@@ -59,6 +59,7 @@ export const geneBox = (field, opts = {}) => {
           options={field.data}
           onChange={field.onChange}
           changeOnSelect={!!field.changeOnSelect}
+          // defaultValue={field.initialValue}
         />
       )
     case 'datetime':

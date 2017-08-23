@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import WrappedFormPage from '../../../../components/FormPage'
 
 class View extends Component {
+  componentDidMount () {
+    const { props } = this
+    const id = props.params.id
+    console.log(id)
+  }
 
   render () {
     const {

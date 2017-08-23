@@ -4,7 +4,7 @@ import { common } from '../../../store/common'
 export const moduleName = 'AddDistribution'
 
 export default (store) => ({
-  path : moduleName,
+  path : moduleName + '(/:id)',
   onEnter: ({ location, routes, params }, replace, next) => {
     store.dispatch(common.initialMenu())
     next()

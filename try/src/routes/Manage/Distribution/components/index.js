@@ -5,7 +5,6 @@ import './style.scss'
 import { Link } from 'react-router'
 
 class View extends Component {
-
   componentDidMount () { // 一进入页面后把table渲染出来
     this.props.search({
       ...this.props.searchParams,
@@ -36,11 +35,11 @@ class View extends Component {
         dataIndex: 'orderStatus',
         search: true,
         type: 'select',
-        data: [['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
+        data: [['0', '待提交'], ['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
         key: 'orderStatus',
         render: (text, record, index) => {
           const statusName = record.orderStatus
-          const statusObj = { 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消' }
+          const statusObj = { 0: '待提交', 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消' }
           const statusValue = statusObj[statusName]
           return statusValue
         },
@@ -75,8 +74,8 @@ class View extends Component {
         max: 50,
         render: (text, record, index) => (
           record.receiversInfoList.length > 1 
-          ? `${record.receiversInfoList[0].shopName}...` : record && record.receiversInfoList.length === 1
-          ? record.receiversInfoList[0].shopName : ''
+            ? `${record.receiversInfoList[0].shopName}...` : record && record.receiversInfoList.length === 1
+              ? record.receiversInfoList[0].shopName : ''
         ),
       },
       {
@@ -85,8 +84,8 @@ class View extends Component {
         max: 50,
         render: (text, record, index) => (
           record.receiversInfoList.length > 1 
-          ? `${record.receiversInfoList[0].address}...` : record && record.receiversInfoList.length === 1
-          ? record.receiversInfoList[0].address : ''
+            ? `${record.receiversInfoList[0].address}...` : record && record.receiversInfoList.length === 1
+              ? record.receiversInfoList[0].address : ''
         ),
       },
       {
@@ -99,18 +98,44 @@ class View extends Component {
       {
         title: '操作',
         key: 'action',
-        // width: 360,
         render: (text, record, index) => (
           <span>
-            <Link to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
-              className="add-btn ant-btn ant-btn-primary">明细</Link>
+            {
+              record.orderStatus === 0 &&
+              <Link to={`/Manage/AddDistribution/${data[index].orderNo}`} 
+                className="add-btn ant-btn ant-btn-primary Distribution-edit-btn">编辑</Link>
+            }
+            {
+              record.orderStatus === 0 && 
+              <Button type="primary" className="Distribution-delete-btn" onClick={
+                () => {
+                  Modal.confirm({
+                    title: '该订单还没有提交，确定要删除吗？',
+                    onOk: () => {
+                      this.props.setStatus(record, index).then((success) => {
+                        success && this.props.search({
+                          ...this.props.searchParams,
+                          ...this.props.page,
+                        })
+                      })
+                    },
+                    onCancel () {},
+                  })
+                }
+              }>删除</Button>
+            }
+            { 
+              record.orderStatus !== 0 &&
+              <Link to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
+                className="add-btn ant-btn ant-btn-primary Distribution-detail-btn">明细</Link>
+            }
             {
               record.orderStatus === 1 &&
               <Link to={`/Manage/ChooseDriver/${data[index].orderNo}`} 
                 className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn">派单</Link>
             }
             {
-              record.orderStatus !== 4 && record.orderStatus !== 5 &&
+              record.orderStatus !== 4 && record.orderStatus !== 5 && record.orderStatus !== 0 &&
               <Button type="danger" className="Distribution-cancel-btn" onClick={
                 (() => {
                   Modal.confirm({
