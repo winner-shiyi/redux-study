@@ -117,14 +117,109 @@ const ACTION_HANDLERS = {
     }
   },
   [ADDDISTRIBUTION_SUCCESS]: (state, action) => {
-    let newReceiverFormNo = state.receiverFormNo
-    newReceiverFormNo = action.payload.receiversInfoList.length - 1 // TODO
-    let newState = {
-      ...state,
-      data: action.payload,
-      loading: false,
-      receiverFormNo: newReceiverFormNo,
-    }
+    // let newReceiverFormNo = state.receiverFormNo
+    // newReceiverFormNo = action.payload.receiversInfoList.length - 1 // TODO
+    // let newRecord = state.record
+
+    let newState = Object.assign({}, state)
+    let newRecord = Object.assign({}, newState.record)
+
+    newRecord.shopName.value = action.payload.shopName
+    newRecord.userName.value = action.payload.userName
+    newRecord.phone.value = action.payload.phone
+    newRecord.region.value = [action.payload.province, action.payload.city, action.payload.area]
+    newRecord.addressDetail.value = action.payload.addressDetail
+    // 注意看 react record里面数据变化，还是不正确的
+    action.payload.receiversInfoList.forEach((item, index) => {
+      if (!newRecord[`${index}region`]) {
+        newRecord[`${index}region`] = {}
+      }
+      newRecord[`${index}region`].value = [item.province, item.city, item.area]
+      if (!newRecord[`${index}addressDetail`]) {
+        newRecord[`${index}addressDetail`] = {}
+      }
+      newRecord[`${index}addressDetail`].value = item.addressDetail
+      if (!newRecord[`${index}phone`]) {
+        newRecord[`${index}phone`] = {}
+      }
+      newRecord[`${index}phone`].value = item.phone
+      if (!newRecord[`${index}shopName`]) {
+        newRecord[`${index}shopName`] = {}
+      }
+      newRecord[`${index}shopName`].value = item.shopName
+      if (!newRecord[`${index}userName`]) {
+        newRecord[`${index}userName`] = {}
+      }
+      newRecord[`${index}userName`].value = item.userName
+      // newRecord[`${index}`].value = item.phone todo 两个时间
+    })
+    newState.record = newRecord
+
+    // 再来实现 怎么 2条收货地址 浅拷贝 和 深拷贝
+    let newReceiverFields = action.payload.receiversInfoList.map((item, index) => {
+      return {
+        id: index.toString(),
+        fields:[
+          {
+            'label': '商家名称',
+            'name': `${index}shopName`,
+            'required': true,
+            'max': 20,
+          },
+          {
+            'label': '联系人',
+            'name': `${index}userName`,
+            'required': true,
+            'max': 20,
+          },
+          {
+            'label': '联系电话',
+            'name': `${index}phone`,
+            'required': true,
+            'phone': true,
+          },
+          {
+            'label': '送达起始时间',
+            'name': `${index}deliveryBeginTime`,
+            'required': false,
+            'type': 'datetime',
+          },
+          {
+            'label': '收货地区',
+            'required': true,
+            'name': `${index}region`,
+            'type': 'Cascader',
+            'data': addr,
+            'changeOnSelect': 'true', // 每选择一项就会马上改变
+          },
+          {
+            'label': '送达结束时间',
+            'name': `${index}deliveryEndTime`,
+            'required': false,
+            'type': 'datetime',
+          },
+          {
+            'label': '详细地址',
+            'name': `${index}addressDetail`,
+            'required': true,
+            'type': 'textarea',
+            'max': 60,
+          },
+        ],
+      }
+    })
+    // 再来实现 怎么把2条收货地址信息填充进去
+    
+    newState.receiverFields = newReceiverFields
+    newState.receiverFormNo = action.payload.receiversInfoList.length - 1
+    newState.loading = false
+    newState.data = action.payload
+    // let newState = { newState 不涉及对象或者数组的操作的时候可以用这个{...state}
+    //   ...state,
+    //   data: action.payload,
+    //   loading: false,
+    //   receiverFormNo: newReceiverFormNo,
+    // }
     return newState
   },
   [ADDDISTRIBUTION_FAILURE]: (state, action) => {
@@ -423,13 +518,7 @@ const initialState = {
     region: {
       value: ['浙江省', '杭州市', '江干区'],
     },
-    '0region': { 
-      value: ['浙江省', '杭州市', '江干区'],
-    },
     addressDetail: {
-      value: '',
-    },
-    '0addressDetail': {
       value: '',
     },
     shopName: {
@@ -439,6 +528,21 @@ const initialState = {
       value: '',
     },
     phone: {
+      value: '',
+    },
+    '0region': { 
+      value: ['浙江省', '杭州市', '江干区'],
+    },
+    '0addressDetail': {
+      value: '',
+    },
+    '0shopName': {
+      value: '',
+    },
+    '0userName': {
+      value: '',
+    },
+    '0phone': {
       value: '',
     },
   }, 
