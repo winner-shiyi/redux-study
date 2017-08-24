@@ -1,4 +1,4 @@
-export function formatDate(value, format) {
+export function formatDate (value, format) {
   let maps = {
     'yyyy' : function (d) {return d.getFullYear();},
     'MM' : function (d){return fix(d.getMonth()+1);},
@@ -30,4 +30,5 @@ export function formatDate(value, format) {
 }
 
 // new Date('2017-08 02:14').getTime()
-// formatDate(1501697640000,'yyyy-MM-dd HH:mm') 
+// formatDate(1501697640000,'yyyy-MM-dd HH:mm')
+ 

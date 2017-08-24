@@ -22,7 +22,7 @@ const ADDDISTRIBUTION_SENDER_SEARCH_FAILURE = 'ADDDISTRIBUTION_SENDER_SEARCH_FAI
 // Actions
 // ------------------------------------
 
-const request = (params) => {
+const request = (id) => {
   return {
     type: ADDDISTRIBUTION_REQUEST,
   }
@@ -40,15 +40,15 @@ const failure = (msg) => {
   }
 }
 
-const editOredr = (params) => {
+const editOredr = (id) => {
   return dispatch => {
-    dispatch(request(params))
-    return fetch('/order/edit', { oederNo: params.orderNo })
+    dispatch(request(id))
+    return fetch('/order/edit', { orederNo:id })
       .then(json => {
-        if (json.rescultCode === '0') {
-          dispatch(success(json.rescultData))
+        if (json.resultCode === '0') {
+          dispatch(success(json.resultData))
         } else {
-          dispatch(failure(json.rescultDesc))
+          dispatch(failure(json.resultDesc))
         }
       })
   }
@@ -108,7 +108,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   /**
-   * 进入编辑车配任务页面
+   * 编辑车配任务请求数据填充页面
    */
   [ADDDISTRIBUTION_REQUEST]: (state, action) => {
     return {
@@ -118,10 +118,10 @@ const ACTION_HANDLERS = {
   },
   [ADDDISTRIBUTION_SUCCESS]: (state, action) => {
     let newReceiverFormNo = state.receiverFormNo
-    newReceiverFormNo = action.payload.list.receiversInfoList.length - 1 // TODO
+    newReceiverFormNo = action.payload.receiversInfoList.length - 1 // TODO
     let newState = {
       ...state,
-      data: action.payload.list,
+      data: action.payload,
       loading: false,
       receiverFormNo: newReceiverFormNo,
     }

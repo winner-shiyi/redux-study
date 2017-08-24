@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd'
 import OrderListPage from '../../../../components/OrderListPage'
 import './style.scss'
 import { Link } from 'react-router'
+import { formatDate } from '../../../../util/date'
 
 class View extends Component {
   componentDidMount () { // 一进入页面后把table渲染出来
@@ -35,11 +36,11 @@ class View extends Component {
         dataIndex: 'orderStatus',
         search: true,
         type: 'select',
-        data: [['0', '待提交'], ['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消']],
+        data: [['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消'], ['6', '待提交']],
         key: 'orderStatus',
         render: (text, record, index) => {
           const statusName = record.orderStatus
-          const statusObj = { 0: '待提交', 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消' }
+          const statusObj = { 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消', 6: '待提交' }
           const statusValue = statusObj[statusName]
           return statusValue
         },
@@ -67,6 +68,7 @@ class View extends Component {
         search: true,
         max: 11,
         number: true,
+        hidden: true,
       }, 
       {
         title: '收货商家名称',
@@ -96,17 +98,26 @@ class View extends Component {
         ),
       },
       {
+        title: '下单时间',
+        dataIndex:'orderTime',
+        render: (text, record, index) => (
+          record.orderStatus !== 6 
+            ? formatDate(Number(text), 'yyyy-MM-dd HH:mm')
+            : ''
+        ),
+      },
+      {
         title: '操作',
         key: 'action',
         render: (text, record, index) => (
           <span>
             {
-              record.orderStatus === 0 &&
+              record.orderStatus === 6 &&
               <Link to={`/Manage/AddDistribution/${data[index].orderNo}`} 
                 className="add-btn ant-btn ant-btn-primary Distribution-edit-btn">编辑</Link>
             }
             {
-              record.orderStatus === 0 && 
+              record.orderStatus === 6 && 
               <Button type="primary" className="Distribution-delete-btn" onClick={
                 () => {
                   Modal.confirm({
@@ -125,7 +136,7 @@ class View extends Component {
               }>删除</Button>
             }
             { 
-              record.orderStatus !== 0 &&
+              record.orderStatus !== 6 &&
               <Link to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
                 className="add-btn ant-btn ant-btn-primary Distribution-detail-btn">明细</Link>
             }
@@ -135,7 +146,7 @@ class View extends Component {
                 className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn">派单</Link>
             }
             {
-              record.orderStatus !== 4 && record.orderStatus !== 5 && record.orderStatus !== 0 &&
+              record.orderStatus !== 4 && record.orderStatus !== 5 && record.orderStatus !== 6 &&
               <Button type="danger" className="Distribution-cancel-btn" onClick={
                 (() => {
                   Modal.confirm({
