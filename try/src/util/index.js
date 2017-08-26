@@ -108,3 +108,9 @@ export function formatMoney (num) {
   let integer = (nums[0]).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
   return nums.length > 1 ? integer + '.' + nums[1] : integer
 }
+
+export function createEmptyObject (option) {
+  if (!option) {
+    option = {}
+  }
+}

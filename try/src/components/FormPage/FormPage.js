@@ -20,6 +20,13 @@ class FormPage extends Component {
     form: PropTypes.object,
     values: PropTypes.object,
   }
+  constructor (props) {
+    super(props)
+    this.state = {
+      createType: 1,
+    }
+  }
+  
   /**
    * 判断是否为空对象
    */
@@ -34,6 +41,14 @@ class FormPage extends Component {
    */
   add () {
     this.props.addReceiverInfo()
+  }
+  /**
+   * 点击【保存草稿】
+   */
+  handleSaveClick = () => {
+    this.setState({
+      createType: 2,
+    })
   }
   /**
    * 提交表单
@@ -109,14 +124,20 @@ class FormPage extends Component {
           return
         }
         this.props.submit({
+          createType: this.state.createType,
+          orderNo: this.props.params.id || '',
           senderInfo,
           receiversInfoList,
         }).then((isSuccess) => {
+          this.props.clearData()
           isSuccess && this.handleGo() // 跳转到列表页
         })
       }
     })
   }
+  /**
+   * 提交成功后路由跳转
+   */
   handleGo = () => {
     browserHistory.push('/Manage/Distribution')
   }
@@ -197,7 +218,8 @@ class FormPage extends Component {
               type="primary"
               htmlType="submit"
               className="save-form-button"
-              loading={this.props.loading}>保存草稿
+              loading={this.props.loading}
+              onClick={this.handleSaveClick}>保存草稿
             </Button>
           </FormItem>
         </Form>

@@ -1,7 +1,8 @@
 import { message } from 'antd'
-import { createAction } from '../../../../util'
+import { createAction, createEmptyObject } from '../../../../util'
 import fetch from '../../../../util/fetch'
 import addr from '../../../../../public/mock/addr2.json'
+import { formatDate } from '../../../../util/date'
 
 // ------------------------------------
 // Constants
@@ -18,6 +19,7 @@ const ADDDISTRIBUTION_SUBMIT_FAILURE = 'ADDDISTRIBUTION_SUBMIT_FAILURE'
 const ADDDISTRIBUTION_SENDER_SEARCH_REQUEST = 'ADDDISTRIBUTION_SENDER_SEARCH_REQUEST'
 const ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS = 'ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS'
 const ADDDISTRIBUTION_SENDER_SEARCH_FAILURE = 'ADDDISTRIBUTION_SENDER_SEARCH_FAILURE'
+const ADDDISTRIBUTION_CLEAR_DATA = 'ADDDISTRIBUTION_CLEAR_DATA' // 清空数据
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -92,15 +94,16 @@ export const actions = {
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
   changeRecord: createAction(ADDDISTRIBUTION_RECORD_CHANGE, 'fields'),
+  clearData: createAction(ADDDISTRIBUTION_CLEAR_DATA),
   submit: (params) => {
-    // console.log(params)
+    console.log('params', params)
     return {
       types: [ADDDISTRIBUTION_SUBMIT_REQUEST, ADDDISTRIBUTION_SUBMIT_SUCCESS, ADDDISTRIBUTION_SUBMIT_FAILURE],
       callAPI: () => fetch('/order/create', params), 
     }
   },
   senderSearch,
-  editOredr,
+  editOredr, 
 }
 
 // ------------------------------------
@@ -129,33 +132,65 @@ const ACTION_HANDLERS = {
     newRecord.phone.value = action.payload.phone
     newRecord.region.value = [action.payload.province, action.payload.city, action.payload.area]
     newRecord.addressDetail.value = action.payload.addressDetail
-    // 注意看 react record里面数据变化，还是不正确的
+    if (!newRecord.drivingTime) {
+      newRecord.drivingTime = {}
+    }
+    if (!action.payload.drivingTime) { // 非必填字段
+      newRecord.drivingTime.value = ''
+    } else {
+      newRecord.drivingTime.value = formatDate(Number(action.payload.drivingTime), 'yyyy-MM-dd HH:mm')
+    }
+    
     action.payload.receiversInfoList.forEach((item, index) => {
+      // createEmptyObject(newRecord[`${index}region`])
       if (!newRecord[`${index}region`]) {
         newRecord[`${index}region`] = {}
       }
       newRecord[`${index}region`].value = [item.province, item.city, item.area]
+      
       if (!newRecord[`${index}addressDetail`]) {
         newRecord[`${index}addressDetail`] = {}
       }
       newRecord[`${index}addressDetail`].value = item.addressDetail
+      
       if (!newRecord[`${index}phone`]) {
         newRecord[`${index}phone`] = {}
       }
       newRecord[`${index}phone`].value = item.phone
+      
       if (!newRecord[`${index}shopName`]) {
         newRecord[`${index}shopName`] = {}
       }
       newRecord[`${index}shopName`].value = item.shopName
+      
       if (!newRecord[`${index}userName`]) {
         newRecord[`${index}userName`] = {}
       }
       newRecord[`${index}userName`].value = item.userName
-      // newRecord[`${index}`].value = item.phone todo 两个时间
+      
+      if (!newRecord[`${index}deliveryBeginTime`]) {
+        newRecord[`${index}deliveryBeginTime`] = {}
+      }
+      if (!item.deliveryBeginTime) { // 非必填字段
+        newRecord[`${index}deliveryBeginTime`].value = ''
+      } else {
+        newRecord[`${index}deliveryBeginTime`].value = 
+        formatDate(Number(item.deliveryBeginTime), 'yyyy-MM-dd HH:mm')
+      }
+  
+      if (!newRecord[`${index}deliveryEndTime`]) {
+        newRecord[`${index}deliveryEndTime`] = {}
+      }
+      if (!item.deliveryEndTime) { // 非必填字段
+        newRecord[`${index}deliveryEndTime`].value = ''
+      } else {
+        newRecord[`${index}deliveryEndTime`].value = 
+        formatDate(Number(item.deliveryEndTime), 'yyyy-MM-dd HH:mm')
+      }
     })
     newState.record = newRecord
 
-    // 再来实现 怎么 2条收货地址 浅拷贝 和 深拷贝
+    // 再来实现 怎么增加2条收货地址 浅拷贝 和 深拷贝
     let newReceiverFields = action.payload.receiversInfoList.map((item, index) => {
       return {
         id: index.toString(),
@@ -208,18 +243,11 @@ const ACTION_HANDLERS = {
         ],
       }
     })
-    // 再来实现 怎么把2条收货地址信息填充进去
     
     newState.receiverFields = newReceiverFields
     newState.receiverFormNo = action.payload.receiversInfoList.length - 1
     newState.loading = false
     newState.data = action.payload
-    // let newState = { newState 不涉及对象或者数组的操作的时候可以用这个{...state}
-    //   ...state,
-    //   data: action.payload,
-    //   loading: false,
-    //   receiverFormNo: newReceiverFormNo,
-    // }
     return newState
   },
   [ADDDISTRIBUTION_FAILURE]: (state, action) => {
@@ -316,6 +344,12 @@ const ACTION_HANDLERS = {
 
     delete newState.record[`${action.id}region`]
     delete newState.record[`${action.id}addressDetail`]
+    delete newState.record[`${action.id}shopName`]
+    delete newState.record[`${action.id}userName`]
+    delete newState.record[`${action.id}phone`]
+    delete newState.record[`${action.id}deliveryEndTime`]
+    delete newState.record[`${action.id}deliveryBeginTime`]
+
     let newRecord = Object.assign({}, newState.record)
     newState.record = newRecord
     return newState
@@ -357,12 +391,42 @@ const ACTION_HANDLERS = {
     message.success('提交成功')
     return {
       ...state,
+    }
+  },
+  [ADDDISTRIBUTION_SUBMIT_FAILURE]: (state, action) => {
+    message.error(action.msg) // 使用callAPI封装的action时候直接action.msg就可得到错误信息
+    return {
+      ...state,
+    }
+  },
+
+  /**
+   * 表单数据改变更新
+   */
+  [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => {
+    let newState = {
+      ...state,
+      record: {
+        ...state.record,
+        ...action.fields,
+      },
+    }
+    return newState
+  },
+
+  /**
+   * 清空数据，回到初始界面
+   */
+  [ADDDISTRIBUTION_CLEAR_DATA]: (state, action) => {
+    return {
+      ...state,
+      receiverFormNo: 0,
       record: { 
         region: {
-          value: [],
+          value: ['浙江省', '杭州市', '江干区'],
         },
         '0region': { 
-          value: [],
+          value: ['浙江省', '杭州市', '江干区'],
         },
         addressDetail: {
           value: '',
@@ -435,26 +499,6 @@ const ACTION_HANDLERS = {
       ],
     }
   },
-  [ADDDISTRIBUTION_SUBMIT_FAILURE]: (state, action) => {
-    message.error(action.msg) // 使用callAPI封装的action时候直接action.msg就可得到错误信息
-    return {
-      ...state,
-    }
-  },
-
-  /**
-   * 表单数据改变更新
-   */
-  [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => {
-    let newState = {
-      ...state,
-      record: {
-        ...state.record,
-        ...action.fields,
-      },
-    }
-    return newState
-  },
 }
 
 // ------------------------------------
@@ -516,7 +560,7 @@ const initialState = {
   ],
   record: { // 用来保存填写的表单数据
     region: {
-      value: ['浙江省', '杭州市', '江干区'],
+      value: ['北京市', '北京市', '东城区'],
     },
     addressDetail: {
       value: '',

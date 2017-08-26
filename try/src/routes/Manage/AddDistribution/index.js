@@ -1,12 +1,17 @@
 import { injectReducer } from '../../../store/reducers.js'
 import { common } from '../../../store/common'
-
+import { actions } from './modules'
 export const moduleName = 'AddDistribution'
 
 export default (store) => ({
   path : moduleName + '(/:id)',
   onEnter: ({ location, routes, params }, replace, next) => {
     store.dispatch(common.initialMenu())
+    if (!params.id) {
+      store.dispatch(actions.clearData()) // 路由从编辑任务切换到新建任务的时候要清空数据
+    } else {
+      store.dispatch(actions.editOredr(params.id))
+    }
     next()
   },
   onLeave: () => {

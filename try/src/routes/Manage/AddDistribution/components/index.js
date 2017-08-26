@@ -8,10 +8,13 @@ class View extends Component {
       this.editTask(id)
     }
   }
+  componentWillUnmount () {
+    this.props.clearData()
+  }
 
   editTask (id) {
     this.props.editOredr(id).then(() => {
-      console.log('this.props.data', this.props.data) 
+      // console.log('this.props.data', this.props.data) 
       // const data = this.props.data
       // debugger
       // let values = this.props.record
