@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Button, message } from 'antd'
+import { Button, Modal } from 'antd'
 import ListPage from '../../../../components/ListPage'
 import { browserHistory } from 'react-router'
 
 class View extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       index:-1,
@@ -16,6 +16,7 @@ class View extends Component {
     let { props } = this;
     props.searchCar({ token:sessionStorage.getItem('accessToken') });
     props.searchDriver(this.props.searchParams);
+
   }
 
   search (params) {
@@ -44,11 +45,8 @@ class View extends Component {
       driverStatus,
       carLengthData,
       isCanChoose,
-      page
-      } = this.props;
-
-    // console.log(data.driverList);
-
+      page,
+    } = this.props;
     let {
       index
       } = this.state;
@@ -58,17 +56,20 @@ class View extends Component {
       '1':'已完成'
     };
 
+    const routeId = this.props.params.id
+
     const columns = [
       {
         label: '司机ID',
         name: 'driverId',
         search: false,
-        hidden:true
+        hidden: true,
       },
       {
-        label: '司机名称',
+        label: '司机姓名',
         name: 'driverName',
         search: true,
+        max: 20,
       },
       {
         label: '车牌',
@@ -77,23 +78,25 @@ class View extends Component {
       },
       {
         label: '车辆类型',
-        name: 'carType',//表格中的值
+        name: 'carType', // 表格中的值
         type: 'select',
-        data: carClassesData,//搜索部分下拉框的值
+        data: carClassesData, // 搜索部分下拉框的值
         search: true,
       },
       {
         label: '车厢长度',
         name: 'carLength',
         data: carLengthData,
-        search: false,
       },
       {
         label: '司机工作状态',
         name:'driverWorkStatus',
         type: 'select',
         data:driverStatus,
-        search: false,
+      },
+      {
+        label: '进行中任务数',
+        name: 'driverOrderCount',
       },
       {
         label: '操作',
@@ -101,10 +104,12 @@ class View extends Component {
         render: (text, record, index) => {
           return <span>
             {
-              isCanChoose[index] == 1 ? <Button ref='choose' type="secondary" onClick={
+              routeId && isCanChoose[index] === 1 
+              ? <Button ref="choose" type="secondary" onClick={
                 () => {
                   let item = isCanChoose;
-                  if( this.state.index != -1 ){
+                  console.log('item', item)
+                  if ( this.state.index !== -1 ) {
                     item[this.state.index] = 1
                   };
                   item[index] = 2;
@@ -114,27 +119,38 @@ class View extends Component {
                     driverId:record.driverId
                   })
                 }
-              }>选择</Button>:isCanChoose[index]==2 ? '已选择':''
-            }
+              }>选择</Button> 
+              : routeId && isCanChoose[index] === 2 ? '已选择' : ''
+            } 
+            {/* {
+              record.lock 
+              ? <Button type="secondary" onClick={() => {
+                this.props.mockRadio(record.driverId)
+              }}>测试</Button>
+              : 'aaa'
+            } */}
           </span>
         },
       },
     ];
 
     return (
-      <div style={{width:'100%'}} >
+      <div style={{ width:'100%' }} >
         <ListPage
           {...this.props}
-          search={::this.search}
+          search={this.search.bind(this)}
           title="分配司机"
           columns={columns}
           formWidth={600}
           data={data.driverList}
           page={page}
           />
-        <div style={{textAlign:'center',marginBottom:'20px'}} >
-          <Button type="secondary" onClick={::this.dispatchOrder} >派单</Button>
-        </div>
+        {
+          routeId && 
+          <div style={{ textAlign:'center', marginBottom:'20px' }} >
+            <Button type="secondary" onClick={this.dispatchOrder.bind(this)} >派单</Button>
+          </div>
+        }
       </div>
     )
   }

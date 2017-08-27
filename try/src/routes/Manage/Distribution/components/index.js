@@ -148,20 +148,20 @@ class View extends Component {
             {
               record.orderStatus !== 4 && record.orderStatus !== 5 && record.orderStatus !== 6 &&
               <Button type="danger" className="Distribution-cancel-btn" onClick={
-                (() => {
+                () => {
                   Modal.confirm({
                     title: '确定要取消该订单吗？',
-                    onOk: (() => {
+                    onOk: () => {
                       this.props.setStatus(record, index).then((success) => {
                         success && this.props.search({
                           ...this.props.searchParams,
                           ...this.props.page,
                         })
                       })
-                    }).bind(this),
+                    },
                     onCancel () {},
                   })
-                }).bind(this)
+                }
               }>取消</Button>
             }
           </span>

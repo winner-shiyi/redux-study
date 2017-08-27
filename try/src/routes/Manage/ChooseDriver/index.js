@@ -4,7 +4,7 @@ import { common } from '../../../store/common'
 export const moduleName = 'ChooseDriver'
 
 export default (store) => ({
-  path : moduleName + '/:id',
+  path : moduleName + '(/:id)',
   onEnter: ({ location, routes, params }, replace, next) => {
     store.dispatch(common.initialMenu())
     next()
@@ -19,7 +19,6 @@ export default (store) => ({
       injectReducer(store, { key: moduleName, reducer })
 
       cb(null, propertyContainer)
-
     })
   },
 })

@@ -19,12 +19,15 @@ const CHOOSE_DRIVER_DISPATCHORDER_REQUEST = 'CHOOSE_DRIVER_DISPATCHORDER_REQUEST
 const CHOOSE_DRIVER_DISPATCHORDER_SUCCESS = 'CHOOSE_DRIVER_DISPATCHORDER_SUCCESS'
 const CHOOSE_DRIVER_DISPATCHORDER_FAILURE = 'CHOOSE_DRIVER_DISPATCHORDER_FAILURE'
 
+const CHOOSE_DRIVER_MOCK_RADIO = 'CHOOSE_DRIVER_MOCK_RADIO'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const actions = {
   /*changeSearch: createAction(EXPRESSAGE_SELECTSEARCH, 'fields'),
   sendNoteStatus: createAction(EXPRESSAGE_NOTESTATUS, 'fields'),*/
+  mockRadio: createAction(CHOOSE_DRIVER_MOCK_RADIO, 'driverId'),
   searchCar: (params) => {
     return {
       types: [CHOOSE_DRIVER_CARSEARCH_REQUEST, CHOOSE_DRIVER_CARSEARCH_SUCCESS, CHOOSE_DRIVER_CARSEARCH_FAILURE],
@@ -99,14 +102,16 @@ const ACTION_HANDLERS = {
         driverList.map((item,index)=>{
           item.key = index;
           item.id = index;
+          item.lock = true; // 给每个list增加一个变量锁
           if(item.driverWorkStatus==0){
-            isCanChoose.push(0);
+            isCanChoose.push(1);
             item.driverWorkStatus = '配送中';
           }else if(item.driverWorkStatus==1){
             isCanChoose.push(1);
             item.driverWorkStatus = '已完成';
           }
           item.carType = dictionary[item.carType];
+
         })
       }
 
@@ -123,6 +128,22 @@ const ACTION_HANDLERS = {
           pageSize: data.pageSize,
           count: data.total,
         },
+      }
+    },
+    [CHOOSE_DRIVER_MOCK_RADIO] : (state, action) => {
+      let newState = Object.assign({}, state)
+      let driverList = newState.data.list
+      if (driverList.length !== 0) {
+        driverList.map((item, index) => {
+          if (item.driverId === action.driverId) {
+            item.lock = !item.lock
+          }
+        })
+      }
+      newState.data.driverList = driverList
+      return {
+        ...state,
+        data: newState.data,
       }
     },
     [CHOOSE_DRIVER_SEARCH_FAILURE] : (state, action) => {
@@ -159,6 +180,7 @@ const ACTION_HANDLERS = {
         paths
       }
     },
+
 }
 
 // ------------------------------------
@@ -169,7 +191,7 @@ const initialState = {
   noteStatusData: [],
   exportStatusData: [],
   data: {
-    driverList:[]
+    driverList:[],
   },
   driverStatus:[
     ["0","配送中"],
@@ -187,7 +209,7 @@ const initialState = {
     driverName:'',
     carType:'',
     carNumber:'',
-    driverStatus:''
+    driverStatus:'', // todo 删除
   },
 }
 

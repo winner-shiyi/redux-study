@@ -560,7 +560,7 @@ const initialState = {
   ],
   record: { // 用来保存填写的表单数据
     region: {
-      value: ['北京市', '北京市', '东城区'],
+      value: ['浙江省', '杭州市', '江干区'],
     },
     addressDetail: {
       value: '',

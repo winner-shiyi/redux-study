@@ -7,6 +7,7 @@ import { Form, Input, Row ,Col , Table, Icon, Button } from 'antd';
 import { createFormItem } from '../../../../components';
 import { Scrollbars } from 'react-custom-scrollbars';
 import {formatDate} from 'util/date';
+import PreviewPic from '../../../../components/PreviewPic'
 
 const FormItem = Form.Item;
 
@@ -132,7 +133,29 @@ class DistributionDetailForm extends Component {
           title: '收货联系电话',
           dataIndex: 'phone',
           key: 'phone',
-        }];
+        }, {
+          title: '收货状态',
+          dataIndex: 'receiverStatus',
+          key: 'receiverStatus',
+        }, {
+          title: '文字备注',
+          dataIndex: 'textTip',
+          key: 'textTip',
+        }, {
+          title: '图片备注',
+          dataIndex: 'imageTip',
+          key: 'imageTip',
+          render: (text, record, index) => (
+            <div>
+              {
+                record.imageTip.length > 0 &&
+
+                <PreviewPic imageTip={record.imageTip} />
+              }
+            </div>
+          ),
+        },
+      ];
         return (
           <div style={{marginTop:'20px'}} >
             <Table title={() => '收货信息'} columns={columns} pagination={{ pageSize: 10 }} dataSource={receiversInfoList} />
