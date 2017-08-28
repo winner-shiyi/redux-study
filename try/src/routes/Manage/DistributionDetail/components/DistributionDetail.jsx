@@ -41,7 +41,7 @@ class DistributionDetailForm extends Component {
         wrapperCol: { span: 8 },
       };
 
-      if(receiversInfoList&&receiversInfoList.length !=0 ){
+      if(receiversInfoList && receiversInfoList.length !=0 ){
         receiversInfoList.map((item,index)=>{
           item.key = index;
         })
@@ -55,15 +55,16 @@ class DistributionDetailForm extends Component {
           let theBooleans  = [item.hasArrived,item.hasLeft,item.receiverFlag];
           // console.log(theBooleans);
           theBooleans = theBooleans.join();
+          
           let newItem,newItem2;
           if (theBooleans == [true,true,true]){
             newItem = {
-              node:"到达"+'送货地：'+ item.shopName,
+              node:"到达"+'发货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
             };
             newItem2 = {
-              node:"离开"+'送货地：'+ item.shopName,
+              node:"离开"+'发货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress
             };
@@ -71,26 +72,30 @@ class DistributionDetailForm extends Component {
             cardArray.push(newItem2);
           }else if(theBooleans == [true,true,false]){
             newItem = {
+              clockSort:index,
               node:"到达"+'收货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
             };
             newItem2 = {
+              clockSort:index,
               node:"离开"+'收货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
-              address : item.actualLeaveAddress
+              address : item.actualLeaveAddress,
+              stopTime:'3',
             };
             cardArray.push(newItem);
             cardArray.push(newItem2);
-          }else if(theBooleans == [true,false,true]){
+          }else if(theBooleans == [true,false,true]){ // receiverFlag true 
             newItem = {
-              node:"到达"+'送货地：'+ item.shopName,
+              node:"到达"+'发货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
             };
             cardArray.push(newItem);
-          }else if(theBooleans == [true,false,false]){
+          }else if(theBooleans == [true,false,false]){ // 到达，没有离开， false
             newItem = {
+              clockSort:index,
               node:"到达"+'收货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
@@ -98,16 +103,18 @@ class DistributionDetailForm extends Component {
             cardArray.push(newItem);
           }else if(theBooleans == [false,true,true]){
             newItem = {
-              node:"离开"+'送货地：'+ item.shopName,
+              node:"离开"+'发货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress
             };
             cardArray.push(newItem);
           }else if(theBooleans == [false,true,false]){
             newItem = {
+              clockSort:index,
               node:"离开"+'收货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
-              address : item.actualLeaveAddress
+              address : item.actualLeaveAddress,
+              stopTime:'3',
             };
             cardArray.push(newItem);
           }
@@ -236,19 +243,33 @@ class DistributionDetailForm extends Component {
       };
 
       const clockForm = (clockData) => {
-          const columns = [{
+          const columns = [
+            {
+              title: '排线次序',
+              dataIndex: 'clockSort',
+              key: 'clockSort',
+            }, 
+            {
               title: '打卡节点',
               dataIndex: 'node',
               key: 'node',
-          }, {
+            }, 
+            {
               title: '打卡时间',
               dataIndex: 'time',
               key:'time',
-          }, {
+            }, 
+            {
+              title: '停留时间',
+              dataIndex: 'stopTime',
+              key:'stopTime',
+            },
+            {
               title: '打卡地址信息',
               dataIndex: 'address',
               key: 'addresss',
-          }];
+            },
+          ];
           return (
               <div style={{marginTop:'20px'}} >
                   <Table title={() => '打卡信息'} columns={columns} pagination={{ pageSize: 10 }} dataSource={clockData} />

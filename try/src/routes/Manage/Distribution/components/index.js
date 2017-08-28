@@ -123,7 +123,7 @@ class View extends Component {
                   Modal.confirm({
                     title: '该订单还没有提交，确定要删除吗？',
                     onOk: () => {
-                      this.props.setStatus(record, index).then((success) => {
+                      this.props.deleteOrder(record).then((success) => {
                         success && this.props.search({
                           ...this.props.searchParams,
                           ...this.props.page,

@@ -15,6 +15,9 @@ const DISTRIBUTION_SET_STATUS_SUCCESS = 'DISTRIBUTION_SET_STATUS_SUCCESS'
 const DISTRIBUTION_SET_STATUS_FAILURE = 'DISTRIBUTION_SET_STATUS_FAILURE'
 const DISTRIBUTION_ENTRY_SHOW = 'DISTRIBUTION_ENTRY_SHOW'
 const DISTRIBUTION_ENTRY_CANCEL = 'DISTRIBUTION_ENTRY_CANCEL'
+const DISTRIBUTION_DELETE_REQUEST = 'DISTRIBUTION_DELETE_REQUEST'
+const DISTRIBUTION_DELETE_SUCCESS = 'DISTRIBUTION_DELETE_SUCCESS'
+const DISTRIBUTION_DELETE_FAILURE = 'DISTRIBUTION_DELETE_FAILURE'
 
 // ------------------------------------
 // Actions
@@ -86,6 +89,14 @@ export const actions = {
   showModal: createAction(DISTRIBUTION_ENTRY_SHOW),
   cancel: createAction(DISTRIBUTION_ENTRY_CANCEL),
   downExcel,
+  deleteOrder: (params) => {
+    return {
+      types: [DISTRIBUTION_DELETE_REQUEST, DISTRIBUTION_DELETE_SUCCESS, DISTRIBUTION_DELETE_FAILURE],
+      callAPI: () => fetch('/order/delete', { // 订单编号
+        orderNo: params.orderNo, 
+      }),
+    }
+  },
 }
 
 // ------------------------------------
@@ -142,6 +153,26 @@ const ACTION_HANDLERS = {
     }
   },
   [DISTRIBUTION_SET_STATUS_FAILURE]: (state, action) => {
+    message.error(action.msg) // 这里调接口的时候使用了callAPI方法，可以在creatStore里面看到封装返回msg
+    return {
+      ...state,
+      loading: false,
+    }
+  },
+  [DISTRIBUTION_DELETE_REQUEST]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+    }
+  },
+  [DISTRIBUTION_DELETE_SUCCESS]: (state, action) => {
+    message.success('删除成功')
+    return {
+      ...state,
+      loading: false,
+    }
+  },
+  [DISTRIBUTION_DELETE_FAILURE]: (state, action) => {
     message.error(action.msg) // 这里调接口的时候使用了callAPI方法，可以在creatStore里面看到封装返回msg
     return {
       ...state,
