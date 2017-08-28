@@ -59,127 +59,127 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [CHOOSE_DRIVER_CARSEARCH_REQUEST] : (state, action) => {
-      return {
-        ...state,
-        loading: true,
-      }
-    },
-    [CHOOSE_DRIVER_CARSEARCH_SUCCESS] : (state, action) => {
-      let newState = Object.assign({}, state)
-      let { data } = action;
-      let carClassesData = data;
-      return {
-        carClassesData,
-        ...newState
-      }
-    },
-    [CHOOSE_DRIVER_CARSEARCH_FAILURE] : (state, action) => {
+  [CHOOSE_DRIVER_CARSEARCH_REQUEST] : (state, action) => {
+    return {
+      ...state,
+      loading: true,
+    }
+  },
+  [CHOOSE_DRIVER_CARSEARCH_SUCCESS] : (state, action) => {
+    let newState = Object.assign({}, state)
+    let { data } = action;
+    let carClassesData = data;
+    return {
+      carClassesData,
+      ...newState
+    }
+  },
+  [CHOOSE_DRIVER_CARSEARCH_FAILURE] : (state, action) => {
+    message.error(action.msg);
+    return {
+      ...state,
+      loading: false,
+    }
+  },
+  [CHOOSE_DRIVER_SEARCH_REQUEST]: (state, action) => {
+    return {
+      ...state,
+    }
+  },
+  [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
+    let newState = Object.assign({}, state);
+    let { data } = action;
+    let driverList = data.list;
+    let dictionary = {
+      "0":"面包",
+      "1":"平板",
+      "2":"高栏",
+      "3":"厢式",
+      "4":"冷链"
+    };
+    let isCanChoose = [];
+    if(driverList && driverList !=0 ){
+      driverList.map((item,index)=>{
+        item.key = index;
+        item.id = index;
+        item.lock = true; // 给每个list增加一个变量锁
+        if(item.driverWorkStatus==0){
+          isCanChoose.push(1);
+          item.driverWorkStatus = '配送中';
+        }else if(item.driverWorkStatus==1){
+          isCanChoose.push(1);
+          item.driverWorkStatus = '已完成';
+        }
+        item.carType = dictionary[item.carType];
+
+      })
+    }
+
+    newState.data.driverList = driverList;
+    newState.data = Object.assign({},newState.data,data);
+
+    return {
+      ...newState,
+      isCanChoose,
+      loading: false,
+      page: {
+        ...state.page,
+        pageNo: data.pageNo,
+        pageSize: data.pageSize,
+        count: data.total,
+      },
+    }
+  },
+  [CHOOSE_DRIVER_MOCK_RADIO] : (state, action) => {
+    let newState = Object.assign({}, state)
+    let driverList = newState.data.list
+    if (driverList.length !== 0) {
+      driverList.map((item, index) => {
+        if (item.driverId === action.driverId) {
+          item.lock = !item.lock
+        }
+      })
+    }
+    newState.data.driverList = driverList
+    return {
+      ...state,
+      data: newState.data,
+    }
+  },
+  [CHOOSE_DRIVER_SEARCH_FAILURE] : (state, action) => {
+    message.error(action.msg)
+    return {
+      ...state,
+    }
+  },
+  [CHOOSE_DRIVER_DISPATCHORDER_REQUEST]: (state, action) => {
+    return {
+      ...state,
+    }
+  },
+  [CHOOSE_DRIVER_DISPATCHORDER_SUCCESS] : (state, action) => {
+    let newState = Object.assign({}, state);
+    let { data } = action;
+    newState.data = Object.assign({},newState.data,data);
+    let paths = "/Manage/Distribution";
+    return {
+      ...newState,
+      paths,
+      loading: false,
+    }
+  },
+  [CHOOSE_DRIVER_DISPATCHORDER_FAILURE] : (state, action) => {
+    if(action.msg == 'driverId不能为空' ){
+      message.error('请选择司机');
+    }else{
       message.error(action.msg);
-      return {
-        ...state,
-        loading: false,
-      }
-    },
-    [CHOOSE_DRIVER_SEARCH_REQUEST]: (state, action) => {
-      return {
-        ...state,
-      }
-    },
-    [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
-      let newState = Object.assign({}, state);
-      let { data } = action;
-      let driverList = data.list;
-      let dictionary = {
-        "0":"面包",
-        "1":"平板",
-        "2":"高栏",
-        "3":"厢式",
-        "4":"冷链"
-      };
-      let isCanChoose = [];
-      if(driverList && driverList !=0 ){
-        driverList.map((item,index)=>{
-          item.key = index;
-          item.id = index;
-          item.lock = true; // 给每个list增加一个变量锁
-          if(item.driverWorkStatus==0){
-            isCanChoose.push(1);
-            item.driverWorkStatus = '配送中';
-          }else if(item.driverWorkStatus==1){
-            isCanChoose.push(1);
-            item.driverWorkStatus = '已完成';
-          }
-          item.carType = dictionary[item.carType];
-
-        })
-      }
-
-      newState.data.driverList = driverList;
-      newState.data = Object.assign({},newState.data,data);
-
-      return {
-        ...newState,
-        isCanChoose,
-        loading: false,
-        page: {
-          ...state.page,
-          pageNo: data.pageNo,
-          pageSize: data.pageSize,
-          count: data.total,
-        },
-      }
-    },
-    [CHOOSE_DRIVER_MOCK_RADIO] : (state, action) => {
-      let newState = Object.assign({}, state)
-      let driverList = newState.data.list
-      if (driverList.length !== 0) {
-        driverList.map((item, index) => {
-          if (item.driverId === action.driverId) {
-            item.lock = !item.lock
-          }
-        })
-      }
-      newState.data.driverList = driverList
-      return {
-        ...state,
-        data: newState.data,
-      }
-    },
-    [CHOOSE_DRIVER_SEARCH_FAILURE] : (state, action) => {
-      message.error(action.msg)
-      return {
-        ...state,
-      }
-    },
-    [CHOOSE_DRIVER_DISPATCHORDER_REQUEST]: (state, action) => {
-      return {
-        ...state,
-      }
-    },
-    [CHOOSE_DRIVER_DISPATCHORDER_SUCCESS] : (state, action) => {
-      let newState = Object.assign({}, state);
-      let { data } = action;
-      newState.data = Object.assign({},newState.data,data);
-      let paths = "/Manage/Distribution";
-      return {
-        ...newState,
-        paths,
-        loading: false,
-      }
-    },
-    [CHOOSE_DRIVER_DISPATCHORDER_FAILURE] : (state, action) => {
-      if(action.msg == 'driverId不能为空' ){
-        message.error('请选择司机');
-      }else{
-        message.error(action.msg);
-      }
-      let paths = false;
-      return {
-        ...state,
-        paths
-      }
-    },
+    }
+    let paths = false;
+    return {
+      ...state,
+      paths
+    }
+  },
 
 }
 

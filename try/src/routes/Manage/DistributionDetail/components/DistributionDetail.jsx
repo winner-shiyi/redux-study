@@ -3,7 +3,7 @@
  */
 import React,{Component} from 'react';
 import {browserHistory} from 'react-router';
-import { Form, Input, Row ,Col , Table, Icon, Button } from 'antd';
+import { Form, Input, Row , Col , Table, Icon, Button, Upload, Modal } from 'antd';
 import { createFormItem } from '../../../../components';
 import { Scrollbars } from 'react-custom-scrollbars';
 import {formatDate} from 'util/date';
@@ -137,6 +137,10 @@ class DistributionDetailForm extends Component {
           title: '收货状态',
           dataIndex: 'receiverStatus',
           key: 'receiverStatus',
+          render: (text, record, index) => {
+            const textStatus = ['未处理', '已妥投', '未妥投']
+            return textStatus[Number(record.receiverStatus-1)]
+          }
         }, {
           title: '文字备注',
           dataIndex: 'textTip',
@@ -149,8 +153,7 @@ class DistributionDetailForm extends Component {
             <div>
               {
                 record.imageTip.length > 0 &&
-
-                <PreviewPic imageTip={record.imageTip} />
+                <PreviewPic imagrUrlArr={record.imageTip} width={50} height={50} />
               }
             </div>
           ),
