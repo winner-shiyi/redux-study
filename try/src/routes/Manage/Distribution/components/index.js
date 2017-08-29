@@ -12,6 +12,9 @@ class View extends Component {
       ...this.props.page,
     })
   }
+  componentWillUnmount () {
+    this.props.reset()
+  }
 
   render () {
     const {

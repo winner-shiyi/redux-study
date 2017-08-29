@@ -6,7 +6,8 @@ import {browserHistory} from 'react-router';
 import { Form, Input, Row , Col , Table, Icon, Button, Upload, Modal } from 'antd';
 import { createFormItem } from '../../../../components';
 import { Scrollbars } from 'react-custom-scrollbars';
-import {formatDate} from 'util/date';
+import { formatDate } from 'util/date';
+import { difftime } from 'util/difftime';
 import PreviewPic from '../../../../components/PreviewPic'
 
 const FormItem = Form.Item;
@@ -21,7 +22,7 @@ class DistributionDetailForm extends Component {
     }
 
     componentDidMount () {
-      //console.log(this.props.params.id)
+      
     }
 
   render () {
@@ -59,19 +60,6 @@ class DistributionDetailForm extends Component {
           let newItem,newItem2;
           if (theBooleans == [true,true,true]){
             newItem = {
-              node:"到达"+'发货地：'+ item.shopName,
-              time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
-              address : item.actualArriveAddress
-            };
-            newItem2 = {
-              node:"离开"+'发货地：'+ item.shopName,
-              time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
-              address : item.actualLeaveAddress
-            };
-            cardArray.push(newItem);
-            cardArray.push(newItem2);
-          }else if(theBooleans == [true,true,false]){
-            newItem = {
               clockSort:index,
               node:"到达"+'收货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
@@ -82,39 +70,51 @@ class DistributionDetailForm extends Component {
               node:"离开"+'收货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress,
-              stopTime:'3',
+              stopTime: difftime(item.arriveTime, item.leaveTime),
+            };
+            cardArray.push(newItem);
+            cardArray.push(newItem2);
+          }else if(theBooleans == [true,true,false]){
+            newItem = {
+              node:"到达"+'发货地：'+ item.shopName,
+              time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
+              address : item.actualArriveAddress
+            };
+            newItem2 = {
+              node:"离开"+'发货地：'+ item.shopName,
+              time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
+              address : item.actualLeaveAddress,
             };
             cardArray.push(newItem);
             cardArray.push(newItem2);
           }else if(theBooleans == [true,false,true]){ // receiverFlag true 
             newItem = {
-              node:"到达"+'发货地：'+ item.shopName,
+              clockSort:index,
+              node:"到达"+'收货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
             };
             cardArray.push(newItem);
           }else if(theBooleans == [true,false,false]){ // 到达，没有离开， false
             newItem = {
-              clockSort:index,
-              node:"到达"+'收货地：'+ item.shopName,
+              node:"到达"+'发货地：'+ item.shopName,
               time : formatDate(item.arriveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualArriveAddress
             };
             cardArray.push(newItem);
           }else if(theBooleans == [false,true,true]){
             newItem = {
-              node:"离开"+'发货地：'+ item.shopName,
+              clockSort:index,
+              node:"离开"+'收货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress
             };
             cardArray.push(newItem);
           }else if(theBooleans == [false,true,false]){
             newItem = {
-              clockSort:index,
-              node:"离开"+'收货地：'+ item.shopName,
+              node:"离开"+'发货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress,
-              stopTime:'3',
             };
             cardArray.push(newItem);
           }

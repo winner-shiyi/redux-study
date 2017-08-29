@@ -103,13 +103,14 @@ const ACTION_HANDLERS = {
         item.key = index;
         item.id = index;
         item.lock = true; // 给每个list增加一个变量锁
-        if(item.driverWorkStatus==0){
-          isCanChoose.push(1);
-          item.driverWorkStatus = '配送中';
-        }else if(item.driverWorkStatus==1){
-          isCanChoose.push(1);
-          item.driverWorkStatus = '已完成';
-        }
+        // if(item.driverWorkStatus==0){
+        //   isCanChoose.push(1);
+        //   item.driverWorkStatus = '配送中';
+        // }else if(item.driverWorkStatus==1){
+        //   isCanChoose.push(1);
+        //   item.driverWorkStatus = '已完成';
+        // }
+        isCanChoose.push(1)
         item.carType = dictionary[item.carType];
 
       })
@@ -209,7 +210,6 @@ const initialState = {
     driverName:'',
     carType:'',
     carNumber:'',
-    driverStatus:'', // todo 删除
   },
 }
 
