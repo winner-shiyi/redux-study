@@ -16,10 +16,19 @@ const ADDDISTRIBUTION_RECORD_CHANGE = 'ADDDISTRIBUTION_RECORD_CHANGE'
 const ADDDISTRIBUTION_SUBMIT_REQUEST = 'ADDDISTRIBUTION_SUBMIT_REQUEST'
 const ADDDISTRIBUTION_SUBMIT_SUCCESS = 'ADDDISTRIBUTION_SUBMIT_SUCCESS'
 const ADDDISTRIBUTION_SUBMIT_FAILURE = 'ADDDISTRIBUTION_SUBMIT_FAILURE'
+// 发货商家名称模糊搜索
 const ADDDISTRIBUTION_SENDER_SEARCH_REQUEST = 'ADDDISTRIBUTION_SENDER_SEARCH_REQUEST'
 const ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS = 'ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS'
 const ADDDISTRIBUTION_SENDER_SEARCH_FAILURE = 'ADDDISTRIBUTION_SENDER_SEARCH_FAILURE'
+// 收货商家名称模糊搜索
+const ADDDISTRIBUTION_RECEIVER_SEARCH_REQUEST = 'ADDDISTRIBUTION_RECEIVER_SEARCH_REQUEST'
+const ADDDISTRIBUTION_RECEIVER_SEARCH_SUCCESS = 'ADDDISTRIBUTION_RECEIVER_SEARCH_SUCCESS'
+const ADDDISTRIBUTION_RECEIVER_SEARCH_FAILURE = 'ADDDISTRIBUTION_RECEIVER_SEARCH_FAILURE'
+
+const ADDDISTRIBUTION_RECEIVER_ACTIVE_ID = 'ADDDISTRIBUTION_RECEIVER_ACTIVE_ID'
+
 const ADDDISTRIBUTION_CLEAR_DATA = 'ADDDISTRIBUTION_CLEAR_DATA' // 清空数据
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -90,6 +99,42 @@ const senderSearch = (params) => { // 发货商家模糊搜索
       })
   }
 }
+
+const receiverSearchRequest = (params) => { 
+  return {
+    type: 'ADDDISTRIBUTION_RECEIVER_SEARCH_REQUEST',
+    payload: params,
+  }
+}
+const receiverSearchSuccess = (data) => {
+  return {
+    type: 'ADDDISTRIBUTION_RECEIVER_SEARCH_SUCCESS',
+    payload: data,
+  }
+}
+
+const receiverSearchFailure = (msg) => {
+  return {
+    type: 'ADDDISTRIBUTION_RECEIVER_SEARCH_FAILURE',
+    payload: msg,
+  }
+}
+
+const receiverSearch = (params) => { // 发货商家模糊搜索
+  return dispatch => {
+    dispatch(receiverSearchRequest(params)) 
+    return fetch('/sender/fuzzyQuery', { shopName: params }) // todo 等待接口
+      .then(json => {
+        if (json.resultCode === '0') {
+          dispatch(receiverSearchSuccess(json.resultData))
+          return json.resultData.list
+        } else {
+          dispatch(receiverSearchFailure(json.resultDesc))
+        }
+      })
+  }
+}
+
 export const actions = {
   addReceiverInfo: createAction(ADDDISTRIBUTION_ADD_RECEIVER_INFO),
   reduceReceiverInfo: createAction(ADDDISTRIBUTION_REDUCE_RECEIVER_INFO, 'id'),
@@ -103,7 +148,9 @@ export const actions = {
     }
   },
   senderSearch,
+  receiverSearch,
   editOredr, 
+  getAcctiveId: createAction(ADDDISTRIBUTION_RECEIVER_ACTIVE_ID, 'id'),
 }
 
 // ------------------------------------
@@ -120,10 +167,6 @@ const ACTION_HANDLERS = {
     }
   },
   [ADDDISTRIBUTION_SUCCESS]: (state, action) => {
-    // let newReceiverFormNo = state.receiverFormNo
-    // newReceiverFormNo = action.payload.receiversInfoList.length - 1 // TODO
-    // let newRecord = state.record
-
     let newState = Object.assign({}, state)
     let newRecord = Object.assign({}, newState.record)
 
@@ -140,53 +183,31 @@ const ACTION_HANDLERS = {
     } else {
       newRecord.drivingTime.value = formatDate(Number(action.payload.drivingTime), 'yyyy-MM-dd HH:mm')
     }
-    
+
+    // 初始化为空对象
     action.payload.receiversInfoList.forEach((item, index) => {
-      // createEmptyObject(newRecord[`${index}region`])
-      if (!newRecord[`${index}region`]) {
-        newRecord[`${index}region`] = {}
-      }
+      newRecord[`${index}region`] = {}
+      newRecord[`${index}addressDetail`] = {}
+      newRecord[`${index}phone`] = {}
+      newRecord[`${index}shopName`] = {}
+      newRecord[`${index}userName`] = {}
+      newRecord[`${index}deliveryBeginTime`] = {}
+      newRecord[`${index}deliveryEndTime`] = {}
+    })
+    
+    // 填充数据
+    action.payload.receiversInfoList.forEach((item, index) => {
       newRecord[`${index}region`].value = [item.province, item.city, item.area]
-      
-      if (!newRecord[`${index}addressDetail`]) {
-        newRecord[`${index}addressDetail`] = {}
-      }
       newRecord[`${index}addressDetail`].value = item.addressDetail
-      
-      if (!newRecord[`${index}phone`]) {
-        newRecord[`${index}phone`] = {}
-      }
       newRecord[`${index}phone`].value = item.phone
-      
-      if (!newRecord[`${index}shopName`]) {
-        newRecord[`${index}shopName`] = {}
-      }
       newRecord[`${index}shopName`].value = item.shopName
-      
-      if (!newRecord[`${index}userName`]) {
-        newRecord[`${index}userName`] = {}
-      }
       newRecord[`${index}userName`].value = item.userName
-      
-      if (!newRecord[`${index}deliveryBeginTime`]) {
-        newRecord[`${index}deliveryBeginTime`] = {}
-      }
-      if (!item.deliveryBeginTime) { // 非必填字段
-        newRecord[`${index}deliveryBeginTime`].value = ''
-      } else {
-        newRecord[`${index}deliveryBeginTime`].value = 
-        formatDate(Number(item.deliveryBeginTime), 'yyyy-MM-dd HH:mm')
-      }
+
+      newRecord[`${index}deliveryBeginTime`].value = item.deliveryBeginTime 
+        ? formatDate(Number(item.deliveryBeginTime), 'yyyy-MM-dd HH:mm') : ''
   
-      if (!newRecord[`${index}deliveryEndTime`]) {
-        newRecord[`${index}deliveryEndTime`] = {}
-      }
-      if (!item.deliveryEndTime) { // 非必填字段
-        newRecord[`${index}deliveryEndTime`].value = ''
-      } else {
-        newRecord[`${index}deliveryEndTime`].value = 
-        formatDate(Number(item.deliveryEndTime), 'yyyy-MM-dd HH:mm')
-      }
+      newRecord[`${index}deliveryEndTime`].value = item.deliveryEndTime 
+        ? formatDate(Number(item.deliveryEndTime), 'yyyy-MM-dd HH:mm') : ''
     })
     newState.record = newRecord
 
@@ -323,10 +344,19 @@ const ACTION_HANDLERS = {
     record[`${numId}addressDetail`] = {
       value: '',
     }
+    record[`${numId}shopName`] = {
+      value: '',
+    }
+    record[`${numId}userName`] = {
+      value: '',
+    }
+    record[`${numId}phone`] = {
+      value: '',
+    }
 
     let newState = {
       ...state,
-      receiverFormNo:numId,
+      receiverFormNo: numId,
       receiverFields,
       record,
     }
@@ -350,8 +380,12 @@ const ACTION_HANDLERS = {
     delete newState.record[`${action.id}deliveryEndTime`]
     delete newState.record[`${action.id}deliveryBeginTime`]
 
+    delete newState.newReceiverInfos[`${action.id}`]
+
     let newRecord = Object.assign({}, newState.record)
+    let lastnewReceiverInfos = Object.assign({}, newState.newReceiverInfos)
     newState.record = newRecord
+    newState.newReceiverInfos = lastnewReceiverInfos
     return newState
   }, 
   /**
@@ -377,6 +411,41 @@ const ACTION_HANDLERS = {
     message.error(action.payload) // 没有使用callAPI封装的action时候，根据action.payload对应获取
     return {
       ...state,
+    }
+  },
+  /**
+   * 收货商家名称模糊搜索
+   */
+  [ADDDISTRIBUTION_RECEIVER_SEARCH_REQUEST]: (state, action) => {
+    return {
+      ...state,
+    }
+  },
+  [ADDDISTRIBUTION_RECEIVER_SEARCH_SUCCESS]: (state, action) => {
+    // message.success('搜索成功')
+    let newState = Object.assign({}, state)
+    const activeId = newState.activeReceiverId
+    newState.newReceiverInfos[activeId] = action.payload.list
+    // 自动填充完毕后，要把errors清除
+    // newState.record[`${activeId}userName`].errors = false
+    // newState.record[`${activeId}phone`].errors = false
+    // newState.record[`${activeId}region`].errors = false
+    // newState.record[`${activeId}addressDetail`].errors = false
+    return newState
+  },
+  [ADDDISTRIBUTION_RECEIVER_SEARCH_FAILURE]: (state, action) => {
+    message.error(action.payload) // 没有使用callAPI封装的action时候，根据action.payload对应获取
+    return {
+      ...state,
+    }
+  },
+  /**
+   * 获取收货信息中聚焦的当前表单id
+   */
+  [ADDDISTRIBUTION_RECEIVER_ACTIVE_ID]: (state, action) => {
+    return {
+      ...state,
+      activeReceiverId: action.id,
     }
   },
   /**
@@ -421,17 +490,11 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       receiverFormNo: 0,
-      record: { 
+      record: { // 用来保存填写的表单数据
         region: {
           value: ['浙江省', '杭州市', '江干区'],
         },
-        '0region': { 
-          value: ['浙江省', '杭州市', '江干区'],
-        },
         addressDetail: {
-          value: '',
-        },
-        '0addressDetail': {
           value: '',
         },
         shopName: {
@@ -441,6 +504,21 @@ const ACTION_HANDLERS = {
           value: '',
         },
         phone: {
+          value: '',
+        },
+        '0region': { 
+          value: ['浙江省', '杭州市', '江干区'],
+        },
+        '0addressDetail': {
+          value: '',
+        },
+        '0shopName': {
+          value: '',
+        },
+        '0userName': {
+          value: '',
+        },
+        '0phone': {
           value: '',
         },
       }, 
@@ -497,6 +575,8 @@ const ACTION_HANDLERS = {
           ],
         },
       ],
+      newReceiverInfos: {}, 
+      searchParams: {},
     }
   },
 }
@@ -590,8 +670,10 @@ const initialState = {
       value: '',
     },
   }, 
-  newSenderInfos: [], // 发货方搜索自动填充信息
+  newSenderInfos: [], // 保存发货商家模糊搜索自动填充的数据
+  newReceiverInfos: {}, // 保存收货商家模糊搜索自动填充的数据
   searchParams: {},
+  activeReceiverId: '',
 }
 
 export default function reducer (state = initialState, action) {

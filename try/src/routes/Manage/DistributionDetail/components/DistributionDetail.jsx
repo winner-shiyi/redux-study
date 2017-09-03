@@ -7,7 +7,7 @@ import { Form, Input, Row , Col , Table, Icon, Button, Upload, Modal } from 'ant
 import { createFormItem } from '../../../../components';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { formatDate } from 'util/date';
-import { difftime } from 'util/difftime';
+// import { difftime } from '../../../util/difftime';
 import PreviewPic from '../../../../components/PreviewPic'
 
 const FormItem = Form.Item;
@@ -70,7 +70,7 @@ class DistributionDetailForm extends Component {
               node:"离开"+'收货地：'+ item.shopName,
               time : formatDate(item.leaveTime,'yyyy-MM-dd HH:mm:ss'),
               address : item.actualLeaveAddress,
-              stopTime: difftime(item.arriveTime, item.leaveTime),
+              // stopTime: difftime(item.arriveTime, item.leaveTime),
             };
             cardArray.push(newItem);
             cardArray.push(newItem2);

@@ -11,6 +11,9 @@ export default class ReceiverForm extends Component {
   }
   constructor (props) {
     super(props)
+    this.state = {
+      dataSource: [],
+    }
     this.AmapId = 'mapId' + Math.random()  
     this.timer1 = null
   }
@@ -30,6 +33,57 @@ export default class ReceiverForm extends Component {
     })
     this.mapChange()
   }
+
+  /**
+   * 监听收货商家名称输入值变化 
+   * 参数：val 表示用户输入的商家名称
+   */
+  onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
+    // 过400毫秒以后去请求接口
+    clearTimeout(this.timer)
+    
+    // 如果商家名称为空则不发送请求，并清空原有填充值
+    if (!(val + '').trim()) {
+      return
+    }
+
+    this.timer = setTimeout(() => {
+      this.props.receiverSearch(val).then((items) => {
+        this.setState({
+          dataSource: items && items.map((item) => item.shopName), // 需要判断，否则请求接口失败的时候 没有map方法
+        })
+      })
+    }, 400)
+  }
+
+  onSelect = (val) => {
+    const {
+      newReceiverInfos, // redux中保存的 模糊搜索接口返回的发货信息数组
+      values,
+    } = this.props
+
+    const shopName = val
+    const _id = this.props.id
+    let shopItem = newReceiverInfos[_id].find((item) => {
+      return item.shopName === shopName
+    })
+
+    shopItem = shopItem || {}
+    
+    values[`${_id}userName`].value = shopItem.userName
+    values[`${_id}phone`].value = shopItem.phone
+    values[`${_id}region`].value = [shopItem.province, shopItem.city, shopItem.area]
+    values[`${_id}addressDetail`].value = shopItem.addressDetail
+    
+    this.props.changeRecord(values)
+    this.mapChange()
+  }
+
+  onFocus = () => {
+    // console.log(this.props.id)
+    this.props.getAcctiveId(this.props.id)
+  }
+
   /**
    * val1Arr拼接val2作为值传给高得地图api的公共函数
    */
@@ -69,7 +123,7 @@ export default class ReceiverForm extends Component {
   
   reduce (id) {
     this.props.reduceReceiverInfo(id)
-  }
+  }  
 
   render () {
     const {
@@ -78,6 +132,12 @@ export default class ReceiverForm extends Component {
       id,
     } = this.props
 
+    // 收货商家名称的onChange，onSelect事件，配置dataSource
+    fields[0].onChange = this.onShopNameChange
+    fields[0].onSelect = this.onSelect
+    fields[0].dataSource = this.state.dataSource
+    fields[0].onFocus = this.onFocus
+    
     // 以下是绑定收货信息表单的【收货地区】和【详细地址】onChange事件
     fields[4].onChange = this.onRegionChange
     fields[6].onChange = this.onAddressDetailChange

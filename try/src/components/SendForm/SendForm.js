@@ -40,7 +40,7 @@ export default class SendForm extends Component {
   }
   
   /**
-   * 监听输入值变化 
+   * 监听发货商家名称输入值变化 
    * 参数：val 表示用户输入的商家名称
    */
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]

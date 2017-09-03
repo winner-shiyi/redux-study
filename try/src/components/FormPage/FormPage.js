@@ -151,7 +151,10 @@ class FormPage extends Component {
       values, // 就是保存表单中填写的数据,
       senderSearch,
       newSenderInfos,
+      receiverSearch,
+      newReceiverInfos,
       changeRecord,
+      getAcctiveId,
     } = this.props
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -200,6 +203,10 @@ class FormPage extends Component {
                   length={this.props.receiverFields.length}
                   reduceReceiverInfo={reduceReceiverInfo}
                   values={values}
+                  changeRecord={changeRecord}
+                  receiverSearch={receiverSearch} 
+                  newReceiverInfos={newReceiverInfos}
+                  getAcctiveId={getAcctiveId}
                 />
               })
             }
