@@ -1,3 +1,3 @@
-import ImagePicker from './ImagePicker.js'
+import ImagePicker from './ImagePickerGroup';
 
-export default ImagePicker
+export default ImagePicker;

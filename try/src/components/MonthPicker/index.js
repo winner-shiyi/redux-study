@@ -1,3 +1,3 @@
-import MonthPicker from './MonthPicker.js'
+import MonthPicker from './MonthPicker';
 
-export default MonthPicker
+export default MonthPicker;

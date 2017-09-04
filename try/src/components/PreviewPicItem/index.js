@@ -1,3 +1,3 @@
-import PreviewPicItem from './PreviewPicItem'
+import PreviewPicItem from './PreviewPicItem';
  
-export default PreviewPicItem
+export default PreviewPicItem;

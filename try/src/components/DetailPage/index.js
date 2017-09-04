@@ -1,3 +1,3 @@
-import DetailPage from './DetailPage.js'
+import DetailPage from './DetailPage';
 
-export default DetailPage
+export default DetailPage;

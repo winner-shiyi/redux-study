@@ -1,3 +1,3 @@
-import CheckboxGroup from './CheckboxGroup.js'
+import CheckboxGroup from './CheckboxGroup';
 
-export default CheckboxGroup
+export default CheckboxGroup;

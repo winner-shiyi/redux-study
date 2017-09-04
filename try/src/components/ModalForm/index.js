@@ -1,3 +1,3 @@
-import ModalForm from './ModalForm.js'
+import ModalForm from './ModalForm';
 
-export default ModalForm
+export default ModalForm;

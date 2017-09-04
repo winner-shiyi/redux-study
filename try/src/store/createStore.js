@@ -1,97 +1,97 @@
-import { applyMiddleware, compose, createStore } from 'redux'
-import thunk from 'redux-thunk'
-import { browserHistory } from 'react-router'
-import makeRootReducer from './reducers'
-import { updateLocation } from './location'
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import { browserHistory } from 'react-router';
+import reducers from './reducers';
+import { updateLocation } from './location';
 
-function callAPIMiddleware ({ dispatch, getState }) {
-  return next => action => {
+function callAPIMiddleware({ dispatch, getState }) {
+  return (next) => (action) => {
     const {
       types,
       callAPI,
       shouldCallAPI = () => true,
       payload = {},
       callback,
-    } = action
+    } = action;
 
     if (!types) {
       // Normal action: pass it on
-      return next(action)
+      return next(action);
     }
 
     if (
       !Array.isArray(types) ||
       types.length !== 3 ||
-      !types.every(type => typeof type === 'string')
+      !types.every((type) => typeof type === 'string')
     ) {
-      throw new Error('Expected an array of three string types.')
+      throw new Error('Expected an array of three string types.');
     }
 
     if (typeof callAPI !== 'function') {
-      throw new Error('Expected callAPI to be a function.')
+      throw new Error('Expected callAPI to be a function.');
     }
 
     if (!shouldCallAPI(getState())) {
-      return
+      return false;
     }
 
-    const [ requestType, successType, failureType ] = types
+    const [requestType, successType, failureType] = types;
 
     dispatch(Object.assign({}, payload, {
       type: requestType,
-    }))
+    }));
 
     return callAPI(getState()).then(
-      response => {
+      (response) => {
         if (response.resultCode === '0') {
-          let newPayload = {
+          const newPayload = {
             ...payload,
             data: response.resultData,
             type: successType,
             success: true,
-          }
-          callback && callback(newPayload, dispatch, getState())
-          return dispatch(newPayload)
-        } else {
-          let failurePayload = {
-            msg: response.resultDesc,
-            type: failureType,
-            success: false,
-          }
-          callback && callback(failurePayload, dispatch, getState())
-          dispatch(failurePayload)
-        }
+          };
+          callback && callback(newPayload, dispatch, getState());
+          return dispatch(newPayload);
+        } 
+        const failurePayload = {
+          msg: response.resultDesc,
+          type: failureType,
+          success: false,
+        };
+        callback && callback(failurePayload, dispatch, getState());
+        dispatch(failurePayload);
+        return false;
       },
-      error => {
-        let errorPayload = {
+      (error) => {
+        const errorPayload = {
           msg: error,
           type: failureType,
           success: false,
-        }
-        callback && callback(errorPayload, dispatch, getState())
-        dispatch(errorPayload)
+        };
+        callback && callback(errorPayload, dispatch, getState());
+        dispatch(errorPayload);
       }
-    )
-  }
+    );
+  };
 }
 
 export default (initialState = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, callAPIMiddleware]
+  const middleware = [thunk, callAPIMiddleware];
 
   // ======================================================
   // Store Enhancers
   // ======================================================
-  const enhancers = []
+  const enhancers = [];
 
-  let composeEnhancers = compose
+  let composeEnhancers = compose;
 
   if (__DEV__) {
-    const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
     if (typeof composeWithDevToolsExtension === 'function') {
-      composeEnhancers = composeWithDevToolsExtension
+      composeEnhancers = composeWithDevToolsExtension;
     }
   }
 
@@ -99,24 +99,24 @@ export default (initialState = {}) => {
   // Store Instantiation and HMR Setup
   // ======================================================
   const store = createStore(
-    makeRootReducer(),
+    reducers(),
     initialState,
     composeEnhancers(
       applyMiddleware(...middleware),
       ...enhancers
     )
-  )
-  store.asyncReducers = {}
+  );
+  store.asyncReducers = {};
 
   // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-  store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
+  store.unsubscribeHistory = browserHistory.listen(updateLocation(store));
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      const reducers = require('./reducers').default
-      store.replaceReducer(reducers(store.asyncReducers))
-    })
+      // const reducers = require('./reducers').default;
+      store.replaceReducer(reducers(store.asyncReducers));
+    });
   }
 
-  return store
-}
+  return store;
+};

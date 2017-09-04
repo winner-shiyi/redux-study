@@ -1,3 +1,3 @@
-import NumberRange from './NumberRange.js'
+import NumberRange from './NumberRange';
 
-export default NumberRange
+export default NumberRange;

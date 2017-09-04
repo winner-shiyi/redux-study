@@ -1,24 +1,24 @@
 // We only need to import the modules necessary for initial render
-import Home from './Home'
-import SignInRoute from './SignIn'
-import FindPwdRoute from './FindPwd'
-import ManageRoute from './Manage'
-
+import Home from './Home';
+import SignInRoute from './SignIn';
+import FindPwdRoute from './FindPwd';
+import ManageRoute from './Manage';
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
-
-export const createRoutes = (store) => ({
+const createRoutes = (store) => ({
   path        : '/',
   component   : null,
   indexRoute  : Home,
-  onEnter: ({ location, routes, params }, replace, next) => {
+  onEnter: ({ location }, replace, next) => {
+    // 初始化的appKey和url在src/config.json中的countly处可找到
+
     if (location.pathname === '/' && sessionStorage.getItem('accessToken')) {
-      replace('/Manage') // TODO
+      replace('/Manage'); 
     }
     if (location.pathname !== '/SignIn' && !sessionStorage.getItem('accessToken')) {
-      replace('/SignIn')
+      replace('/SignIn');
     }
-    next()
+    next();
   },
   onLeave: () => {
   },
@@ -27,7 +27,7 @@ export const createRoutes = (store) => ({
     ManageRoute(store),
     FindPwdRoute(store),
   ],
-})
+});
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
     using getChildRoutes with the following signature:
@@ -47,4 +47,4 @@ export const createRoutes = (store) => ({
     when the route exists and matches.
 */
 
-export default createRoutes
+export default createRoutes;

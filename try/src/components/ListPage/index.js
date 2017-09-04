@@ -1,3 +1,3 @@
-import ListPage from './ListPage.js'
+import ListPage from './ListPage';
 
-export default ListPage
+export default ListPage;

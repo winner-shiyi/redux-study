@@ -1,105 +1,93 @@
 import { message } from 'antd';
 import { createAction } from '../../../../util';
-import fetch from '../../../../util/fetch';
-import moment from 'moment';
-import {browserHistory} from 'react-router';
+import fetch from '../../../../../lib/fetch';
+
 
 // ------------------------------------
 // Constants
 // ------------------------------------
-const CHOOSE_DRIVER_CARSEARCH_REQUEST = 'CHOOSE_DRIVER_CARSEARCH_REQUEST'
-const CHOOSE_DRIVER_CARSEARCH_SUCCESS = 'CHOOSE_DRIVER_CARSEARCH_SUCCESS'
-const CHOOSE_DRIVER_CARSEARCH_FAILURE = 'CHOOSE_DRIVER_CARSEARCH_FAILURE'
+const CHOOSE_DRIVER_CARSEARCH_REQUEST = 'CHOOSE_DRIVER_CARSEARCH_REQUEST';
+const CHOOSE_DRIVER_CARSEARCH_SUCCESS = 'CHOOSE_DRIVER_CARSEARCH_SUCCESS';
+const CHOOSE_DRIVER_CARSEARCH_FAILURE = 'CHOOSE_DRIVER_CARSEARCH_FAILURE';
 
-const CHOOSE_DRIVER_SEARCH_REQUEST = 'CHOOSE_DRIVER_SEARCH_REQUEST'
-const CHOOSE_DRIVER_SEARCH_SUCCESS = 'CHOOSE_DRIVER_SEARCH_SUCCESS'
-const CHOOSE_DRIVER_SEARCH_FAILURE = 'CHOOSE_DRIVER_SEARCH_FAILURE'
+const CHOOSE_DRIVER_SEARCH_REQUEST = 'CHOOSE_DRIVER_SEARCH_REQUEST';
+const CHOOSE_DRIVER_SEARCH_SUCCESS = 'CHOOSE_DRIVER_SEARCH_SUCCESS';
+const CHOOSE_DRIVER_SEARCH_FAILURE = 'CHOOSE_DRIVER_SEARCH_FAILURE';
 
-const CHOOSE_DRIVER_DISPATCHORDER_REQUEST = 'CHOOSE_DRIVER_DISPATCHORDER_REQUEST'
-const CHOOSE_DRIVER_DISPATCHORDER_SUCCESS = 'CHOOSE_DRIVER_DISPATCHORDER_SUCCESS'
-const CHOOSE_DRIVER_DISPATCHORDER_FAILURE = 'CHOOSE_DRIVER_DISPATCHORDER_FAILURE'
+const CHOOSE_DRIVER_DISPATCHORDER_REQUEST = 'CHOOSE_DRIVER_DISPATCHORDER_REQUEST';
+const CHOOSE_DRIVER_DISPATCHORDER_SUCCESS = 'CHOOSE_DRIVER_DISPATCHORDER_SUCCESS';
+const CHOOSE_DRIVER_DISPATCHORDER_FAILURE = 'CHOOSE_DRIVER_DISPATCHORDER_FAILURE';
 
-const CHOOSE_DRIVER_MOCK_RADIO = 'CHOOSE_DRIVER_MOCK_RADIO'
+const CHOOSE_DRIVER_MOCK_RADIO = 'CHOOSE_DRIVER_MOCK_RADIO';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const actions = {
-  /*changeSearch: createAction(EXPRESSAGE_SELECTSEARCH, 'fields'),
-  sendNoteStatus: createAction(EXPRESSAGE_NOTESTATUS, 'fields'),*/
   mockRadio: createAction(CHOOSE_DRIVER_MOCK_RADIO, 'driverId'),
-  searchCar: (params) => {
-    return {
-      types: [CHOOSE_DRIVER_CARSEARCH_REQUEST, CHOOSE_DRIVER_CARSEARCH_SUCCESS, CHOOSE_DRIVER_CARSEARCH_FAILURE],
-      callAPI: () => fetch('//' + location.host + '/mock/SearchCar.json', params,{
-        method: 'GET',
-      }),
-    }
-  },
-  searchDriver: (params) => {
-    return {
-      types: [CHOOSE_DRIVER_SEARCH_REQUEST, CHOOSE_DRIVER_SEARCH_SUCCESS, CHOOSE_DRIVER_SEARCH_FAILURE],
-      //callAPI: () => fetch('http://172.16.25.64:8081/mock/DriverSearchList.json', params,{
-      callAPI: () => fetch('/order/driver/list', params,{
-        method:'POST',
-      }),
-    }
-  },
-  dispatchOrder: (params) => {
-    return {
-      types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST, CHOOSE_DRIVER_DISPATCHORDER_SUCCESS, CHOOSE_DRIVER_DISPATCHORDER_FAILURE],
-      callAPI: () => fetch('/order/dispatch', params,{
-        method:'POST',
-      }),
-    }
-  }
-}
+  searchCar: (params) => ({
+    types: [CHOOSE_DRIVER_CARSEARCH_REQUEST, CHOOSE_DRIVER_CARSEARCH_SUCCESS, CHOOSE_DRIVER_CARSEARCH_FAILURE],
+    callAPI: () => fetch(`//${location.host}/mock/SearchCar.json`, params, {
+      method: 'GET',
+    }),
+  }),
+  searchDriver: (params) => ({
+    types: [CHOOSE_DRIVER_SEARCH_REQUEST, CHOOSE_DRIVER_SEARCH_SUCCESS, CHOOSE_DRIVER_SEARCH_FAILURE],
+    callAPI: () => fetch('/order/driver/list', params, {
+      method:'POST',
+    }),
+  }),
+  dispatchOrder: (params) => ({
+    types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST, CHOOSE_DRIVER_DISPATCHORDER_SUCCESS, 
+      CHOOSE_DRIVER_DISPATCHORDER_FAILURE],
+    callAPI: () => fetch('/order/dispatch', params, {
+      method:'POST',
+    }),
+  }),
+};
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [CHOOSE_DRIVER_CARSEARCH_REQUEST] : (state, action) => {
-    return {
-      ...state,
-      loading: true,
-    }
-  },
+  [CHOOSE_DRIVER_CARSEARCH_REQUEST] : (state) => ({
+    ...state,
+    loading: true,
+  }),
   [CHOOSE_DRIVER_CARSEARCH_SUCCESS] : (state, action) => {
-    let newState = Object.assign({}, state)
-    let { data } = action;
-    let carClassesData = data;
+    const newState = Object.assign({}, state);
+    const { data } = action;
+    const carClassesData = data;
     return {
       carClassesData,
-      ...newState
-    }
+      ...newState,
+    };
   },
   [CHOOSE_DRIVER_CARSEARCH_FAILURE] : (state, action) => {
     message.error(action.msg);
     return {
       ...state,
       loading: false,
-    }
-  },
-  [CHOOSE_DRIVER_SEARCH_REQUEST]: (state, action) => {
-    return {
-      ...state,
-    }
-  },
-  [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
-    let newState = Object.assign({}, state);
-    let { data } = action;
-    let driverList = data.list;
-    let dictionary = {
-      "0":"面包",
-      "1":"平板",
-      "2":"高栏",
-      "3":"厢式",
-      "4":"冷链"
     };
-    let isCanChoose = [];
-    if(driverList && driverList !=0 ){
-      driverList.map((item,index)=>{
+  },
+  [CHOOSE_DRIVER_SEARCH_REQUEST]: (state) => ({
+    ...state,
+  }),
+  [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
+    const newState = Object.assign({}, state);
+    const { data } = action;
+    const driverList = data.list;
+    const dictionary = {
+      0:'面包',
+      1:'平板',
+      2:'高栏',
+      3:'厢式',
+      4:'冷链',
+    };
+    const isCanChoose = [];
+    if (driverList && driverList !== 0) {
+      driverList.map((itemTemp, index) => {
+        const item = itemTemp;
         item.key = index;
         item.id = index;
         item.lock = true; // 给每个list增加一个变量锁
@@ -110,14 +98,14 @@ const ACTION_HANDLERS = {
         //   isCanChoose.push(1);
         //   item.driverWorkStatus = '已完成';
         // }
-        isCanChoose.push(1)
+        isCanChoose.push(1);
         item.carType = dictionary[item.carType];
-
-      })
+        return false;
+      });
     }
 
     newState.data.driverList = driverList;
-    newState.data = Object.assign({},newState.data,data);
+    newState.data = Object.assign({}, newState.data, data);
 
     return {
       ...newState,
@@ -129,60 +117,59 @@ const ACTION_HANDLERS = {
         pageSize: data.pageSize,
         count: data.total,
       },
-    }
+    };
   },
   [CHOOSE_DRIVER_MOCK_RADIO] : (state, action) => {
-    let newState = Object.assign({}, state)
-    let driverList = newState.data.list
+    const newState = Object.assign({}, state);
+    const driverList = newState.data.list;
     if (driverList.length !== 0) {
-      driverList.map((item, index) => {
+      driverList.map((item) => {
         if (item.driverId === action.driverId) {
-          item.lock = !item.lock
+          // item.lock = !item.lock;  // todo
         }
-      })
+        return false;
+      });
     }
-    newState.data.driverList = driverList
+    newState.data.driverList = driverList;
     return {
       ...state,
       data: newState.data,
-    }
+    };
   },
   [CHOOSE_DRIVER_SEARCH_FAILURE] : (state, action) => {
-    message.error(action.msg)
+    message.error(action.msg);
     return {
       ...state,
-    }
+    };
   },
-  [CHOOSE_DRIVER_DISPATCHORDER_REQUEST]: (state, action) => {
-    return {
-      ...state,
-    }
-  },
+  [CHOOSE_DRIVER_DISPATCHORDER_REQUEST]: (state) => ({
+    ...state,
+  }),
   [CHOOSE_DRIVER_DISPATCHORDER_SUCCESS] : (state, action) => {
-    let newState = Object.assign({}, state);
-    let { data } = action;
-    newState.data = Object.assign({},newState.data,data);
-    let paths = "/Manage/Distribution";
+    const newState = Object.assign({}, state);
+    const { data } = action;
+    newState.data = Object.assign({}, newState.data, data);
+    const paths = '/Manage/Distribution';
     return {
       ...newState,
       paths,
       loading: false,
-    }
+    };
   },
   [CHOOSE_DRIVER_DISPATCHORDER_FAILURE] : (state, action) => {
-    if(action.msg == 'driverId不能为空' ){
+    if (action.msg === 'driverId不能为空') {
       message.error('请选择司机');
-    }else{
+    } else {
       message.error(action.msg);
     }
-    let paths = false;
+    const paths = false;
     return {
       ...state,
-      paths
-    }
+      paths,
+    };
   },
 
-}
+};
 
 // ------------------------------------
 // Reducer
@@ -195,8 +182,8 @@ const initialState = {
     driverList:[],
   },
   driverStatus:[
-    ["0","配送中"],
-    ["1","已完成"]
+    ['0', '配送中'],
+    ['1', '已完成'],
   ],
   page: {
     current: 1,
@@ -211,11 +198,11 @@ const initialState = {
     carType:'',
     carNumber:'',
   },
-}
+};
 
-export default function reducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+export default function reducer(state = initialState, action) {
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 }
 

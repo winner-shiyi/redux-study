@@ -1,24 +1,24 @@
-import { injectReducer } from '../../../store/reducers.js'
-import { common } from '../../../store/common'
+import { injectReducer } from '../../../store/reducers';
+import { common } from '../../../store/common';
 
-export const moduleName = 'ChooseDriver'
+export const moduleName = 'ChooseDriver';
 
 export default (store) => ({
-  path : moduleName + '(/:id)',
-  onEnter: ({ location, routes, params }, replace, next) => {
-    store.dispatch(common.initialMenu())
-    next()
+  path : `${moduleName}(/:id)`,
+  onEnter: (opts, replace, next) => {
+    store.dispatch(common.initialMenu());
+    next();
   },
   onLeave: () => {
   },
-  getComponent (nextState, cb) {
+  getComponent(nextState, cb) {
     require.ensure([], (require) => {
-      const propertyContainer = require('./containers').default
-      const reducer = require('./modules').default
+      const propertyContainer = require('./containers').default;
+      const reducer = require('./modules').default;
 
-      injectReducer(store, { key: moduleName, reducer })
+      injectReducer(store, { key: moduleName, reducer });
 
-      cb(null, propertyContainer)
-    })
+      cb(null, propertyContainer);
+    });
   },
-})
+});
