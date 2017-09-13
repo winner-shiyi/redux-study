@@ -109,11 +109,8 @@ export function formatMoney (num) {
   return nums.length > 1 ? integer + '.' + nums[1] : integer
 }
 
-/**
- * 对象、数组深拷贝
- * @param {Object} obj
- * @return {Object} 深拷贝后的对象
- */
-export function deepCloneObj (obj) {
-  return JSON.parse(JSON.stringify(obj))
+export function createEmptyObject (option) {
+  if (!option) {
+    option = {}
+  }
 }

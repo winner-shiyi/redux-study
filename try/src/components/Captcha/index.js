@@ -1,3 +1,3 @@
-import Captcha from './Captcha.js'
+import Captcha from './Captcha';
 
-export default Captcha
+export default Captcha;

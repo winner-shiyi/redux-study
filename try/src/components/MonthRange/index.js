@@ -1,3 +1,3 @@
-import MonthRange from './MonthRange.js'
+import MonthRange from './MonthRange';
 
-export default MonthRange
+export default MonthRange;

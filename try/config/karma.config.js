@@ -70,4 +70,6 @@ if (project.globals.__COVERAGE__) {
   }]
 }
 
+//karmaConfig.node={fs:'empty'}
+
 module.exports = (cfg) => cfg.set(karmaConfig)

@@ -1,3 +1,3 @@
-import SendForm from './SendForm.js'
+import SendForm from './SendForm';
 
-export default SendForm
+export default SendForm;

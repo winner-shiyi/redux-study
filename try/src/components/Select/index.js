@@ -1,3 +1,3 @@
-import CommonSelect from './Select.js'
+import CommonSelect from './Select';
 
-export default CommonSelect
+export default CommonSelect;

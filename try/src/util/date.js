@@ -1,33 +1,35 @@
-export function formatDate(value, format) {
-  let maps = {
-    'yyyy' : function (d) {return d.getFullYear();},
-    'MM' : function (d){return fix(d.getMonth()+1);},
-    'dd' : function (d){return fix(d.getDate());},
-    'HH' : function (d){return fix(d.getHours());},
-    'mm' : function (d){return fix(d.getMinutes());},
-    'ss' : function (d){return fix(d.getSeconds());}
-  };
-
-  let chunk = new RegExp(Object.keys(maps).join('|'), 'g');
-
-  function fix(d) {
-    d = "" + d;
+export default function formatDate(value, format) {
+  function fix(dTemp) {
+    let d = dTemp;
+    d = `${d}`;
     if (d.length <= 1) {
-      d = '0' + d;
+      d = `0${d}`;
     }
     return d;
   }
+  const maps = {
+    yyyy(d) { return d.getFullYear(); },
+    MM(d) { return fix(d.getMonth() + 1); },
+    dd(d) { return fix(d.getDate()); },
+    HH(d) { return fix(d.getHours()); },
+    mm(d) { return fix(d.getMinutes()); },
+    ss(d) { return fix(d.getSeconds()); },
+  };
 
-  function formatDateInside(value, format) {
-    format = format || 'yyyy-MM-dd HH:mm:ss';
-    value = new Date(value);
-    return format.replace(chunk, function (capture){
-      return maps[capture]?maps[capture](value):'';
-    })
+  const chunk = new RegExp(Object.keys(maps).join('|'), 'g');  
+
+  function formatDateInside(valueTemp, formatTemp) {
+    let value1 = valueTemp;
+    let format1 = formatTemp;
+    format1 = format || 'yyyy-MM-dd HH:mm:ss';
+    value1 = new Date(value1);
+    return format1.replace(chunk, (capture) => (maps[capture] ? maps[capture](value1) : ''));
   }
 
   return formatDateInside(value, format);
 }
-
+/**
+ * 使用方法
+ */
 // new Date('2017-08 02:14').getTime()
-// formatDate(1501697640000,'yyyy-MM-dd HH:mm') 
+// formatDate(1501697640000,'yyyy-MM-dd HH:mm')

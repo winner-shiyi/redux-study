@@ -1,3 +1,3 @@
-import WrappedFormPage from './FormPage.js'
+import WrappedFormPage from './FormPage';
  
-export default WrappedFormPage
+export default WrappedFormPage;

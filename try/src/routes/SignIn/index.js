@@ -1,34 +1,34 @@
-import { injectReducer } from '../../store/reducers.js'
+import { injectReducer } from '../../store/reducers';
 
-export const moduleName = 'SignIn'
+export const moduleName = 'SignIn';
 
 export default (store) => ({
   path : moduleName,
-  onEnter: ({ location, routes, params }, replace, next) => {
+  onEnter: (opts, replace, next) => {
     if (sessionStorage.getItem('accessToken')) {
-      replace('/Manage')
+      replace('/Manage');
     }
-    next()
+    next();
   },
   onLeave: () => {
   },
   /*  Async getComponent is only invoked when route matches   */
-  getComponent (nextState, cb) {
+  getComponent(nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
      and embed an async module loader (jsonp) when bundling   */
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
        dependencies for bundling   */
-      const container = require('./containers').default
-      const reducer = require('./modules').default
+      const container = require('./containers').default;
+      const reducer = require('./modules').default;
 
       /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: moduleName, reducer })
+      injectReducer(store, { key: moduleName, reducer });
 
       /*  Return getComponent   */
-      cb(null, container)
+      cb(null, container);
 
       /* Webpack named bundle   */
-    })
+    });
   },
-})
+});

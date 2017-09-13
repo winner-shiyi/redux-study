@@ -1,3 +1,3 @@
-import OrderListPage from './OrderListPage.js'
+import OrderListPage from './OrderListPage';
 
-export default OrderListPage
+export default OrderListPage;

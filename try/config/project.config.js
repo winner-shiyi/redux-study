@@ -132,4 +132,6 @@ if (overrides) {
   debug('No environment overrides found, defaults will be used.')
 }
 
+// config.node={fs:'empty'}
+
 module.exports = config

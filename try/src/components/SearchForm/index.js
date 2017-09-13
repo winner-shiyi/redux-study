@@ -1,3 +1,3 @@
-import SearchForm from './SearchForm.js'
+import SearchForm from './SearchForm';
 
-export default SearchForm
+export default SearchForm;

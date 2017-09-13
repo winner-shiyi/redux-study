@@ -164,8 +164,8 @@ webpackConfig.module.loaders.push({
     'style',
     BASE_CSS_LOADER,
     'postcss',
-    'less?{modifyVars:{"@primary-color":"#32B4CA", "@icon-url":\'"/iconfont/iconfont"\'}}'
-  ]
+    'less?{modifyVars:{"@primary-color":"#ffdb08", "@icon-url":\'"/iconfont/iconfont"\'}}',
+  ],
 })
 
 webpackConfig.sassLoader = {
@@ -226,5 +226,7 @@ if (true/*!__DEV__*/) { // to be simple css, not blob
     })
   )
 }
+
+// webpackConfig.node = { fs:'empty' }
 
 module.exports = webpackConfig

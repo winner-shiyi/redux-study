@@ -1,3 +1,3 @@
-import ReceiverForm from './ReceiverForm.js'
+import ReceiverForm from './ReceiverForm';
 
-export default ReceiverForm
+export default ReceiverForm;

@@ -1,14 +1,14 @@
-import { connect } from 'react-redux'
-import { actions } from '../modules'
-import { moduleName } from '../index'
-import { common } from '../../../store/common'
+import { connect } from 'react-redux';
+import { actions } from '../modules';
+import { moduleName } from '../index';
+import { common } from '../../../store/common';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import View from '../components'
+import View from '../components';
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
@@ -18,14 +18,14 @@ const mapDispatchToProps = {
   ...actions,
   initCommon: common.initCommon,
   initCompany: common.initCompany,
-}
+};
 
-const mapStateToProps = (state, ownProps) => {
-  var localState = state[moduleName]
+const mapStateToProps = (state) => {
+  const localState = state[moduleName];
   return {
     ...localState,
-  }
-}
+  };
+};
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 
@@ -41,4 +41,4 @@ const mapStateToProps = (state, ownProps) => {
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
-export default connect(mapStateToProps, mapDispatchToProps)(View)
+export default connect(mapStateToProps, mapDispatchToProps)(View);

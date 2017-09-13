@@ -12,7 +12,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import { createFormItem } from '../../components'
 import { common } from '../../store/common'
 
-const {Header, Content, Sider, Footer} = Layout
+const { Header, Content, Sider, Footer } = Layout
 
 class ChangePwdForm extends Component {
 
@@ -173,13 +173,10 @@ class DropdownPanel extends Component {
 
     const menu = (
       <Menu onClick={::this.onMenuClick}>
-        <Menu.Item key="2">
-          <a>修改密码</a>
-        </Menu.Item>
         <Menu.Item key="3">
           <a onClick={(() => {
             Modal.confirm({
-              title: '确定要退出园区管理系统吗？',
+              title: '确定要退出兔波波车配管理后台吗？',
               onOk: (() => {
                 setTimeout(() => {
                   logout()
@@ -195,8 +192,8 @@ class DropdownPanel extends Component {
     return (
       <Dropdown overlay={menu} trigger={['click']}>
         <a className="login-name">
-          {sessionStorage.getItem('user') &&
-          JSON.parse(sessionStorage.getItem('user')).loginName}，你好！<Icon type="down" />
+          {/*JSON.parse(sessionStorage.getItem(''))*/}
+          你好！<Icon type="down" />
         </a>
       </Dropdown>
     )
@@ -307,9 +304,8 @@ class CoreLayout extends Component {
           width={200}>
           <layout className="flex flex-v" style={{ height: '100%', borderRight: '1px solid #ececec' }}>
             <div className="logo-wrapper flex flex-v flex-c">
-              <div className="logo"><img src="/logo-w.png" style={{ height: 70 }} /></div>
-              <div className="logo-title">新辰产业园</div>
-              <div className="logo-text">园区管理系统</div>
+              <div className="logo"><img src="/tobobo_logo.png" style={{ height: 150 }} /></div>
+              <div className="logo-title">兔波波车配管理后台</div>
             </div>
             <SideMenu />
           </layout>
